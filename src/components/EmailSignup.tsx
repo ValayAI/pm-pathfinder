@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
@@ -11,6 +11,33 @@ const EmailSignup = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [subscribers, setSubscribers] = useLocalStorage<string[]>('pm-pathfinder-subscribers', []);
   const { toast } = useToast();
+  const [scriptLoaded, setScriptLoaded] = useState(false);
+
+  // Function to load the script dynamically
+  const loadSubscriptionScript = () => {
+    if (scriptLoaded) return;
+    
+    const existingScript = document.querySelector('script[data-uid="6a1eced7a7"]');
+    if (existingScript) return;
+    
+    const script = document.createElement('script');
+    script.src = "https://pm-pathfinder.kit.com/6a1eced7a7/index.js";
+    script.async = true;
+    script.setAttribute('data-uid', '6a1eced7a7');
+    document.body.appendChild(script);
+    
+    setScriptLoaded(true);
+  };
+
+  // Cleanup function to remove the script if component unmounts
+  useEffect(() => {
+    return () => {
+      const script = document.querySelector('script[data-uid="6a1eced7a7"]');
+      if (script) {
+        script.remove();
+      }
+    };
+  }, []);
 
   const validateEmail = (email: string) => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -28,6 +55,9 @@ const EmailSignup = () => {
       return;
     }
 
+    // Load the subscription script
+    loadSubscriptionScript();
+    
     setIsSubmitting(true);
     
     // Simulate API call with timeout
