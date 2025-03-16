@@ -17,14 +17,14 @@ const EmailSignup = () => {
   // Function to load the ConvertKit script
   useEffect(() => {
     const loadConvertKitScript = () => {
-      if (document.querySelector('script[data-uid="6a1eced7a7"]')) {
+      if (document.querySelector('script[data-uid="51a320fe9d"]')) {
         return;
       }
       
       const script = document.createElement('script');
-      script.src = "https://pm-pathfinder.kit.com/6a1eced7a7/index.js";
+      script.src = "https://pm-pathfinder.kit.com/51a320fe9d/index.js";
       script.async = true;
-      script.setAttribute('data-uid', '6a1eced7a7');
+      script.setAttribute('data-uid', '51a320fe9d');
       
       script.onload = () => {
         console.log("ConvertKit script loaded successfully");
@@ -42,7 +42,7 @@ const EmailSignup = () => {
 
     return () => {
       // Cleanup function
-      const script = document.querySelector('script[data-uid="6a1eced7a7"]');
+      const script = document.querySelector('script[data-uid="51a320fe9d"]');
       if (script) {
         script.remove();
       }
@@ -86,7 +86,7 @@ const EmailSignup = () => {
         // ConvertKit API
         window.convertkit.createSubscriber({
           email: email,
-          form: '6a1eced7a7',
+          form: '51a320fe9d',
         }).then(() => {
           console.log("Subscriber created successfully via ConvertKit API");
         }).catch((error: any) => {
@@ -114,7 +114,7 @@ const EmailSignup = () => {
   return (
     <div className="bg-muted/30 border border-border rounded-md p-4 shadow-sm">
       <h3 className="text-base font-medium mb-2">Stay updated with PM resources</h3>
-      <form ref={formRef} onSubmit={handleSubmit} className="flex gap-2" data-uid="6a1eced7a7">
+      <form ref={formRef} onSubmit={handleSubmit} className="flex gap-2" data-uid="51a320fe9d">
         <Input
           type="email"
           name="email_address"
