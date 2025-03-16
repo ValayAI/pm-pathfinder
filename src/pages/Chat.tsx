@@ -1,4 +1,3 @@
-
 import { useEffect, useState, useRef, FormEvent } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -12,7 +11,6 @@ import { cn } from "@/lib/utils";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import MessageBubble from "@/components/MessageBubble";
 
-// Message type definition
 type Message = {
   id: string;
   content: string;
@@ -20,7 +18,6 @@ type Message = {
   timestamp: number;
 };
 
-// Response cache type
 type CachedResponse = {
   query: string;
   response: string;
@@ -48,7 +45,7 @@ export function Chat() {
   const checkCache = (query: string): string | null => {
     const normalizedQuery = query.trim().toLowerCase();
     const now = Date.now();
-    const expiryTime = CACHE_EXPIRY_HOURS * 60 * 60 * 1000; // Convert hours to milliseconds
+    const expiryTime = CACHE_EXPIRY_HOURS * 60 * 60 * 1000;
     
     const cachedItem = responseCache.find(item => 
       item.query.toLowerCase() === normalizedQuery && 
@@ -62,14 +59,11 @@ export function Chat() {
     const normalizedQuery = query.trim();
     const now = Date.now();
     
-    // Remove expired items
     const expiryTime = CACHE_EXPIRY_HOURS * 60 * 60 * 1000;
     const validCache = responseCache.filter(item => (now - item.timestamp) < expiryTime);
     
-    // Add new response to cache
     const newCache = [...validCache, { query: normalizedQuery, response, timestamp: now }];
     
-    // Limit cache size to last 50 items
     if (newCache.length > 50) {
       newCache.shift();
     }
@@ -100,7 +94,6 @@ export function Chat() {
     
     setMessages(prev => [...prev, userMessage]);
     
-    // Check cache first
     const cachedResponse = checkCache(input);
     
     if (cachedResponse) {
@@ -121,7 +114,7 @@ export function Chat() {
             </div>
           ),
         });
-      }, 500); // Small delay to make it feel more natural
+      }, 500);
       
       setInput("");
       return;
@@ -131,7 +124,6 @@ export function Chat() {
     setInput("");
     
     try {
-      // Call OpenAI API
       const response = await fetch("api/chat", {
         method: "POST",
         headers: {
@@ -190,11 +182,11 @@ export function Chat() {
           <div className="mb-8 text-center">
             <div className="inline-flex items-center rounded-full px-4 py-1 text-sm font-medium bg-primary/10 text-primary mb-4">
               <Sparkles className="mr-2 h-4 w-4" />
-              <span>AI-Powered Product Management Assistant</span>
+              <span>Your AI PM Coach</span>
             </div>
             <h1 className="text-3xl font-bold mb-4">Chat with Your PM Coach</h1>
             <p className="text-muted-foreground max-w-xl mx-auto">
-              Get instant advice on product strategy, career growth, interview preparation, and more.
+              Get expert guidance on product management career growth, interview preparation, and strategic decision-making.
             </p>
           </div>
           
@@ -203,8 +195,8 @@ export function Chat() {
               {messages.length === 0 ? (
                 <div className="h-full flex flex-col items-center justify-center text-center p-8 text-muted-foreground">
                   <Sparkles className="h-12 w-12 mb-4 text-primary/50" />
-                  <p className="mb-2">No messages yet</p>
-                  <p className="text-sm">Ask any product management question to get started</p>
+                  <p className="mb-2">Your PM Coach is ready</p>
+                  <p className="text-sm">Ask about career paths, interview prep, or product strategy</p>
                 </div>
               ) : (
                 messages.map((message) => (
@@ -227,7 +219,7 @@ export function Chat() {
               <Input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Ask about product management..."
+                placeholder="Ask your PM coach anything..."
                 disabled={isLoading || usedMessages >= MAX_FREE_MESSAGES}
                 className="flex-grow"
               />
@@ -242,30 +234,30 @@ export function Chat() {
           
           <div className="mt-4 mb-8">
             <div className="flex justify-between text-sm mb-1">
-              <span>Messages used</span>
+              <span>Coaching sessions used</span>
               <span className="font-medium">{usedMessages} / {MAX_FREE_MESSAGES}</span>
             </div>
             <Progress value={(usedMessages / MAX_FREE_MESSAGES) * 100} className="h-2" />
             {usedMessages >= MAX_FREE_MESSAGES && (
               <div className="mt-2 flex items-center text-destructive text-sm">
                 <AlertCircle className="h-4 w-4 mr-1" />
-                <span>You've reached your free message limit</span>
+                <span>You've reached your free coaching limit</span>
               </div>
             )}
             {usedMessages > 0 && usedMessages < MAX_FREE_MESSAGES && (
               <p className="text-xs text-muted-foreground mt-1">
-                You have {MAX_FREE_MESSAGES - usedMessages} free messages remaining
+                You have {MAX_FREE_MESSAGES - usedMessages} free coaching sessions remaining
               </p>
             )}
           </div>
           
           <div className="text-center mt-8">
-            <h2 className="text-xl font-semibold mb-4">Upgrade to Premium</h2>
+            <h2 className="text-xl font-semibold mb-4">Upgrade to Premium Coaching</h2>
             <p className="text-muted-foreground mb-6 max-w-md mx-auto">
-              Get unlimited AI chat messages, personalized coaching, and exclusive PM resources.
+              Get unlimited coaching sessions, personalized feedback, and exclusive PM resources and frameworks.
             </p>
             <Button size="lg">
-              Unlock Unlimited Access
+              Unlock Premium Coaching
             </Button>
           </div>
         </div>

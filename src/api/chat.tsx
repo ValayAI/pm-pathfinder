@@ -14,51 +14,52 @@ export interface ChatResponse {
 export async function handleChatRequest(request: ChatRequest): Promise<ChatResponse> {
   const userMessage = request.message.toLowerCase();
   
-  // Simple pattern matching for demo purposes
+  // PM Coach persona - pattern matching for demo purposes
   let response = "";
   
   if (userMessage.includes("interview") || userMessage.includes("interviewing")) {
-    response = "For PM interviews, I recommend focusing on these key areas:\n\n" +
+    response = "As your PM Coach, here's my advice for interviews:\n\n" +
       "1. Product sense - Practice analyzing products and suggesting improvements\n" +
       "2. Analytical thinking - Work on market sizing and metrics analysis\n" +
       "3. Strategy - Be ready to discuss prioritization frameworks like RICE\n" +
       "4. Leadership - Prepare stories about influencing without authority\n\n" +
-      "Would you like me to suggest some practice questions?";
+      "Would you like me to suggest some practice questions for your next PM interview?";
   }
   else if (userMessage.includes("roadmap") || userMessage.includes("prioritiz")) {
-    response = "When creating product roadmaps, consider these best practices:\n\n" +
+    response = "As your PM Coach, here's my guidance on roadmapping:\n\n" +
       "• Start with clear objectives aligned with company strategy\n" +
       "• Focus on outcomes rather than features\n" +
       "• Use a prioritization framework (RICE, WSJF, Kano model)\n" +
       "• Balance between customer value, business value, and technical effort\n" +
-      "• Keep it flexible to adapt to changing market conditions";
+      "• Keep it flexible to adapt to changing market conditions\n\n" +
+      "Which area of roadmap planning do you need help with?";
   }
   else if (userMessage.includes("metrics") || userMessage.includes("kpi")) {
-    response = "Effective product metrics typically fall into these categories:\n\n" +
+    response = "As your PM Coach, I recommend these key product metrics:\n\n" +
       "• Acquisition: CAC, conversion rates, traffic sources\n" +
       "• Activation: onboarding completion, feature adoption rates\n" +
       "• Retention: churn rate, retention cohorts, NPS/CSAT\n" +
       "• Revenue: ARPU, LTV, expansion revenue\n" +
       "• Referral: virality coefficient, referral rates\n\n" +
-      "The key is selecting a few North Star metrics that align with your product strategy.";
+      "For career growth, focus on metrics that demonstrate your business impact. Which metrics would be most valuable for your product?";
   }
   else if (userMessage.includes("career") || userMessage.includes("promotion")) {
-    response = "To advance your product management career:\n\n" +
-      "1. Demonstrate business impact with metrics\n" +
-      "2. Build cross-functional relationships\n" +
-      "3. Develop expertise in your product domain\n" +
-      "4. Practice strategic thinking and communication\n" +
+    response = "As your PM Coach, here are my top tips for advancing your product management career:\n\n" +
+      "1. Demonstrate business impact with quantifiable metrics\n" +
+      "2. Build strong cross-functional relationships, especially with engineering\n" +
+      "3. Develop expertise in your product domain through continuous learning\n" +
+      "4. Practice strategic thinking and improve your communication skills\n" +
       "5. Consider whether you want to pursue a specialist path or management track\n\n" +
-      "What specific area would you like more advice on?";
+      "What specific area of career development are you focusing on right now?";
   }
   else {
-    response = "I'm your AI PM coach. I can help you with:\n\n" +
-      "• Interview preparation\n" +
-      "• Career guidance\n" +
-      "• Product strategy and roadmapping\n" +
-      "• Metrics and analytics\n" +
-      "• Stakeholder management\n\n" +
-      "What specific area of product management can I assist you with today?";
+    response = "I'm your AI PM Coach, here to help you excel in product management. I can assist with:\n\n" +
+      "• Career guidance and advancement strategies\n" +
+      "• Interview preparation and practice\n" +
+      "• Product strategy and decision frameworks\n" +
+      "• Roadmapping and prioritization techniques\n" +
+      "• Stakeholder management and communication\n\n" +
+      "What specific area of your PM journey can I help with today?";
   }
   
   // Simulate API delay
