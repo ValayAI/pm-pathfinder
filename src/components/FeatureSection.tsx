@@ -1,8 +1,7 @@
 
 import { cn } from "@/lib/utils";
 import { 
-  BookText, Users, Award, BarChart3, Target, Briefcase, 
-  BookOpen, MessageCircle, GraduationCap 
+  MessageSquareText, Lightbulb, Compass, BarChart3, Target, Award
 } from "lucide-react";
 import { useState, useEffect } from "react";
 
@@ -30,55 +29,43 @@ export function FeatureSection() {
   
   const features = [
     {
-      title: "Career Pathways",
-      description: "Personalized guidance for your product management journey, from junior to executive roles.",
-      icon: <GraduationCap />
+      title: "AI PM Assistant",
+      description: "Get instant answers to your product management questions from our AI-powered assistant.",
+      icon: <MessageSquareText />
     },
     {
-      title: "Interview Preparation",
-      description: "Focused coaching for product management interviews at top tech companies.",
-      icon: <Briefcase />
+      title: "Framework Library",
+      description: "Access proven PM frameworks for prioritization, roadmapping, and decision-making.",
+      icon: <Compass />
     },
     {
-      title: "PM Frameworks",
-      description: "Curated collection of frameworks for prioritization, roadmapping, and decision-making.",
-      icon: <Target />
+      title: "Career Insights",
+      description: "Actionable career advice to help you advance your PM journey from junior to executive roles.",
+      icon: <Award />
     },
     {
-      title: "Industry Insights",
-      description: "Specialized knowledge for B2B, B2C, fintech, SaaS, and other industry verticals.",
+      title: "Interview Prep",
+      description: "Prepare for PM interviews with guided practice questions and expert feedback.",
+      icon: <Lightbulb />
+    },
+    {
+      title: "Metrics Guide",
+      description: "Learn how to define, track, and analyze the right metrics for product success.",
       icon: <BarChart3 />
     },
     {
-      title: "Expert Mentorship",
-      description: "Connect with experienced product leaders for personalized coaching sessions.",
-      icon: <MessageCircle />
-    },
-    {
-      title: "Resource Library",
-      description: "Extensive collection of templates, guides, and best practices for product managers.",
-      icon: <BookOpen />
+      title: "Goal Setting",
+      description: "Techniques for setting effective product goals that align with business objectives.",
+      icon: <Target />
     },
   ];
   
   return (
-    <section id="feature-section" className="py-24 relative">
-      {/* Subtle background pattern */}
-      <div className="absolute inset-0 -z-10 opacity-20">
-        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="currentColor" strokeWidth="0.5" />
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#grid)" />
-        </svg>
-      </div>
-    
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="feature-section" className="py-20 relative bg-muted/30">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className={cn(
-            "text-3xl md:text-4xl font-bold tracking-tight transition-all duration-700",
+            "text-3xl font-bold tracking-tight transition-all duration-700",
             inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
           )}>
             Everything You Need to Excel in Product Management
@@ -87,21 +74,21 @@ export function FeatureSection() {
             "mt-4 text-lg text-muted-foreground max-w-2xl mx-auto transition-all duration-700 delay-100",
             inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
           )}>
-            Comprehensive resources and guidance tailored to your specific product management needs
+            Simple, powerful tools and resources to help you become a better product manager
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {features.map((feature, index) => (
             <div 
               key={index}
               className={cn(
-                "glass-card glass-card-hover rounded-xl p-6 transition-all duration-700",
+                "bg-background rounded-xl p-6 shadow border border-border/50 transition-all duration-700 hover:shadow-md hover:border-primary/20 hover:translate-y-[-2px]",
                 inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8",
                 inView && `delay-[${200 + (index * 100)}ms]`
               )}
             >
-              <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary mb-5">
+              <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary mb-4">
                 {feature.icon}
               </div>
               <h3 className="text-xl font-medium mb-2">{feature.title}</h3>
