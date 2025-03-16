@@ -1,49 +1,64 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { useToast } from "@/hooks/use-toast";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const EmailSignup = () => {
   const { toast } = useToast();
-  const formRef = useRef<HTMLFormElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
-    // Load the ConvertKit script
-    const script = document.createElement('script');
-    script.src = "https://f.convertkit.com/ckjs/ck.5.js";
-    script.async = true;
+    // Load the ConvertKit script - this is already in the HTML, but we'll ensure it's loaded
+    const existingScript = document.querySelector('script[src="https://f.convertkit.com/ckjs/ck.5.js"]');
     
-    script.onload = () => {
-      console.log("ConvertKit script loaded successfully");
-    };
-    
-    script.onerror = (error) => {
-      console.error("Error loading ConvertKit script:", error);
-      toast({
-        title: "Error",
-        description: "Failed to load the newsletter signup form. Please try again later.",
-        variant: "destructive",
-      });
-    };
-    
-    document.head.appendChild(script);
-
-    return () => {
-      // Cleanup function to remove the script when component unmounts
-      if (document.head.contains(script)) {
-        document.head.removeChild(script);
-      }
-    };
+    if (!existingScript) {
+      const script = document.createElement('script');
+      script.src = "https://f.convertkit.com/ckjs/ck.5.js";
+      script.async = true;
+      
+      script.onload = () => {
+        console.log("ConvertKit script loaded successfully");
+      };
+      
+      script.onerror = (error) => {
+        console.error("Error loading ConvertKit script:", error);
+        toast({
+          title: "Error",
+          description: "Failed to load the newsletter signup form. Please try again later.",
+          variant: "destructive",
+        });
+      };
+      
+      document.head.appendChild(script);
+      
+      return () => {
+        if (document.head.contains(script)) {
+          document.head.removeChild(script);
+        }
+      };
+    }
   }, [toast]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!formRef.current) return;
+    
     setIsSubmitting(true);
     
     // Get the form data
-    const formData = new FormData(formRef.current as HTMLFormElement);
+    const formData = new FormData(formRef.current);
     const email = formData.get('email_address') as string;
+    
+    if (!email) {
+      toast({
+        title: "Error",
+        description: "Please enter your email address.",
+        variant: "destructive",
+      });
+      setIsSubmitting(false);
+      return;
+    }
     
     // Submit the form through standard form submission to ConvertKit
     fetch("https://app.kit.com/forms/7803602/subscriptions", {
@@ -55,6 +70,7 @@ const EmailSignup = () => {
     })
     .then(response => {
       if (response.ok) {
+        // Show success toast
         toast({
           title: "Success!",
           description: "Thank you for subscribing to our newsletter.",
@@ -64,6 +80,7 @@ const EmailSignup = () => {
         if (formRef.current) {
           formRef.current.reset();
         }
+        return response.json();
       } else {
         throw new Error("Failed to subscribe");
       }
@@ -111,6 +128,7 @@ const EmailSignup = () => {
             data-element="submit" 
             className="formkit-submit formkit-submit w-full bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90 transition-colors flex items-center justify-center"
             disabled={isSubmitting}
+            type="submit"
           >
             {isSubmitting ? (
               <div className="flex items-center">
