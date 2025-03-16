@@ -29,7 +29,7 @@ import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { 
   Rocket, 
-  Fire, 
+  Flame, 
   Briefcase, 
   CheckCircle2, 
   Lock, 
@@ -71,7 +71,7 @@ const PaywallModal = ({ open, onOpenChange, onUpgrade, onLogin }: PaywallModalPr
       description: "Best Value",
       price: "$99",
       period: " one-time",
-      icon: Fire,
+      icon: Flame,
       features: [
         "Unlimited messages",
         "Resume & interview coaching",
