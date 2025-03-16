@@ -7,8 +7,8 @@ const EmailSignup = () => {
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
-    // Show a test toast immediately when the component mounts
-    toast.success("Test toast - component mounted successfully!");
+    // Show a test toast when the component mounts to verify toast functionality
+    toast.success("Newsletter component loaded successfully");
     
     // Load the ConvertKit script - this is already in the HTML, but we'll ensure it's loaded
     const existingScript = document.querySelector('script[src="https://f.convertkit.com/ckjs/ck.5.js"]');
@@ -20,6 +20,7 @@ const EmailSignup = () => {
       
       script.onload = () => {
         console.log("ConvertKit script loaded successfully");
+        toast.info("Newsletter form ready");
       };
       
       script.onerror = (error) => {
@@ -41,7 +42,7 @@ const EmailSignup = () => {
     e.preventDefault();
     console.log("Form submitted, handling submission");
     
-    // Test toast directly to check if it's working
+    // Show processing toast
     toast.info("Processing your subscription...");
     
     if (!formRef.current) return;
@@ -61,7 +62,7 @@ const EmailSignup = () => {
     
     console.log("Submitting to ConvertKit:", email);
     
-    // Submit the form through standard form submission to ConvertKit
+    // Submit the form to ConvertKit
     fetch("https://app.kit.com/forms/7803602/subscriptions", {
       method: "POST",
       body: formData,
