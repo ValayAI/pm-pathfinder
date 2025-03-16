@@ -1,9 +1,7 @@
-
 import React, { useEffect, useRef, useState } from 'react';
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 
 const EmailSignup = () => {
-  const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -22,11 +20,7 @@ const EmailSignup = () => {
       
       script.onerror = (error) => {
         console.error("Error loading ConvertKit script:", error);
-        toast({
-          title: "Error",
-          description: "Failed to load the newsletter signup form. Please try again later.",
-          variant: "destructive",
-        });
+        toast.error("Failed to load the newsletter signup form. Please try again later.");
       };
       
       document.head.appendChild(script);
@@ -37,11 +31,14 @@ const EmailSignup = () => {
         }
       };
     }
-  }, [toast]);
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Form submitted, handling submission");
+    
+    // Test toast directly to check if it's working
+    toast.info("Processing your subscription...");
     
     if (!formRef.current) return;
     
@@ -53,11 +50,7 @@ const EmailSignup = () => {
     
     if (!email) {
       console.log("No email provided, showing error toast");
-      toast({
-        title: "Error",
-        description: "Please enter your email address.",
-        variant: "destructive",
-      });
+      toast.error("Please enter your email address.");
       setIsSubmitting(false);
       return;
     }
@@ -77,10 +70,7 @@ const EmailSignup = () => {
       if (response.ok) {
         // Show success toast
         console.log("Showing success toast");
-        toast({
-          title: "Success!",
-          description: "Thank you for subscribing to our newsletter.",
-        });
+        toast.success("Thank you for subscribing to our newsletter!");
         
         // Reset the form
         if (formRef.current) {
@@ -94,11 +84,7 @@ const EmailSignup = () => {
     .catch(error => {
       console.error("Subscription error:", error);
       console.log("Showing error toast");
-      toast({
-        title: "Subscription failed",
-        description: "There was an error subscribing to the newsletter. Please try again later.",
-        variant: "destructive",
-      });
+      toast.error("There was an error subscribing to the newsletter. Please try again later.");
     })
     .finally(() => {
       setIsSubmitting(false);
