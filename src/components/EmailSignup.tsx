@@ -2,14 +2,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/components/ui/use-toast";
-import { useLocalStorage } from "@/hooks/use-local-storage";
+import { useToast } from "@/hooks/use-toast";
 import { SendIcon } from "lucide-react";
 
 const EmailSignup = () => {
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [subscribers, setSubscribers] = useLocalStorage<string[]>('pm-pathfinder-subscribers', []);
   const { toast } = useToast();
   const formRef = useRef<HTMLFormElement>(null);
   const [convertKitInitialized, setConvertKitInitialized] = useState(false);
@@ -67,45 +65,61 @@ const EmailSignup = () => {
 
     setIsSubmitting(true);
     
-    // Check if email already exists in local storage
-    if (subscribers.includes(email)) {
-      toast({
-        title: "Already subscribed",
-        description: "This email is already on our list. Thanks for your enthusiasm!",
-      });
-      setIsSubmitting(false);
-      return;
-    }
-
-    // Add to local storage
-    setSubscribers([...subscribers, email]);
-    
-    // Trigger the ConvertKit form submission
+    // Method 1: Use ConvertKit's JavaScript API if available
     if (typeof window !== 'undefined' && window.convertkit) {
       try {
-        // ConvertKit API
         window.convertkit.createSubscriber({
           email: email,
           form: '51a320fe9d',
         }).then(() => {
           console.log("Subscriber created successfully via ConvertKit API");
+          showSuccessToast();
         }).catch((error: any) => {
           console.error("Error creating subscriber via ConvertKit API:", error);
+          fallbackSubmission();
         });
       } catch (error) {
         console.error("Error using ConvertKit API:", error);
+        fallbackSubmission();
       }
     } else {
-      console.log("ConvertKit API not available, would have submitted:", email);
+      // Method 2: Direct form submission as fallback
+      fallbackSubmission();
     }
-    
+  };
+
+  const fallbackSubmission = () => {
+    // This is a fallback method that uses the native form submission
+    // which will POST directly to ConvertKit's servers
+    if (formRef.current) {
+      console.log("Using fallback direct form submission to ConvertKit");
+      
+      // Create a hidden form that will submit directly to ConvertKit
+      const hiddenForm = document.createElement('form');
+      hiddenForm.method = 'POST';
+      hiddenForm.action = `https://app.convertkit.com/forms/51a320fe9d/subscriptions`;
+      hiddenForm.target = '_blank';
+      
+      const emailInput = document.createElement('input');
+      emailInput.type = 'email';
+      emailInput.name = 'email_address';
+      emailInput.value = email;
+      
+      hiddenForm.appendChild(emailInput);
+      document.body.appendChild(hiddenForm);
+      
+      hiddenForm.submit();
+      document.body.removeChild(hiddenForm);
+      
+      showSuccessToast();
+    }
+  };
+  
+  const showSuccessToast = () => {
     toast({
       title: "Subscription successful!",
       description: "Thank you for subscribing to our newsletter.",
     });
-    
-    console.log("New subscriber:", email);
-    console.log("All subscribers:", [...subscribers, email]);
     
     setEmail('');
     setIsSubmitting(false);
