@@ -114,8 +114,12 @@ export function Chat() {
         
         setMessages(prev => [...prev, assistantMessage]);
         toast({
-          description: "Retrieved from cache",
-          icon: <Clock className="h-4 w-4" />,
+          description: (
+            <div className="flex items-center">
+              <Clock className="h-4 w-4 mr-2" />
+              <span>Retrieved from cache</span>
+            </div>
+          ),
         });
       }, 500); // Small delay to make it feel more natural
       
