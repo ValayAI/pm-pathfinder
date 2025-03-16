@@ -1,10 +1,9 @@
-
 import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { 
-  Menu, X, Compass, BookOpen, MessageSquare, User, Moon, Sun 
+  Menu, X, Compass, BookOpen, MessageSquare, User, Moon, Sun, DollarSign
 } from "lucide-react";
 
 export function Navbar() {
@@ -39,6 +38,7 @@ export function Navbar() {
     { name: 'Explore', path: '/explore', icon: <Compass className="h-4 w-4 mr-1" /> },
     { name: 'Resources', path: '/resources', icon: <BookOpen className="h-4 w-4 mr-1" /> },
     { name: 'Coaching', path: '/coaching', icon: <MessageSquare className="h-4 w-4 mr-1" /> },
+    { name: 'Pricing', path: '/pricing', icon: <DollarSign className="h-4 w-4 mr-1" /> },
   ];
   
   return (
