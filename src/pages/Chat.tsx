@@ -1,3 +1,4 @@
+
 import { useEffect, useState, useRef, FormEvent } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -6,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Send, Sparkles, Clock, AlertCircle } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "sonner"; // Change to import from sonner directly
 import { cn } from "@/lib/utils";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import MessageBubble from "@/components/MessageBubble";
@@ -36,7 +37,6 @@ export function Chat() {
   const [usedMessages, setUsedMessages] = useLocalStorage<number>("usedMessages", 0);
   const [responseCache, setResponseCache] = useLocalStorage<CachedResponse[]>("responseCache", []);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const { toast } = useToast();
   const [isVisible, setIsVisible] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
 
@@ -50,6 +50,15 @@ export function Chat() {
       setShowPaywall(true);
     }
   }, [usedMessages]);
+
+  // Add a test toast on component mount to verify toast is working
+  useEffect(() => {
+    // Show a welcome toast when the component mounts
+    toast("Welcome to your PM Coach!", {
+      description: "Ask me anything about product management!",
+      duration: 3000,
+    });
+  }, []);
 
   const checkCache = (query: string): string | null => {
     const normalizedQuery = query.trim().toLowerCase();
@@ -111,13 +120,10 @@ export function Chat() {
         };
         
         setMessages(prev => [...prev, assistantMessage]);
-        toast({
-          description: (
-            <div className="flex items-center">
-              <Clock className="h-4 w-4 mr-2" />
-              <span>Retrieved from cache</span>
-            </div>
-          ),
+        
+        // Update toast to use Sonner
+        toast("Retrieved from cache", {
+          icon: <Clock className="h-4 w-4" />,
         });
       }, 500);
       
@@ -143,19 +149,18 @@ export function Chat() {
       updateCache(input, data.message);
       
       if (usedMessages + 1 >= MAX_FREE_MESSAGES) {
-        toast({
-          title: "Free limit reached",
+        // Update toast to use Sonner
+        toast.error("Free limit reached", {
           description: "You've used all your free messages. Please upgrade to continue.",
-          variant: "destructive",
         });
       }
       
     } catch (error) {
       console.error("Chat error:", error);
-      toast({
-        title: "Error",
+      
+      // Update toast to use Sonner
+      toast.error("Error", {
         description: "Failed to get response. Please try again.",
-        variant: "destructive",
       });
       
       const errorMessage: Message = {
@@ -172,24 +177,25 @@ export function Chat() {
   };
 
   const handleUpgrade = (plan: string) => {
-    toast({
-      title: "Upgrade initiated",
+    // Update toast to use Sonner
+    toast.success("Upgrade initiated", {
       description: `You selected the ${plan} plan. Redirecting to payment...`,
     });
     
     setTimeout(() => {
       setShowPaywall(false);
       setUsedMessages(0);
-      toast({
-        title: "Upgrade successful!",
+      
+      // Update toast to use Sonner
+      toast.success("Upgrade successful!", {
         description: "You now have unlimited access to your PM Coach.",
       });
     }, 2000);
   };
 
   const handleLogin = () => {
-    toast({
-      title: "Login successful",
+    // Update toast to use Sonner
+    toast.success("Login successful", {
       description: "Welcome back! You now have full access.",
     });
     setShowPaywall(false);
