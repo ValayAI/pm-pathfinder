@@ -2,6 +2,7 @@
 import React from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import EmailSignup from "../components/EmailSignup";
 
 const Explore = () => {
   return (
@@ -10,9 +11,14 @@ const Explore = () => {
       <main className="flex-grow container mx-auto px-4 py-24">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-4xl font-bold mb-6">Explore Product Management Resources</h1>
-          <p className="text-xl text-muted-foreground mb-12">
+          <p className="text-xl text-muted-foreground mb-6">
             Discover tools, frameworks, and methodologies to enhance your product management skills.
           </p>
+          
+          {/* Email signup component */}
+          <div className="max-w-md mx-auto mb-12">
+            <EmailSignup />
+          </div>
           
           <div className="grid md:grid-cols-2 gap-6">
             <div className="bg-card rounded-lg p-6 shadow-sm">
@@ -78,9 +84,6 @@ const Explore = () => {
           
           <div className="mt-12 text-center">
             <p className="text-muted-foreground mb-4">More resources coming soon. Subscribe to our newsletter for updates.</p>
-            <button className="bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-md transition-colors">
-              Stay Updated
-            </button>
           </div>
         </div>
       </main>

@@ -2,6 +2,7 @@
 import React from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import EmailSignup from "../components/EmailSignup";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { BookOpen, FileText, Video, Download } from "lucide-react";
@@ -62,6 +63,11 @@ const Resources = () => {
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Access our library of templates, guides, and tools to enhance your product management skills.
             </p>
+            
+            {/* Email signup component */}
+            <div className="max-w-md mx-auto mt-6">
+              <EmailSignup />
+            </div>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

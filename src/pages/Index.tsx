@@ -7,6 +7,7 @@ import FeatureSection from "@/components/FeatureSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import CTASection from "@/components/CTASection";
 import Footer from "@/components/Footer";
+import EmailSignup from "@/components/EmailSignup";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, MessageSquareText } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -41,6 +42,11 @@ const Index = () => {
               </Button>
             </Link>
             <p className="text-muted-foreground">Get instant answers to your product management questions</p>
+            
+            {/* Email signup component */}
+            <div className="max-w-md mx-auto mt-8">
+              <EmailSignup />
+            </div>
           </div>
         </div>
         <FeatureSection />
