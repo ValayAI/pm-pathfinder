@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef, useState } from 'react';
 import { toast } from "sonner";
 
@@ -6,6 +7,9 @@ const EmailSignup = () => {
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
+    // Show a test toast immediately when the component mounts
+    toast.success("Test toast - component mounted successfully!");
+    
     // Load the ConvertKit script - this is already in the HTML, but we'll ensure it's loaded
     const existingScript = document.querySelector('script[src="https://f.convertkit.com/ckjs/ck.5.js"]');
     
