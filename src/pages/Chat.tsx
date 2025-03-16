@@ -1,3 +1,4 @@
+
 import { useEffect, useState, useRef, FormEvent } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -10,6 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import MessageBubble from "@/components/MessageBubble";
+import PaywallModal from "@/components/PaywallModal";
 
 type Message = {
   id: string;
@@ -36,11 +38,19 @@ export function Chat() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
   const [isVisible, setIsVisible] = useState(false);
+  const [showPaywall, setShowPaywall] = useState(false);
 
   useEffect(() => {
     setIsVisible(true);
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  // Show paywall if user has reached limit
+  useEffect(() => {
+    if (usedMessages >= MAX_FREE_MESSAGES) {
+      setShowPaywall(true);
+    }
+  }, [usedMessages]);
 
   const checkCache = (query: string): string | null => {
     const normalizedQuery = query.trim().toLowerCase();
@@ -77,11 +87,7 @@ export function Chat() {
     if (!input.trim()) return;
     
     if (usedMessages >= MAX_FREE_MESSAGES) {
-      toast({
-        title: "Message limit reached",
-        description: "You've reached your free message limit. Please upgrade to continue.",
-        variant: "destructive",
-      });
+      setShowPaywall(true);
       return;
     }
     
@@ -151,6 +157,15 @@ export function Chat() {
       setUsedMessages(prev => prev + 1);
       updateCache(input, data.message);
       
+      // Check if this was the last free message
+      if (usedMessages + 1 >= MAX_FREE_MESSAGES) {
+        toast({
+          title: "Free limit reached",
+          description: "You've used all your free messages. Please upgrade to continue.",
+          variant: "destructive",
+        });
+      }
+      
     } catch (error) {
       toast({
         title: "Error",
@@ -171,6 +186,36 @@ export function Chat() {
     }
   };
 
+  const handleUpgrade = (plan: string) => {
+    // In a real app, this would redirect to a payment page
+    toast({
+      title: "Upgrade initiated",
+      description: `You selected the ${plan} plan. Redirecting to payment...`,
+    });
+    
+    // For demo purposes: simulate successful payment and hide paywall
+    setTimeout(() => {
+      setShowPaywall(false);
+      // Reset message count to simulate unlimited access
+      setUsedMessages(0);
+      toast({
+        title: "Upgrade successful!",
+        description: "You now have unlimited access to your PM Coach.",
+      });
+    }, 2000);
+  };
+
+  const handleLogin = () => {
+    // For demo purposes only
+    toast({
+      title: "Login successful",
+      description: "Welcome back! You now have full access.",
+    });
+    setShowPaywall(false);
+    // Reset message count to simulate unlimited access
+    setUsedMessages(0);
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
@@ -180,7 +225,7 @@ export function Chat() {
           isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
         )}>
           <div className="mb-8 text-center">
-            <div className="inline-flex items-center rounded-full px-4 py-1 text-sm font-medium bg-primary/10 text-primary mb-4">
+            <div className="inline-flex items-center rounded-full px-4 py-1 text-sm font-medium bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200 mb-4">
               <Sparkles className="mr-2 h-4 w-4" />
               <span>Your AI PM Coach</span>
             </div>
@@ -194,7 +239,7 @@ export function Chat() {
             <div className="flex-grow overflow-y-auto mb-4 space-y-4 p-2">
               {messages.length === 0 ? (
                 <div className="h-full flex flex-col items-center justify-center text-center p-8 text-muted-foreground">
-                  <Sparkles className="h-12 w-12 mb-4 text-primary/50" />
+                  <Sparkles className="h-12 w-12 mb-4 text-purple-500/50" />
                   <p className="mb-2">Your PM Coach is ready</p>
                   <p className="text-sm">Ask about career paths, interview prep, or product strategy</p>
                 </div>
@@ -206,9 +251,9 @@ export function Chat() {
               {isLoading && (
                 <div className="flex items-center justify-center p-4">
                   <div className="animate-pulse flex space-x-2">
-                    <div className="h-2 w-2 bg-primary rounded-full"></div>
-                    <div className="h-2 w-2 bg-primary rounded-full"></div>
-                    <div className="h-2 w-2 bg-primary rounded-full"></div>
+                    <div className="h-2 w-2 bg-purple-500 rounded-full"></div>
+                    <div className="h-2 w-2 bg-purple-500 rounded-full"></div>
+                    <div className="h-2 w-2 bg-purple-500 rounded-full"></div>
                   </div>
                 </div>
               )}
@@ -226,6 +271,7 @@ export function Chat() {
               <Button 
                 type="submit" 
                 disabled={isLoading || !input.trim() || usedMessages >= MAX_FREE_MESSAGES}
+                className="bg-purple-600 hover:bg-purple-700"
               >
                 <Send className="h-4 w-4" />
               </Button>
@@ -237,7 +283,11 @@ export function Chat() {
               <span>Coaching sessions used</span>
               <span className="font-medium">{usedMessages} / {MAX_FREE_MESSAGES}</span>
             </div>
-            <Progress value={(usedMessages / MAX_FREE_MESSAGES) * 100} className="h-2" />
+            <Progress 
+              value={(usedMessages / MAX_FREE_MESSAGES) * 100} 
+              className="h-2" 
+              indicatorClassName="bg-purple-600"
+            />
             {usedMessages >= MAX_FREE_MESSAGES && (
               <div className="mt-2 flex items-center text-destructive text-sm">
                 <AlertCircle className="h-4 w-4 mr-1" />
@@ -256,13 +306,24 @@ export function Chat() {
             <p className="text-muted-foreground mb-6 max-w-md mx-auto">
               Get unlimited coaching sessions, personalized feedback, and exclusive PM resources and frameworks.
             </p>
-            <Button size="lg">
+            <Button 
+              size="lg" 
+              onClick={() => setShowPaywall(true)}
+              className="bg-purple-600 hover:bg-purple-700"
+            >
               Unlock Premium Coaching
             </Button>
           </div>
         </div>
       </main>
       <Footer />
+      
+      <PaywallModal 
+        open={showPaywall} 
+        onOpenChange={setShowPaywall}
+        onUpgrade={handleUpgrade}
+        onLogin={handleLogin}
+      />
     </div>
   );
 }
