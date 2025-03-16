@@ -41,6 +41,7 @@ const EmailSignup = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("Form submitted, handling submission");
     
     if (!formRef.current) return;
     
@@ -51,6 +52,7 @@ const EmailSignup = () => {
     const email = formData.get('email_address') as string;
     
     if (!email) {
+      console.log("No email provided, showing error toast");
       toast({
         title: "Error",
         description: "Please enter your email address.",
@@ -59,6 +61,8 @@ const EmailSignup = () => {
       setIsSubmitting(false);
       return;
     }
+    
+    console.log("Submitting to ConvertKit:", email);
     
     // Submit the form through standard form submission to ConvertKit
     fetch("https://app.kit.com/forms/7803602/subscriptions", {
@@ -69,8 +73,10 @@ const EmailSignup = () => {
       }
     })
     .then(response => {
+      console.log("ConvertKit response received:", response.status);
       if (response.ok) {
         // Show success toast
+        console.log("Showing success toast");
         toast({
           title: "Success!",
           description: "Thank you for subscribing to our newsletter.",
@@ -87,6 +93,7 @@ const EmailSignup = () => {
     })
     .catch(error => {
       console.error("Subscription error:", error);
+      console.log("Showing error toast");
       toast({
         title: "Subscription failed",
         description: "There was an error subscribing to the newsletter. Please try again later.",
