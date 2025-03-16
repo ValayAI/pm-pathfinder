@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import MessageBubble from "@/components/MessageBubble";
 import PaywallModal from "@/components/PaywallModal";
-import { handleChatRequest } from "@/api/chat";
+import { handleChatRequest } from "@/api/chat.tsx";
 
 type Message = {
   id: string;
