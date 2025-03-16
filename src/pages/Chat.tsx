@@ -1,4 +1,3 @@
-
 import { useEffect, useState, useRef, FormEvent } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -12,6 +11,7 @@ import { cn } from "@/lib/utils";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import MessageBubble from "@/components/MessageBubble";
 import PaywallModal from "@/components/PaywallModal";
+import { handleChatRequest } from "@/api/chat";
 
 type Message = {
   id: string;
@@ -45,7 +45,6 @@ export function Chat() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // Show paywall if user has reached limit
   useEffect(() => {
     if (usedMessages >= MAX_FREE_MESSAGES) {
       setShowPaywall(true);
@@ -130,21 +129,7 @@ export function Chat() {
     setInput("");
     
     try {
-      const response = await fetch("api/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          message: input,
-        }),
-      });
-      
-      if (!response.ok) {
-        throw new Error("Failed to get response");
-      }
-      
-      const data = await response.json();
+      const data = await handleChatRequest({ message: input });
       
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
@@ -157,7 +142,6 @@ export function Chat() {
       setUsedMessages(prev => prev + 1);
       updateCache(input, data.message);
       
-      // Check if this was the last free message
       if (usedMessages + 1 >= MAX_FREE_MESSAGES) {
         toast({
           title: "Free limit reached",
@@ -167,6 +151,7 @@ export function Chat() {
       }
       
     } catch (error) {
+      console.error("Chat error:", error);
       toast({
         title: "Error",
         description: "Failed to get response. Please try again.",
@@ -187,16 +172,13 @@ export function Chat() {
   };
 
   const handleUpgrade = (plan: string) => {
-    // In a real app, this would redirect to a payment page
     toast({
       title: "Upgrade initiated",
       description: `You selected the ${plan} plan. Redirecting to payment...`,
     });
     
-    // For demo purposes: simulate successful payment and hide paywall
     setTimeout(() => {
       setShowPaywall(false);
-      // Reset message count to simulate unlimited access
       setUsedMessages(0);
       toast({
         title: "Upgrade successful!",
@@ -206,13 +188,11 @@ export function Chat() {
   };
 
   const handleLogin = () => {
-    // For demo purposes only
     toast({
       title: "Login successful",
       description: "Welcome back! You now have full access.",
     });
     setShowPaywall(false);
-    // Reset message count to simulate unlimited access
     setUsedMessages(0);
   };
 
