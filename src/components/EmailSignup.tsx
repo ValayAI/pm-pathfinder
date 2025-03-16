@@ -1,6 +1,8 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { toast } from "sonner";
+import { isSubscribed, addSubscriber } from '@/utils/subscriberUtils';
+import { Input } from './ui/input';
 
 const EmailSignup = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -42,12 +44,7 @@ const EmailSignup = () => {
     e.preventDefault();
     console.log("Form submitted, handling submission");
     
-    // Show processing toast
-    toast.info("Processing your subscription...");
-    
     if (!formRef.current) return;
-    
-    setIsSubmitting(true);
     
     // Get the form data
     const formData = new FormData(formRef.current);
@@ -56,14 +53,24 @@ const EmailSignup = () => {
     if (!email) {
       console.log("No email provided, showing error toast");
       toast.error("Please enter your email address.");
-      setIsSubmitting(false);
       return;
     }
+    
+    // Check if already subscribed
+    if (isSubscribed(email)) {
+      console.log("Email already subscribed:", email);
+      toast.info("You're already subscribed to our newsletter!");
+      return;
+    }
+    
+    // Show processing toast
+    toast.info("Processing your subscription...");
+    setIsSubmitting(true);
     
     console.log("Submitting to ConvertKit:", email);
     
     // Submit the form to ConvertKit
-    fetch("https://app.kit.com/forms/7803602/subscriptions", {
+    fetch("https://app.convertkit.com/forms/7803602/subscriptions", {
       method: "POST",
       body: formData,
       headers: {
@@ -76,6 +83,9 @@ const EmailSignup = () => {
         // Show success toast
         console.log("Showing success toast");
         toast.success("Thank you for subscribing to our newsletter!");
+        
+        // Add to local storage
+        addSubscriber(email);
         
         // Reset the form
         if (formRef.current) {
@@ -100,7 +110,7 @@ const EmailSignup = () => {
     <div className="bg-muted/30 border border-border rounded-md shadow-sm">
       <form 
         ref={formRef}
-        action="https://app.kit.com/forms/7803602/subscriptions" 
+        action="https://app.convertkit.com/forms/7803602/subscriptions" 
         className="seva-form formkit-form" 
         method="post" 
         data-sv-form="7803602" 
@@ -113,8 +123,8 @@ const EmailSignup = () => {
         <div data-style="full">
           <div className="formkit-field mb-3">
             <label htmlFor="email-address" className="block text-base font-medium mb-2">Stay updated with PM resources</label>
-            <input 
-              className="formkit-input w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" 
+            <Input 
+              className="formkit-input w-full" 
               name="email_address" 
               aria-label="Email Address" 
               placeholder="Enter your email" 
