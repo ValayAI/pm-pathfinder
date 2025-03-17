@@ -56,7 +56,7 @@ const PaywallModal = ({ open, onOpenChange, onUpgrade, onLogin }: PaywallModalPr
       price: "$29",
       period: "/month",
       icon: Rocket,
-      priceId: "price_1R3JHtK225E53DUIj3BqvhKu", // Updated to a valid price ID
+      priceId: "price_1NhJHtK225E53DUItest001", // Updated test price ID
       features: [
         "50 messages/month",
         "PM career & interview tips"
@@ -73,7 +73,7 @@ const PaywallModal = ({ open, onOpenChange, onUpgrade, onLogin }: PaywallModalPr
       price: "$99",
       period: " one-time",
       icon: Flame,
-      priceId: "price_1R3JHGK225E53DUIm7Qtp84l", // Updated to a valid price ID
+      priceId: "price_1NhJHGK225E53DUItest002", // Updated test price ID
       features: [
         "Unlimited messages",
         "Resume & interview coaching",
@@ -92,7 +92,7 @@ const PaywallModal = ({ open, onOpenChange, onUpgrade, onLogin }: PaywallModalPr
       price: "$249",
       period: " one-time",
       icon: Briefcase,
-      priceId: "price_1R3JIkK225E53DUIgdpvD8HS", // Updated to a valid price ID
+      priceId: "price_1NhJIkK225E53DUItest003", // Updated test price ID
       features: [
         "Everything in Most Popular",
         "1-on-1 PM coaching call",

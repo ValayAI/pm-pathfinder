@@ -3,7 +3,7 @@ import { loadStripe } from '@stripe/stripe-js';
 
 // Initialize Stripe with your publishable key
 // In a production environment, you should use an environment variable
-const stripePromise = loadStripe('pk_live_51R3J6WK225E53DUIWzPcD3dVqdWIP7UKcpd8ZBXtMLSmzEiEshEa7wAWLWlSQUxVBiQ74HwZ1KWkrsGavumRA8ab00YfrD11Vn');
+const stripePromise = loadStripe('pk_test_51R3J6WK225E53DUIWzPcD3dVqdWIP7UKcpd8ZBXtMLSmzEiEshEa7wAWLWlSQUxVBiQ74HwZ1KWkrsGavumRA8ab00YfrD11Vn');
 
 export interface CheckoutSessionRequest {
   priceId: string;
@@ -29,7 +29,7 @@ export const createCheckoutSession = async (request: CheckoutSessionRequest) => 
           quantity: 1,
         },
       ],
-      mode: 'subscription',
+      mode: 'payment',
       successUrl: request.successUrl || window.location.origin + '/success',
       cancelUrl: request.cancelUrl || window.location.origin + '/pricing',
     });

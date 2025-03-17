@@ -51,8 +51,18 @@ const StripeCheckout: React.FC<StripeCheckoutProps> = ({
       }
     } catch (error) {
       console.error('Error during checkout:', error);
+      
+      // Provide a more detailed error message based on the error
+      let errorMessage = "Unable to process your payment. Please try again.";
+      
+      if (error instanceof Error) {
+        if (error.message.includes("No such plan")) {
+          errorMessage = "This payment plan is currently unavailable. Please try a different plan or contact support.";
+        }
+      }
+      
       toast.error("Payment failed", {
-        description: "Unable to process your payment. Please try again.",
+        description: errorMessage,
       });
     } finally {
       setIsLoading(false);
