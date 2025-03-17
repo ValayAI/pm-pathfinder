@@ -35,10 +35,10 @@ import {
   Lock, 
   LockOpen,
   CreditCard,
-  DollarSign,
   ThumbsUp 
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import StripeCheckout from "./StripeCheckout";
 
 interface PaywallModalProps {
   open: boolean;
@@ -56,6 +56,7 @@ const PaywallModal = ({ open, onOpenChange, onUpgrade, onLogin }: PaywallModalPr
       price: "$29",
       period: "/month",
       icon: Rocket,
+      priceId: "price_starter123",
       features: [
         "50 messages/month",
         "PM career & interview tips"
@@ -72,6 +73,7 @@ const PaywallModal = ({ open, onOpenChange, onUpgrade, onLogin }: PaywallModalPr
       price: "$99",
       period: " one-time",
       icon: Flame,
+      priceId: "price_popular456",
       features: [
         "Unlimited messages",
         "Resume & interview coaching",
@@ -90,6 +92,7 @@ const PaywallModal = ({ open, onOpenChange, onUpgrade, onLogin }: PaywallModalPr
       price: "$249",
       period: " one-time",
       icon: Briefcase,
+      priceId: "price_pro789",
       features: [
         "Everything in Most Popular",
         "1-on-1 PM coaching call",
@@ -101,6 +104,10 @@ const PaywallModal = ({ open, onOpenChange, onUpgrade, onLogin }: PaywallModalPr
       buttonVariant: "outline" as const
     }
   ];
+
+  const handlePlanSuccess = (planId: string) => {
+    onUpgrade(planId);
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -165,23 +172,14 @@ const PaywallModal = ({ open, onOpenChange, onUpgrade, onLogin }: PaywallModalPr
                   </ul>
                 </CardContent>
                 <CardFooter>
-                  <Button 
-                    className={cn(
-                      "w-full", 
-                      plan.highlight ? "bg-purple-600 hover:bg-purple-700" : ""
-                    )} 
+                  <StripeCheckout 
+                    planId={plan.id}
+                    planName={plan.name}
+                    priceId={plan.priceId}
                     variant={plan.buttonVariant}
-                    onClick={() => onUpgrade(plan.id)}
-                  >
-                    {plan.highlight ? (
-                      <>
-                        <DollarSign className="h-4 w-4 mr-1" />
-                        Choose Plan
-                      </>
-                    ) : (
-                      "Select Plan"
-                    )}
-                  </Button>
+                    highlight={plan.highlight}
+                    onSuccess={() => handlePlanSuccess(plan.id)}
+                  />
                 </CardFooter>
               </Card>
             ))}

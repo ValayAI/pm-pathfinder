@@ -16,7 +16,6 @@ import {
   Flame, 
   Briefcase, 
   CheckCircle2, 
-  Lock, 
   LockOpen,
   CreditCard,
   DollarSign,
@@ -25,6 +24,8 @@ import {
 import { cn } from "@/lib/utils";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import StripeCheckout from "@/components/StripeCheckout";
+import { toast } from "sonner";
 
 const Pricing = () => {
   const plans = [
@@ -35,6 +36,7 @@ const Pricing = () => {
       price: "$29",
       period: "/month",
       icon: Rocket,
+      priceId: "price_starter123",
       features: [
         "50 messages/month",
         "PM career & interview tips"
@@ -51,6 +53,7 @@ const Pricing = () => {
       price: "$99",
       period: " one-time",
       icon: Flame,
+      priceId: "price_popular456",
       features: [
         "Unlimited messages",
         "Resume & interview coaching",
@@ -69,6 +72,7 @@ const Pricing = () => {
       price: "$249",
       period: " one-time",
       icon: Briefcase,
+      priceId: "price_pro789",
       features: [
         "Everything in Most Popular",
         "1-on-1 PM coaching call",
@@ -81,14 +85,16 @@ const Pricing = () => {
     }
   ];
 
-  const handleUpgrade = (plan: string) => {
-    console.log(`Selected plan: ${plan}`);
-    // Upgrade logic here
+  const handlePlanSuccess = (planId: string) => {
+    toast.success("Upgrade successful!", {
+      description: `You've successfully subscribed to the ${planId} plan.`,
+    });
   };
 
   const handleLogin = () => {
-    console.log('Login clicked');
-    // Login logic here
+    toast.success("Login successful", {
+      description: "Welcome back! You now have full access.",
+    });
   };
 
   return (
@@ -151,23 +157,14 @@ const Pricing = () => {
                 </ul>
               </CardContent>
               <CardFooter>
-                <Button 
-                  className={cn(
-                    "w-full", 
-                    plan.highlight ? "bg-purple-600 hover:bg-purple-700" : ""
-                  )} 
+                <StripeCheckout 
+                  planId={plan.id}
+                  planName={plan.name}
+                  priceId={plan.priceId}
                   variant={plan.buttonVariant}
-                  onClick={() => handleUpgrade(plan.id)}
-                >
-                  {plan.highlight ? (
-                    <>
-                      <DollarSign className="h-4 w-4 mr-1" />
-                      Choose Plan
-                    </>
-                  ) : (
-                    "Select Plan"
-                  )}
-                </Button>
+                  highlight={plan.highlight}
+                  onSuccess={() => handlePlanSuccess(plan.id)}
+                />
               </CardFooter>
             </Card>
           ))}
