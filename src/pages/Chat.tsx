@@ -1,4 +1,3 @@
-
 import { useEffect, useState, useRef, FormEvent } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -7,12 +6,13 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Send, Sparkles, Clock, AlertCircle } from "lucide-react";
-import { toast } from "sonner"; // Change to import from sonner directly
+import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import MessageBubble from "@/components/MessageBubble";
 import PaywallModal from "@/components/PaywallModal";
 import { handleChatRequest } from "@/api/chat.tsx";
+import PreloadedPrompts from "@/components/PreloadedPrompts";
 
 type Message = {
   id: string;
@@ -51,9 +51,7 @@ export function Chat() {
     }
   }, [usedMessages]);
 
-  // Add a test toast on component mount to verify toast is working
   useEffect(() => {
-    // Show a welcome toast when the component mounts
     toast("Welcome to your PM Coach!", {
       description: "Ask me anything about product management!",
       duration: 3000,
@@ -89,6 +87,10 @@ export function Chat() {
     setResponseCache(newCache);
   };
 
+  const handleSelectPrompt = (prompt: string) => {
+    setInput(prompt);
+  };
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     
@@ -121,7 +123,6 @@ export function Chat() {
         
         setMessages(prev => [...prev, assistantMessage]);
         
-        // Update toast to use Sonner
         toast("Retrieved from cache", {
           icon: <Clock className="h-4 w-4" />,
         });
@@ -149,7 +150,6 @@ export function Chat() {
       updateCache(input, data.message);
       
       if (usedMessages + 1 >= MAX_FREE_MESSAGES) {
-        // Update toast to use Sonner
         toast.error("Free limit reached", {
           description: "You've used all your free messages. Please upgrade to continue.",
         });
@@ -158,7 +158,6 @@ export function Chat() {
     } catch (error) {
       console.error("Chat error:", error);
       
-      // Update toast to use Sonner
       toast.error("Error", {
         description: "Failed to get response. Please try again.",
       });
@@ -177,7 +176,6 @@ export function Chat() {
   };
 
   const handleUpgrade = (plan: string) => {
-    // Update toast to use Sonner
     toast.success("Upgrade initiated", {
       description: `You selected the ${plan} plan. Redirecting to payment...`,
     });
@@ -186,7 +184,6 @@ export function Chat() {
       setShowPaywall(false);
       setUsedMessages(0);
       
-      // Update toast to use Sonner
       toast.success("Upgrade successful!", {
         description: "You now have unlimited access to your PM Coach.",
       });
@@ -194,7 +191,6 @@ export function Chat() {
   };
 
   const handleLogin = () => {
-    // Update toast to use Sonner
     toast.success("Login successful", {
       description: "Welcome back! You now have full access.",
     });
@@ -224,10 +220,14 @@ export function Chat() {
           <Card className="bg-card/50 backdrop-blur-sm border rounded-xl shadow-md mb-4 p-4 min-h-[400px] flex flex-col">
             <div className="flex-grow overflow-y-auto mb-4 space-y-4 p-2">
               {messages.length === 0 ? (
-                <div className="h-full flex flex-col items-center justify-center text-center p-8 text-muted-foreground">
+                <div className="h-full flex flex-col items-center justify-center text-center p-8">
                   <Sparkles className="h-12 w-12 mb-4 text-purple-500/50" />
                   <p className="mb-2">Your PM Coach is ready</p>
-                  <p className="text-sm">Ask about career paths, interview prep, or product strategy</p>
+                  <p className="text-sm mb-8">Ask about career paths, interview prep, or product strategy</p>
+                  
+                  <div className="max-w-md w-full">
+                    <PreloadedPrompts onSelectPrompt={handleSelectPrompt} />
+                  </div>
                 </div>
               ) : (
                 messages.map((message) => (
