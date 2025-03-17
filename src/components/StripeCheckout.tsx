@@ -32,6 +32,8 @@ const StripeCheckout: React.FC<StripeCheckoutProps> = ({
         description: `Preparing checkout for ${planName} plan...`,
       });
       
+      console.log(`Processing checkout for plan: ${planName}, price ID: ${priceId}`);
+      
       // Get the current URL for success and cancel URLs
       const successUrl = `${window.location.origin}/success?plan=${planId}`;
       const cancelUrl = `${window.location.origin}/pricing`;
