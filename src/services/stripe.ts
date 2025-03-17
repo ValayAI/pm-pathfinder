@@ -20,6 +20,8 @@ export const createCheckoutSession = async (request: CheckoutSessionRequest) => 
       throw new Error('Failed to load Stripe');
     }
 
+    console.log(`Creating checkout session with priceId: ${request.priceId}`);
+
     // In a real app, this would call your backend API to create a checkout session
     // For this example, we're creating a checkout session directly on the client
     const { error } = await stripe.redirectToCheckout({
@@ -35,6 +37,7 @@ export const createCheckoutSession = async (request: CheckoutSessionRequest) => 
     });
 
     if (error) {
+      console.error('Stripe checkout error:', error);
       throw error;
     }
 

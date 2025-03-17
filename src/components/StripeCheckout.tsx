@@ -32,7 +32,7 @@ const StripeCheckout: React.FC<StripeCheckoutProps> = ({
         description: `Preparing checkout for ${planName} plan...`,
       });
       
-      console.log(`Processing checkout for plan: ${planName}, price ID: ${priceId}`);
+      console.log(`Processing checkout for plan: ${planName}, product ID: ${priceId}`);
       
       // Get the current URL for success and cancel URLs
       const successUrl = `${window.location.origin}/success?plan=${planId}`;
@@ -56,8 +56,12 @@ const StripeCheckout: React.FC<StripeCheckoutProps> = ({
       let errorMessage = "Unable to process your payment. Please try again.";
       
       if (error instanceof Error) {
-        if (error.message.includes("No such plan")) {
+        errorMessage = `Payment error: ${error.message}`;
+        
+        if (error.message.includes("No such price")) {
           errorMessage = "This payment plan is currently unavailable. Please try a different plan or contact support.";
+        } else if (error.message.includes("Invalid API Key")) {
+          errorMessage = "Payment processing is temporarily unavailable. Please try again later.";
         }
       }
       
