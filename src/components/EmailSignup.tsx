@@ -1,5 +1,5 @@
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { toast } from "sonner";
 import { isSubscribed, addSubscriber } from '@/utils/subscriberUtils';
 import { Input } from './ui/input';
@@ -7,38 +7,6 @@ import { Input } from './ui/input';
 const EmailSignup = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
-
-  useEffect(() => {
-    // Show a test toast when the component mounts to verify toast functionality
-    toast.success("Newsletter component loaded successfully");
-    
-    // Load the ConvertKit script - this is already in the HTML, but we'll ensure it's loaded
-    const existingScript = document.querySelector('script[src="https://f.convertkit.com/ckjs/ck.5.js"]');
-    
-    if (!existingScript) {
-      const script = document.createElement('script');
-      script.src = "https://f.convertkit.com/ckjs/ck.5.js";
-      script.async = true;
-      
-      script.onload = () => {
-        console.log("ConvertKit script loaded successfully");
-        toast.info("Newsletter form ready");
-      };
-      
-      script.onerror = (error) => {
-        console.error("Error loading ConvertKit script:", error);
-        toast.error("Failed to load the newsletter signup form. Please try again later.");
-      };
-      
-      document.head.appendChild(script);
-      
-      return () => {
-        if (document.head.contains(script)) {
-          document.head.removeChild(script);
-        }
-      };
-    }
-  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
