@@ -1,13 +1,9 @@
 
-import React, { useEffect, useState } from 'react';
-import { loadStripe } from '@stripe/stripe-js';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { DollarSign } from 'lucide-react';
-
-// Initialize Stripe with publishable key
-// In a production environment, you should use an environment variable
-const stripePromise = loadStripe('pk_test_TYooMQauvdEDq54NiTphI7jx');
+import { createCheckoutSession } from '@/services/stripe';
 
 interface StripeCheckoutProps {
   planId: string;
@@ -32,21 +28,22 @@ const StripeCheckout: React.FC<StripeCheckoutProps> = ({
     setIsLoading(true);
     
     try {
-      // In a real implementation, this would call your backend to create a Stripe checkout session
-      // For demo purposes, we'll simulate the checkout process
-      
       toast.info("Processing payment", {
         description: `Preparing checkout for ${planName} plan...`,
       });
       
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // Get the current URL for success and cancel URLs
+      const successUrl = `${window.location.origin}/success?plan=${planId}`;
+      const cancelUrl = `${window.location.origin}/pricing`;
       
-      // For demo purposes, immediately show success
-      toast.success("Payment successful!", {
-        description: `You've successfully subscribed to the ${planName} plan.`,
+      // Create a checkout session and redirect to Stripe
+      await createCheckoutSession({
+        priceId,
+        successUrl,
+        cancelUrl
       });
       
+      // Note: This code may not execute as redirectToCheckout will navigate away
       if (onSuccess) {
         onSuccess();
       }

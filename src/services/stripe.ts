@@ -13,12 +13,32 @@ export interface CheckoutSessionRequest {
 
 export const createCheckoutSession = async (request: CheckoutSessionRequest) => {
   try {
-    // In a real app, this would call your backend to create a checkout session
-    // For now, we'll simulate a response
-    const mockSessionId = `cs_test_${Math.random().toString(36).substring(2, 15)}`;
+    // Create a checkout session with Stripe
+    const stripe = await stripePromise;
     
-    // Return a mock session ID
-    return { sessionId: mockSessionId };
+    if (!stripe) {
+      throw new Error('Failed to load Stripe');
+    }
+
+    // In a real app, this would call your backend API to create a checkout session
+    // For this example, we're creating a mock session ID and redirecting directly
+    const { error } = await stripe.redirectToCheckout({
+      lineItems: [
+        {
+          price: request.priceId,
+          quantity: 1,
+        },
+      ],
+      mode: 'payment',
+      successUrl: request.successUrl || window.location.origin + '/success',
+      cancelUrl: request.cancelUrl || window.location.origin + '/pricing',
+    });
+
+    if (error) {
+      throw error;
+    }
+
+    return { success: true };
   } catch (error) {
     console.error('Error creating checkout session:', error);
     throw error;
