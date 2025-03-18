@@ -5,7 +5,7 @@ import Footer from '../components/Footer';
 import EmailSignup from "../components/EmailSignup";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { BookOpen, FileText, Video, Download } from "lucide-react";
+import { BookOpen, FileText, Video, Download, Eye, Wand2 } from "lucide-react";
 
 const Resources = () => {
   const resources = [
@@ -15,6 +15,7 @@ const Resources = () => {
       description: "A comprehensive PRD template to define product features and requirements",
       icon: <FileText className="h-8 w-8 text-primary" />,
       action: "Download",
+      showSampleGenerate: true // Flag to show Sample and Generate buttons
     },
     {
       title: "User Interview Playbook",
@@ -84,9 +85,22 @@ const Resources = () => {
                   <CardDescription>{resource.description}</CardDescription>
                 </CardHeader>
                 <CardContent className="pt-2 mt-auto">
-                  <Button variant="secondary" className="w-full">
-                    {resource.action}
-                  </Button>
+                  {resource.showSampleGenerate ? (
+                    <div className="flex flex-col space-y-2">
+                      <Button variant="outline" className="w-full flex items-center justify-center">
+                        <Eye className="mr-2 h-4 w-4" />
+                        Sample
+                      </Button>
+                      <Button variant="default" className="w-full flex items-center justify-center">
+                        <Wand2 className="mr-2 h-4 w-4" />
+                        Generate
+                      </Button>
+                    </div>
+                  ) : (
+                    <Button variant="secondary" className="w-full">
+                      {resource.action}
+                    </Button>
+                  )}
                 </CardContent>
               </Card>
             ))}
