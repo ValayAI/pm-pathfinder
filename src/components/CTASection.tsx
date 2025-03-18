@@ -28,44 +28,44 @@ export function CTASection() {
   }, []);
   
   return (
-    <section id="cta-section" className="py-20 relative overflow-hidden">
+    <section id="cta-section" className="py-12 relative overflow-hidden">
       {/* Background gradient effect */}
       <div className="absolute inset-0 -z-10">
-        <div className="absolute top-0 w-full h-full bg-primary/5"></div>
+        <div className="absolute top-0 w-full h-full bg-gradient-to-b from-transparent via-blue-50/50 to-blue-50/80 dark:from-transparent dark:via-blue-950/10 dark:to-blue-950/20"></div>
       </div>
     
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container mx-auto">
         <div className={cn(
-          "text-center transition-all duration-700",
+          "text-center glass-effect rounded-xl py-8 px-6 transition-all duration-700 max-w-3xl mx-auto",
           inView ? "opacity-100 scale-100" : "opacity-0 scale-95"
         )}>
-          <div className="inline-flex items-center rounded-full px-4 py-1 text-sm font-medium bg-primary/10 text-primary mb-4">
-            <Sparkles className="mr-2 h-4 w-4" />
+          <div className="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-300 mb-3">
+            <Sparkles className="mr-1.5 h-3 w-3" />
             <span>Start your PM journey today</span>
           </div>
           
-          <h2 className="text-3xl font-bold tracking-tight mb-6">
+          <h2 className="text-xl sm:text-2xl font-outfit font-semibold mb-3">
             Get Instant Product Management Guidance
           </h2>
           
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-10">
+          <p className="text-sm text-muted-foreground max-w-xl mx-auto mb-6">
             Try our AI-powered PM coach for free. Get answers to your product management questions, career advice, and strategic guidance.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link to="/chat">
-              <Button size="lg" className="group bg-gradient-to-r from-primary to-primary/80 shadow-lg shadow-primary/10">
-                <MessageSquareText className="mr-2 h-5 w-5" />
+              <Button size="default" className="group bg-gradient-to-r from-blue-600 to-indigo-600 shadow-sm">
+                <MessageSquareText className="mr-1.5 h-3.5 w-3.5" />
                 Chat with AI Coach
-                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                <ArrowRight className="ml-1.5 h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
               </Button>
             </Link>
-            <Button size="lg" variant="outline">
+            <Button size="default" variant="outline">
               Explore Resources
             </Button>
           </div>
           
-          <p className="mt-6 text-sm text-muted-foreground">
+          <p className="mt-4 text-xs text-muted-foreground">
             Free plan includes 10 messages. No credit card required.
           </p>
         </div>

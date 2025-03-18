@@ -7,7 +7,6 @@ import {
   Menu, X, Compass, BookOpen, MessageSquare, User, Moon, Sun, DollarSign, Sparkles
 } from "lucide-react";
 
-// Define the type for navigation items
 type NavItem = {
   name: string;
   path: string;
@@ -60,35 +59,35 @@ export function Navbar() {
     <nav 
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out",
-        isScrolled ? "bg-white/80 dark:bg-background/80 backdrop-blur-md shadow-sm" : "bg-transparent"
+        isScrolled ? "glass-effect py-1" : "bg-transparent py-2"
       )}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-14">
+      <div className="container mx-auto px-4">
+        <div className="flex items-center justify-between h-12">
           {/* Logo and brand */}
           <div className="flex items-center">
             <NavLink to="/" className="flex items-center space-x-2" onClick={() => setIsOpen(false)}>
-              <div className="w-7 h-7 rounded-full bg-primary flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-md">P</span>
+              <div className="w-6 h-6 rounded-md bg-primary flex items-center justify-center">
+                <span className="text-primary-foreground font-bold text-sm">P</span>
               </div>
-              <span className="font-medium text-md tracking-tight">PM Pathfinder</span>
+              <span className="font-outfit font-medium text-md">PM Pathfinder</span>
             </NavLink>
           </div>
           
           {/* Desktop navigation */}
           <div className="hidden md:block">
-            <div className="ml-10 flex items-center space-x-1">
+            <div className="ml-6 flex items-center space-x-1">
               {navItems.map(item => (
                 <NavLink 
                   key={item.name}
                   to={item.path}
                   className={({ isActive }) => cn(
-                    "flex items-center px-2.5 py-1.5 rounded-full text-sm font-medium transition-colors duration-200",
+                    "flex items-center px-2 py-1 rounded-md text-sm font-medium transition-colors duration-200",
                     isActive 
-                      ? "text-primary bg-primary/10" 
-                      : "text-foreground/80 hover:text-primary hover:bg-primary/5",
-                    item.highlight && !isActive && "bg-purple-50 text-purple-700 dark:bg-purple-900/20 dark:text-purple-300",
-                    item.highlight && isActive && "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-200"
+                      ? "text-primary bg-primary/5" 
+                      : "text-foreground/70 hover:text-primary hover:bg-primary/5",
+                    item.highlight && !isActive && "bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400",
+                    item.highlight && isActive && "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300"
                   )}
                 >
                   {item.icon}
@@ -99,15 +98,14 @@ export function Navbar() {
                 variant="ghost" 
                 size="icon" 
                 onClick={toggleDarkMode} 
-                className="ml-1 h-8 w-8 rounded-full"
+                className="ml-1 h-7 w-7 rounded-md"
                 aria-label="Toggle dark mode"
               >
-                {isDark ? <Sun className="h-[1rem] w-[1rem]" /> : <Moon className="h-[1rem] w-[1rem]" />}
+                {isDark ? <Sun className="h-[0.9rem] w-[0.9rem]" /> : <Moon className="h-[0.9rem] w-[0.9rem]" />}
               </Button>
               <NavLink to="/profile">
-                <Button variant="outline" size="sm" className="ml-1 rounded-full h-8 px-3">
-                  <User className="h-3.5 w-3.5 mr-1" />
-                  Profile
+                <Button variant="outline" size="sm" className="ml-1 h-7 px-2">
+                  <User className="h-3.5 w-3.5" />
                 </Button>
               </NavLink>
             </div>
@@ -119,19 +117,19 @@ export function Navbar() {
               variant="ghost" 
               size="icon" 
               onClick={toggleDarkMode} 
-              className="mr-1 h-8 w-8 rounded-full"
+              className="mr-1 h-7 w-7 rounded-md"
               aria-label="Toggle dark mode"
             >
-              {isDark ? <Sun className="h-[1rem] w-[1rem]" /> : <Moon className="h-[1rem] w-[1rem]" />}
+              {isDark ? <Sun className="h-[0.9rem] w-[0.9rem]" /> : <Moon className="h-[0.9rem] w-[0.9rem]" />}
             </Button>
             <Button
               variant="ghost"
               size="icon"
               onClick={() => setIsOpen(!isOpen)}
               aria-label="Toggle menu"
-              className="h-8 w-8 rounded-full"
+              className="h-7 w-7 rounded-md"
             >
-              {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              {isOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
             </Button>
           </div>
         </div>
@@ -142,18 +140,18 @@ export function Navbar() {
         "md:hidden transition-all duration-300 ease-in-out overflow-hidden",
         isOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
       )}>
-        <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 backdrop-blur-md bg-white/80 dark:bg-background/80 border-t border-border">
+        <div className="px-4 pt-2 pb-3 space-y-1 glass-effect">
           {navItems.map(item => (
             <NavLink
               key={item.name}
               to={item.path}
               className={({ isActive }) => cn(
-                "flex items-center px-3 py-1.5 rounded-full text-sm font-medium transition-colors duration-200",
+                "flex items-center px-3 py-1.5 rounded-md text-sm font-medium transition-colors duration-200",
                 isActive 
-                  ? "text-primary bg-primary/10" 
-                  : "text-foreground/80 hover:text-primary hover:bg-primary/5",
-                item.highlight && !isActive && "bg-purple-50 text-purple-700 dark:bg-purple-900/20 dark:text-purple-300",
-                item.highlight && isActive && "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-200"
+                  ? "text-primary bg-primary/5" 
+                  : "text-foreground/70 hover:text-primary hover:bg-primary/5",
+                item.highlight && !isActive && "bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400",
+                item.highlight && isActive && "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300"
               )}
               onClick={() => setIsOpen(false)}
             >
@@ -163,7 +161,7 @@ export function Navbar() {
           ))}
           <NavLink 
             to="/profile"
-            className="flex items-center px-3 py-1.5 rounded-full text-sm font-medium text-foreground/80 hover:text-primary hover:bg-primary/5"
+            className="flex items-center px-3 py-1.5 rounded-md text-sm font-medium text-foreground/70 hover:text-primary hover:bg-primary/5"
             onClick={() => setIsOpen(false)}
           >
             <User className="h-4 w-4 mr-1" />
