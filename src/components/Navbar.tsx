@@ -38,7 +38,12 @@ export function Navbar() {
   const navItems = [
     { name: 'Explore', path: '/explore', icon: <Compass className="h-4 w-4 mr-1" /> },
     { name: 'Resources', path: '/resources', icon: <BookOpen className="h-4 w-4 mr-1" /> },
-    { name: 'PM Coach', path: '/chat', icon: <Sparkles className="h-4 w-4 mr-1" /> },
+    { 
+      name: 'PM Coach', 
+      path: '/chat', 
+      icon: <Sparkles className="h-4 w-4 mr-1" />, 
+      highlight: true 
+    },
     { name: 'Coaching', path: '/coaching', icon: <MessageSquare className="h-4 w-4 mr-1" /> },
     { name: 'Pricing', path: '/pricing', icon: <DollarSign className="h-4 w-4 mr-1" /> },
   ];
@@ -73,7 +78,9 @@ export function Navbar() {
                     "flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200",
                     isActive 
                       ? "text-primary bg-primary/10" 
-                      : "text-foreground/80 hover:text-primary hover:bg-primary/5"
+                      : "text-foreground/80 hover:text-primary hover:bg-primary/5",
+                    item.highlight && !isActive && "bg-purple-50 text-purple-700 dark:bg-purple-900/20 dark:text-purple-300",
+                    item.highlight && isActive && "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-200"
                   )}
                 >
                   {item.icon}
@@ -135,7 +142,9 @@ export function Navbar() {
                 "flex items-center px-3 py-2 rounded-md text-base font-medium transition-colors duration-200",
                 isActive 
                   ? "text-primary bg-primary/10" 
-                  : "text-foreground/80 hover:text-primary hover:bg-primary/5"
+                  : "text-foreground/80 hover:text-primary hover:bg-primary/5",
+                item.highlight && !isActive && "bg-purple-50 text-purple-700 dark:bg-purple-900/20 dark:text-purple-300",
+                item.highlight && isActive && "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-200"
               )}
               onClick={() => setIsOpen(false)}
             >
