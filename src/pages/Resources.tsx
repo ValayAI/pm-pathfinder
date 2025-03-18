@@ -5,7 +5,7 @@ import Footer from '../components/Footer';
 import EmailSignup from "../components/EmailSignup";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { BookOpen, FileText, Video, Download, Eye, Wand2 } from "lucide-react";
+import { BookOpen, FileText, Video, Download, Eye, Wand2, Leaf } from "lucide-react";
 
 const Resources = () => {
   const resources = [
@@ -65,6 +65,14 @@ const Resources = () => {
               Access our library of templates, guides, and tools to enhance your product management skills.
             </p>
             
+            {/* Sustainability message */}
+            <div className="mt-4 mb-6 flex items-center justify-center">
+              <Leaf className="h-4 w-4 text-green-500 mr-2" />
+              <p className="font-eco text-sm text-green-600 dark:text-green-400">
+                1% of your purchase goes to removing CO₂ from the atmosphere
+              </p>
+            </div>
+            
             {/* Email signup component */}
             <div className="max-w-md mx-auto mt-6">
               <EmailSignup />
@@ -114,6 +122,14 @@ const Resources = () => {
             <Button size="lg">
               Request Custom Resources
             </Button>
+            
+            {/* Sustainability message in CTA section */}
+            <div className="mt-4 flex items-center justify-center">
+              <Leaf className="h-4 w-4 text-green-500 mr-2" />
+              <p className="font-eco text-sm text-green-600 dark:text-green-400">
+                1% of your purchase goes to removing CO₂ from the atmosphere
+              </p>
+            </div>
           </div>
         </div>
       </main>
