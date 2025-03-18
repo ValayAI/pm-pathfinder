@@ -7,10 +7,7 @@ interface PreloadedPromptsProps {
 }
 
 const PRELOADED_PROMPTS = [
-  "How do I create a compelling product roadmap that aligns with business objectives?",
-  "What's the best way to handle stakeholder disagreements about feature prioritization?",
-  "Give me specific techniques for conducting effective user interviews to validate my product ideas",
-  "How can I transition from engineering to product management? What skills should I highlight?",
+  "How do I transition from engineering to product management?",
   "What metrics should I focus on to demonstrate the success of my product?",
   "Help me prepare for a senior PM interview at a tech company",
   "How do I create user stories that developers will understand and appreciate?",
@@ -28,10 +25,10 @@ const PreloadedPrompts: React.FC<PreloadedPromptsProps> = ({ onSelectPrompt }) =
           <Button 
             key={index}
             variant="outline" 
-            className="h-auto py-2.5 px-4 justify-start text-left text-sm font-normal border-gray-200 dark:border-gray-700 text-muted-foreground hover:text-foreground hover:bg-gray-50 dark:hover:bg-gray-800 w-full overflow-hidden"
+            className="h-auto min-h-[48px] py-2.5 px-4 justify-start text-left text-sm font-normal border-gray-200 dark:border-gray-700 text-muted-foreground hover:text-foreground hover:bg-gray-50 dark:hover:bg-gray-800 w-full"
             onClick={() => onSelectPrompt(prompt)}
           >
-            <span className="truncate">{prompt}</span>
+            <span className="line-clamp-2">{prompt}</span>
           </Button>
         ))}
       </div>
