@@ -1,7 +1,7 @@
 
 import { loadStripe } from '@stripe/stripe-js';
 
-// Initialize Stripe with the correct publishable key
+// Initialize Stripe with a valid publishable key
 // In a production environment, you should use an environment variable
 const stripePromise = loadStripe('pk_test_51O1JDzFva8nkdRj0T38vBcN1V76QYC5gUpizoWXYUNJcRNi5ICa9JpXuwcIrkD0vkOqgNbIcBOzQY2xVVF6fGxRm00Xc4jTxFF');
 

@@ -4,6 +4,12 @@ import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { DollarSign } from 'lucide-react';
 import { createCheckoutSession } from '@/services/stripe';
+import { createClient } from '@supabase/supabase-js';
+
+// Initialize Supabase client
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://hqftusejwtxfdbjldlen.supabase.co';
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhxZnR1c2Vqd3R4ZmRiamxkbGVuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTg1ODg0NTMsImV4cCI6MjAzNDE2NDQ1M30.89vt2eZMBsofAL-0f6_W_GFMEO51mL45v1e6_6mGVjE';
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 interface StripeCheckoutProps {
   planId: string;
@@ -38,14 +44,31 @@ const StripeCheckout: React.FC<StripeCheckoutProps> = ({
       const successUrl = `${window.location.origin}/success?plan=${planId}`;
       const cancelUrl = `${window.location.origin}/pricing`;
       
-      // Create a checkout session and redirect to Stripe
-      await createCheckoutSession({
-        priceId,
-        successUrl,
-        cancelUrl
-      });
+      // First try the Supabase Edge Function
+      try {
+        const { data, error } = await supabase.functions.invoke('create-checkout-session', {
+          body: { priceId, successUrl, cancelUrl }
+        });
+        
+        if (error) throw error;
+        
+        // Redirect to Stripe checkout page
+        if (data.url) {
+          window.location.href = data.url;
+          return;
+        }
+      } catch (edgeFunctionError) {
+        console.warn('Edge function failed, falling back to client-side checkout:', edgeFunctionError);
+        
+        // Fall back to client-side checkout
+        await createCheckoutSession({
+          priceId,
+          successUrl,
+          cancelUrl
+        });
+      }
       
-      // Note: This code may not execute as redirectToCheckout will navigate away
+      // Note: This code may not execute as redirect will navigate away
       if (onSuccess) {
         onSuccess();
       }
