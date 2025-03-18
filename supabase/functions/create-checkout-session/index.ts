@@ -27,7 +27,7 @@ serve(async (req) => {
     
     if (!priceId) {
       return new Response(
-        JSON.stringify({ error: 'Price ID is required' }),
+        JSON.stringify({ error: 'Product ID is required' }),
         { 
           status: 400, 
           headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
@@ -36,17 +36,22 @@ serve(async (req) => {
     }
 
     // Log the received parameters
-    console.log(`Creating Stripe checkout session for price: ${priceId}`);
+    console.log(`Creating Stripe checkout session for product: ${priceId}`);
     console.log(`Success URL: ${successUrl}, Cancel URL: ${cancelUrl}`);
 
-    // Create a checkout session
+    // Create a checkout session - adjust line_items to use priceId as product instead of price
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [{
-        price: priceId,
+        price_data: {
+          product: priceId,
+          currency: 'usd',
+          unit_amount: priceId === 'prod_RxEyhiWdXOWnUk' ? 2900 : priceId === 'prod_Rxhow56qBX4uRZ' ? 9900 : 24900,
+          recurring: priceId === 'prod_RxEyhiWdXOWnUk' ? { interval: 'month' } : undefined,
+        },
         quantity: 1,
       }],
-      mode: 'subscription',
+      mode: priceId === 'prod_RxEyhiWdXOWnUk' ? 'subscription' : 'payment',
       success_url: successUrl || `${req.headers.get('origin')}/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: cancelUrl || `${req.headers.get('origin')}/pricing`,
     });

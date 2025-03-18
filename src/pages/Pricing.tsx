@@ -1,3 +1,4 @@
+
 import React from "react";
 import { 
   Card, 
@@ -35,7 +36,7 @@ const Pricing = () => {
       price: "$29",
       period: "/month",
       icon: Rocket,
-      priceId: "price_1OW2izFva8nkdRj0l1xRpXHl", // Updated price ID
+      priceId: "prod_RxEyhiWdXOWnUk", // Updated product ID for starter plan
       features: [
         "50 messages/month",
         "PM career & interview tips"
@@ -52,7 +53,7 @@ const Pricing = () => {
       price: "$99",
       period: " one-time",
       icon: Flame,
-      priceId: "price_1OW2jUFva8nkdRj0XzcjTDBd", // Updated price ID
+      priceId: "prod_Rxhow56qBX4uRZ", // Updated product ID for popular plan
       features: [
         "Unlimited messages",
         "Resume & interview coaching",
@@ -71,7 +72,7 @@ const Pricing = () => {
       price: "$249",
       period: " one-time",
       icon: Briefcase,
-      priceId: "price_1OW2jqFva8nkdRj0qfN0XfKC", // Updated price ID
+      priceId: "prod_Rxhqlof4dblRZT", // Updated product ID for pro plan
       features: [
         "Everything in Most Popular",
         "1-on-1 PM coaching call",
