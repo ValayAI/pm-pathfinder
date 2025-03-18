@@ -1,4 +1,3 @@
-
 import { ClerkProvider } from "@clerk/clerk-react";
 import { useEffect, useState } from "react";
 
@@ -59,7 +58,6 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
       publishableKey={PUBLISHABLE_KEY}
       clerkJSVersion="5.56.0-snapshot.v20250312225817"
       appearance={{
-        baseTheme: isDarkMode ? 'dark' : 'light',
         variables: {
           colorPrimary: isDarkMode ? '#a855f7' : '#7e22ce',
         }
