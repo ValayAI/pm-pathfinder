@@ -15,11 +15,6 @@ const Explore = () => {
             Discover tools, frameworks, and methodologies to enhance your product management skills.
           </p>
           
-          {/* Email signup component */}
-          <div className="max-w-md mx-auto mb-12">
-            <EmailSignup />
-          </div>
-          
           <div className="grid md:grid-cols-2 gap-6">
             <div className="bg-card rounded-lg p-6 shadow-sm">
               <h2 className="text-2xl font-semibold mb-4">Popular Frameworks</h2>
@@ -84,6 +79,11 @@ const Explore = () => {
           
           <div className="mt-12 text-center">
             <p className="text-muted-foreground mb-4">More resources coming soon. Subscribe to our newsletter for updates.</p>
+          </div>
+          
+          {/* Email signup moved to bottom */}
+          <div className="max-w-md mx-auto mt-16">
+            <EmailSignup />
           </div>
         </div>
       </main>
