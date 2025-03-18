@@ -1,4 +1,3 @@
-
 import React from "react";
 import { 
   Dialog,
@@ -56,7 +55,7 @@ const PaywallModal = ({ open, onOpenChange, onUpgrade, onLogin }: PaywallModalPr
       price: "$29",
       period: "/month",
       icon: Rocket,
-      priceId: "prod_RxEyhiWdXOWnUk", // Updated with correct product ID
+      priceId: "price_1OW2izFva8nkdRj0l1xRpXHl",
       features: [
         "50 messages/month",
         "PM career & interview tips"
@@ -73,7 +72,7 @@ const PaywallModal = ({ open, onOpenChange, onUpgrade, onLogin }: PaywallModalPr
       price: "$99",
       period: " one-time",
       icon: Flame,
-      priceId: "prod_Rxhow56qBX4uRZ", // Updated with correct product ID
+      priceId: "price_1OW2jUFva8nkdRj0XzcjTDBd",
       features: [
         "Unlimited messages",
         "Resume & interview coaching",
@@ -92,7 +91,7 @@ const PaywallModal = ({ open, onOpenChange, onUpgrade, onLogin }: PaywallModalPr
       price: "$249",
       period: " one-time",
       icon: Briefcase,
-      priceId: "prod_Rxhqlof4dblRZT", // Updated with correct product ID
+      priceId: "price_1OW2jqFva8nkdRj0qfN0XfKC",
       features: [
         "Everything in Most Popular",
         "1-on-1 PM coaching call",
