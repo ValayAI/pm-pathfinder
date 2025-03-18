@@ -19,7 +19,8 @@ import {
   LockOpen,
   CreditCard,
   DollarSign,
-  ThumbsUp 
+  ThumbsUp,
+  Leaf
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Navbar from "@/components/Navbar";
@@ -111,6 +112,14 @@ const Pricing = () => {
             Get expert Product Management advice tailored to your career goals. 
             Select the plan that best fits your needs and ambitions.
           </p>
+          
+          {/* Sustainability message */}
+          <div className="mt-5 flex items-center justify-center">
+            <Leaf className="h-5 w-5 text-green-500 mr-2" />
+            <p className="font-eco text-green-600 dark:text-green-400">
+              1% of your purchase goes to removing CO₂ from the atmosphere
+            </p>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-12">

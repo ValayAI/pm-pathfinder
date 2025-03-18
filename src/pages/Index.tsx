@@ -9,7 +9,7 @@ import CTASection from "@/components/CTASection";
 import Footer from "@/components/Footer";
 import EmailSignup from "@/components/EmailSignup";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, MessageSquareText } from "lucide-react";
+import { ArrowRight, MessageSquareText, Leaf } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const Index = () => {
@@ -42,6 +42,14 @@ const Index = () => {
               </Button>
             </Link>
             <p className="text-muted-foreground">Get instant answers to your product management questions</p>
+            
+            {/* Sustainability message */}
+            <div className="mt-4 mb-6 flex items-center justify-center">
+              <Leaf className="h-4 w-4 text-green-500 mr-2" />
+              <p className="font-eco text-sm text-green-600 dark:text-green-400">
+                1% of your purchase goes to removing CO₂ from the atmosphere
+              </p>
+            </div>
             
             {/* Email signup component */}
             <div className="max-w-md mx-auto mt-8">
