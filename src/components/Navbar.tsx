@@ -1,9 +1,10 @@
+
 import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { 
-  Menu, X, Compass, BookOpen, MessageSquare, User, Moon, Sun, DollarSign
+  Menu, X, Compass, BookOpen, MessageSquare, User, Moon, Sun, DollarSign, Sparkles
 } from "lucide-react";
 
 export function Navbar() {
@@ -37,6 +38,12 @@ export function Navbar() {
   const navItems = [
     { name: 'Explore', path: '/explore', icon: <Compass className="h-4 w-4 mr-1" /> },
     { name: 'Resources', path: '/resources', icon: <BookOpen className="h-4 w-4 mr-1" /> },
+    { 
+      name: 'PM Coach', 
+      path: '/chat', 
+      icon: <Sparkles className="h-4 w-4 mr-1" />, 
+      highlight: true 
+    },
     { name: 'Coaching', path: '/coaching', icon: <MessageSquare className="h-4 w-4 mr-1" /> },
     { name: 'Pricing', path: '/pricing', icon: <DollarSign className="h-4 w-4 mr-1" /> },
   ];
