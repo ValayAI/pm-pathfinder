@@ -64,26 +64,26 @@ export function Navbar() {
       )}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-14">
           {/* Logo and brand */}
           <div className="flex items-center">
             <NavLink to="/" className="flex items-center space-x-2" onClick={() => setIsOpen(false)}>
-              <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-lg">P</span>
+              <div className="w-7 h-7 rounded-full bg-primary flex items-center justify-center">
+                <span className="text-primary-foreground font-bold text-md">P</span>
               </div>
-              <span className="font-medium text-lg tracking-tight">PM Pathfinder</span>
+              <span className="font-medium text-md tracking-tight">PM Pathfinder</span>
             </NavLink>
           </div>
           
           {/* Desktop navigation */}
           <div className="hidden md:block">
-            <div className="ml-10 flex items-center space-x-4">
+            <div className="ml-10 flex items-center space-x-1">
               {navItems.map(item => (
                 <NavLink 
                   key={item.name}
                   to={item.path}
                   className={({ isActive }) => cn(
-                    "flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200",
+                    "flex items-center px-2.5 py-1.5 rounded-full text-sm font-medium transition-colors duration-200",
                     isActive 
                       ? "text-primary bg-primary/10" 
                       : "text-foreground/80 hover:text-primary hover:bg-primary/5",
@@ -99,14 +99,14 @@ export function Navbar() {
                 variant="ghost" 
                 size="icon" 
                 onClick={toggleDarkMode} 
-                className="ml-2"
+                className="ml-1 h-8 w-8 rounded-full"
                 aria-label="Toggle dark mode"
               >
-                {isDark ? <Sun className="h-[1.2rem] w-[1.2rem]" /> : <Moon className="h-[1.2rem] w-[1.2rem]" />}
+                {isDark ? <Sun className="h-[1rem] w-[1rem]" /> : <Moon className="h-[1rem] w-[1rem]" />}
               </Button>
               <NavLink to="/profile">
-                <Button variant="outline" size="sm" className="ml-2">
-                  <User className="h-4 w-4 mr-1" />
+                <Button variant="outline" size="sm" className="ml-1 rounded-full h-8 px-3">
+                  <User className="h-3.5 w-3.5 mr-1" />
                   Profile
                 </Button>
               </NavLink>
@@ -119,18 +119,19 @@ export function Navbar() {
               variant="ghost" 
               size="icon" 
               onClick={toggleDarkMode} 
-              className="mr-2"
+              className="mr-1 h-8 w-8 rounded-full"
               aria-label="Toggle dark mode"
             >
-              {isDark ? <Sun className="h-[1.2rem] w-[1.2rem]" /> : <Moon className="h-[1.2rem] w-[1.2rem]" />}
+              {isDark ? <Sun className="h-[1rem] w-[1rem]" /> : <Moon className="h-[1rem] w-[1rem]" />}
             </Button>
             <Button
               variant="ghost"
               size="icon"
               onClick={() => setIsOpen(!isOpen)}
               aria-label="Toggle menu"
+              className="h-8 w-8 rounded-full"
             >
-              {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </Button>
           </div>
         </div>
@@ -147,7 +148,7 @@ export function Navbar() {
               key={item.name}
               to={item.path}
               className={({ isActive }) => cn(
-                "flex items-center px-3 py-2 rounded-md text-base font-medium transition-colors duration-200",
+                "flex items-center px-3 py-1.5 rounded-full text-sm font-medium transition-colors duration-200",
                 isActive 
                   ? "text-primary bg-primary/10" 
                   : "text-foreground/80 hover:text-primary hover:bg-primary/5",
@@ -162,7 +163,7 @@ export function Navbar() {
           ))}
           <NavLink 
             to="/profile"
-            className="flex items-center px-3 py-2 rounded-md text-base font-medium text-foreground/80 hover:text-primary hover:bg-primary/5"
+            className="flex items-center px-3 py-1.5 rounded-full text-sm font-medium text-foreground/80 hover:text-primary hover:bg-primary/5"
             onClick={() => setIsOpen(false)}
           >
             <User className="h-4 w-4 mr-1" />
