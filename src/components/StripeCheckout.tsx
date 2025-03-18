@@ -1,7 +1,5 @@
 
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useUser } from '@clerk/clerk-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { DollarSign } from 'lucide-react';
@@ -25,19 +23,8 @@ const StripeCheckout: React.FC<StripeCheckoutProps> = ({
   highlight = false 
 }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const { isSignedIn } = useUser();
-  const navigate = useNavigate();
 
   const handleCheckout = async () => {
-    // If user is not signed in, redirect to sign in page
-    if (!isSignedIn) {
-      toast.info("Authentication required", {
-        description: "Please sign in to purchase a plan",
-      });
-      navigate('/sign-in');
-      return;
-    }
-    
     setIsLoading(true);
     
     try {

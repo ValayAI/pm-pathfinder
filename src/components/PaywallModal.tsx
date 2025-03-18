@@ -1,7 +1,5 @@
 
 import React from "react";
-import { useNavigate } from "react-router-dom";
-import { useUser } from "@clerk/clerk-react";
 import { 
   Dialog,
   DialogContent,
@@ -19,6 +17,14 @@ import {
   CardHeader, 
   CardTitle 
 } from "@/components/ui/card";
+import { 
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { 
@@ -42,9 +48,6 @@ interface PaywallModalProps {
 }
 
 const PaywallModal = ({ open, onOpenChange, onUpgrade, onLogin }: PaywallModalProps) => {
-  const { isSignedIn } = useUser();
-  const navigate = useNavigate();
-
   const plans = [
     {
       id: "starter",
@@ -53,7 +56,7 @@ const PaywallModal = ({ open, onOpenChange, onUpgrade, onLogin }: PaywallModalPr
       price: "$29",
       period: "/month",
       icon: Rocket,
-      priceId: "price_1OW2izFva8nkdRj0l1xRpXHl", 
+      priceId: "prod_RxEyhiWdXOWnUk", // Updated with correct product ID
       features: [
         "50 messages/month",
         "PM career & interview tips"
@@ -70,7 +73,7 @@ const PaywallModal = ({ open, onOpenChange, onUpgrade, onLogin }: PaywallModalPr
       price: "$99",
       period: " one-time",
       icon: Flame,
-      priceId: "price_1OW2jUFva8nkdRj0XzcjTDBd", 
+      priceId: "prod_Rxhow56qBX4uRZ", // Updated with correct product ID
       features: [
         "Unlimited messages",
         "Resume & interview coaching",
@@ -89,7 +92,7 @@ const PaywallModal = ({ open, onOpenChange, onUpgrade, onLogin }: PaywallModalPr
       price: "$249",
       period: " one-time",
       icon: Briefcase,
-      priceId: "price_1OW2jqFva8nkdRj0qfN0XfKC", 
+      priceId: "prod_Rxhqlof4dblRZT", // Updated with correct product ID
       features: [
         "Everything in Most Popular",
         "1-on-1 PM coaching call",
@@ -104,15 +107,6 @@ const PaywallModal = ({ open, onOpenChange, onUpgrade, onLogin }: PaywallModalPr
 
   const handlePlanSuccess = (planId: string) => {
     onUpgrade(planId);
-  };
-
-  const handleLogin = () => {
-    if (isSignedIn) {
-      onLogin();
-    } else {
-      onOpenChange(false);
-      navigate('/sign-in');
-    }
   };
 
   return (
@@ -199,11 +193,11 @@ const PaywallModal = ({ open, onOpenChange, onUpgrade, onLogin }: PaywallModalPr
               <Button 
                 variant="outline" 
                 size="sm" 
-                onClick={handleLogin}
+                onClick={onLogin}
                 className="mt-2 sm:mt-0"
               >
                 <CreditCard className="h-4 w-4 mr-2" />
-                {isSignedIn ? "Access Premium" : "Log in"}
+                Log in
               </Button>
             </AlertDescription>
           </Alert>

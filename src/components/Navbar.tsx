@@ -1,20 +1,15 @@
-
 import { useState, useEffect } from 'react';
-import { NavLink, Link, useNavigate } from 'react-router-dom';
-import { useUser, useClerk, SignedIn, SignedOut } from '@clerk/clerk-react';
+import { NavLink } from 'react-router-dom';
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { 
-  Menu, X, Compass, BookOpen, MessageSquare, User, Moon, Sun, DollarSign, LogIn
+  Menu, X, Compass, BookOpen, MessageSquare, User, Moon, Sun, DollarSign
 } from "lucide-react";
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isDark, setIsDark] = useState(false);
-  const { user, isLoaded } = useUser();
-  const { signOut } = useClerk();
-  const navigate = useNavigate();
   
   // Handle scrolling effect
   useEffect(() => {
@@ -37,11 +32,6 @@ export function Navbar() {
   
   const toggleDarkMode = () => {
     setIsDark(!isDark);
-  };
-
-  const handleSignOut = async () => {
-    await signOut();
-    navigate('/');
   };
   
   const navItems = [
@@ -97,31 +87,12 @@ export function Navbar() {
               >
                 {isDark ? <Sun className="h-[1.2rem] w-[1.2rem]" /> : <Moon className="h-[1.2rem] w-[1.2rem]" />}
               </Button>
-              
-              <SignedIn>
-                <NavLink to="/dashboard">
-                  <Button variant="outline" size="sm" className="ml-2">
-                    <User className="h-4 w-4 mr-1" />
-                    Dashboard
-                  </Button>
-                </NavLink>
-              </SignedIn>
-              
-              <SignedOut>
-                <div className="flex space-x-2">
-                  <NavLink to="/sign-in">
-                    <Button variant="outline" size="sm" className="ml-2">
-                      <LogIn className="h-4 w-4 mr-1" />
-                      Sign In
-                    </Button>
-                  </NavLink>
-                  <NavLink to="/sign-up">
-                    <Button size="sm">
-                      Sign Up
-                    </Button>
-                  </NavLink>
-                </div>
-              </SignedOut>
+              <NavLink to="/profile">
+                <Button variant="outline" size="sm" className="ml-2">
+                  <User className="h-4 w-4 mr-1" />
+                  Profile
+                </Button>
+              </NavLink>
             </div>
           </div>
           
@@ -170,44 +141,14 @@ export function Navbar() {
               {item.name}
             </NavLink>
           ))}
-          
-          <SignedIn>
-            <NavLink 
-              to="/dashboard"
-              className="flex items-center px-3 py-2 rounded-md text-base font-medium text-foreground/80 hover:text-primary hover:bg-primary/5"
-              onClick={() => setIsOpen(false)}
-            >
-              <User className="h-4 w-4 mr-1" />
-              Dashboard
-            </NavLink>
-            <Button
-              className="flex items-center w-full justify-start px-3 py-2 rounded-md text-base font-medium text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950"
-              variant="ghost"
-              onClick={handleSignOut}
-            >
-              <LogIn className="h-4 w-4 mr-1" />
-              Sign Out
-            </Button>
-          </SignedIn>
-          
-          <SignedOut>
-            <NavLink 
-              to="/sign-in"
-              className="flex items-center px-3 py-2 rounded-md text-base font-medium text-foreground/80 hover:text-primary hover:bg-primary/5"
-              onClick={() => setIsOpen(false)}
-            >
-              <LogIn className="h-4 w-4 mr-1" />
-              Sign In
-            </NavLink>
-            <NavLink 
-              to="/sign-up"
-              className="flex items-center px-3 py-2 rounded-md text-base font-medium text-primary bg-primary/10 hover:bg-primary/20"
-              onClick={() => setIsOpen(false)}
-            >
-              <User className="h-4 w-4 mr-1" />
-              Sign Up
-            </NavLink>
-          </SignedOut>
+          <NavLink 
+            to="/profile"
+            className="flex items-center px-3 py-2 rounded-md text-base font-medium text-foreground/80 hover:text-primary hover:bg-primary/5"
+            onClick={() => setIsOpen(false)}
+          >
+            <User className="h-4 w-4 mr-1" />
+            Profile
+          </NavLink>
         </div>
       </div>
     </nav>
