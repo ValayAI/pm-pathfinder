@@ -28,10 +28,10 @@ const PreloadedPrompts: React.FC<PreloadedPromptsProps> = ({ onSelectPrompt }) =
           <Button 
             key={index}
             variant="outline" 
-            className="h-auto py-2.5 px-4 justify-start text-left text-sm font-normal border-gray-200 dark:border-gray-700 text-muted-foreground hover:text-foreground hover:bg-gray-50 dark:hover:bg-gray-800"
+            className="h-auto py-2.5 px-4 justify-start text-left text-sm font-normal border-gray-200 dark:border-gray-700 text-muted-foreground hover:text-foreground hover:bg-gray-50 dark:hover:bg-gray-800 w-full overflow-hidden"
             onClick={() => onSelectPrompt(prompt)}
           >
-            {prompt}
+            <span className="truncate">{prompt}</span>
           </Button>
         ))}
       </div>
