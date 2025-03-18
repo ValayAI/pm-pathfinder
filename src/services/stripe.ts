@@ -1,5 +1,6 @@
 
 import { loadStripe } from '@stripe/stripe-js';
+import { supabase } from '@/integrations/supabase/client';
 
 // Initialize Stripe with a valid publishable key
 // In a production environment, you should use an environment variable
@@ -13,34 +14,29 @@ export interface CheckoutSessionRequest {
 
 export const createCheckoutSession = async (request: CheckoutSessionRequest) => {
   try {
-    // Create a checkout session with Stripe
-    const stripe = await stripePromise;
-    
-    if (!stripe) {
-      throw new Error('Failed to load Stripe');
-    }
-
     console.log(`Creating checkout session with priceId: ${request.priceId}`);
-
-    // In a real app, this would call your backend API to create a checkout session
-    // For this example, we're creating a checkout session directly on the client
-    const { error } = await stripe.redirectToCheckout({
-      lineItems: [
-        {
-          price: request.priceId, // This should be the actual price ID from Stripe
-          quantity: 1,
-        },
-      ],
-      mode: 'subscription',
-      successUrl: request.successUrl || window.location.origin + '/success',
-      cancelUrl: request.cancelUrl || window.location.origin + '/pricing',
+    
+    // Call the Supabase Edge Function to create a checkout session
+    const { data, error } = await supabase.functions.invoke('create-checkout-session', {
+      body: { 
+        priceId: request.priceId, 
+        successUrl: request.successUrl || window.location.origin + '/success',
+        cancelUrl: request.cancelUrl || window.location.origin + '/pricing'
+      }
     });
-
+    
     if (error) {
-      console.error('Stripe checkout error:', error);
-      throw error;
+      console.error('Edge function error:', error);
+      throw new Error(error.message || 'Failed to create checkout session');
     }
-
+    
+    if (!data || !data.url) {
+      throw new Error('No checkout URL returned from server');
+    }
+    
+    // Redirect to the Stripe checkout page
+    window.location.href = data.url;
+    
     return { success: true };
   } catch (error) {
     console.error('Error creating checkout session:', error);
