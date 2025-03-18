@@ -7,6 +7,14 @@ import {
   Menu, X, Compass, BookOpen, MessageSquare, User, Moon, Sun, DollarSign, Sparkles
 } from "lucide-react";
 
+// Define the type for navigation items
+type NavItem = {
+  name: string;
+  path: string;
+  icon: React.ReactNode;
+  highlight?: boolean;
+};
+
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -35,7 +43,7 @@ export function Navbar() {
     setIsDark(!isDark);
   };
   
-  const navItems = [
+  const navItems: NavItem[] = [
     { name: 'Explore', path: '/explore', icon: <Compass className="h-4 w-4 mr-1" /> },
     { name: 'Resources', path: '/resources', icon: <BookOpen className="h-4 w-4 mr-1" /> },
     { 
