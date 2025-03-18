@@ -33,15 +33,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const getInitialSession = async () => {
       setIsLoading(true);
       try {
-        const { data: { session }, error } = await supabase.auth.getSession();
+        const { data, error } = await supabase.auth.getSession();
         
         if (error) {
+          console.error('Error getting initial session:', error);
           throw error;
         }
 
-        if (session) {
-          setSession(session);
-          setUser(session.user);
+        if (data.session) {
+          setSession(data.session);
+          setUser(data.session.user);
         }
       } catch (error) {
         console.error('Error getting initial session:', error);
@@ -54,6 +55,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      console.log('Auth state changed:', _event, session);
       setSession(session);
       setUser(session?.user ?? null);
       setIsLoading(false);
@@ -66,9 +68,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const signIn = async (email: string, password: string) => {
     try {
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      console.log('Signing in with:', email);
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
       
       if (error) {
+        console.error('Error signing in:', error);
         throw error;
       }
 
@@ -85,12 +89,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const signUp = async (email: string, password: string) => {
     try {
-      const { error } = await supabase.auth.signUp({ email, password });
+      console.log('Signing up with:', email);
+      const { data, error } = await supabase.auth.signUp({ email, password });
       
       if (error) {
+        console.error('Error signing up:', error);
         throw error;
       }
       
+      console.log('Sign up successful:', data);
       return { error: null, success: true };
     } catch (error) {
       console.error('Error signing up:', error);

@@ -1,9 +1,9 @@
 
 import { createClient } from '@supabase/supabase-js';
 
-// Get Supabase URL and Anon Key from the environment variables or use defaults
+// Get Supabase URL and Anon Key using the latest key from the integrations client
 const supabaseUrl = 'https://hqftusejwtxfdbjldlen.supabase.co';
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhxZnR1c2Vqd3R4ZmRiamxkbGVuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTA3MjU5OTEsImV4cCI6MjAyNjMwMTk5MX0.ypGxb52_5OQW9FgVsE_2UL3iqC-WZzRQQQ3QLkH8_ss';
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhxZnR1c2Vqd3R4ZmRiamxkbGVuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIyNjI0MTgsImV4cCI6MjA1NzgzODQxOH0.8Zzt350XypmpkzgCzltZczjVN3FkAa8iIWTYUC7Icc0';
 
 // Create a Supabase client
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
