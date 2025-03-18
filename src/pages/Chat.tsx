@@ -1,3 +1,4 @@
+
 import { useEffect, useState, useRef, FormEvent } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -13,6 +14,7 @@ import MessageBubble from "@/components/MessageBubble";
 import PaywallModal from "@/components/PaywallModal";
 import { handleChatRequest } from "@/api/chat.tsx";
 import PreloadedPrompts from "@/components/PreloadedPrompts";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 type Message = {
   id: string;
@@ -39,10 +41,19 @@ export function Chat() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setIsVisible(true);
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, []);
+
+  // Auto-scroll when messages change
+  useEffect(() => {
+    if (messages.length > 0) {
+      setTimeout(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+      }, 100);
+    }
   }, [messages]);
 
   useEffect(() => {
@@ -52,7 +63,7 @@ export function Chat() {
   }, [usedMessages]);
 
   useEffect(() => {
-    toast("Welcome to your PM Coach!", {
+    toast.success("Your PM Coach is ready", {
       description: "Ask me anything about product management!",
       duration: 3000,
     });
@@ -201,82 +212,89 @@ export function Chat() {
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
-      <main className="flex-grow container mx-auto px-4 py-8 max-w-4xl">
+      <main className="flex-grow container mx-auto px-4 py-8 max-w-3xl">
         <div className={cn(
           "transition-all duration-700",
           isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
         )}>
-          <div className="mb-8 text-center">
-            <div className="inline-flex items-center rounded-full px-4 py-1 text-sm font-medium bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200 mb-4">
-              <Sparkles className="mr-2 h-4 w-4" />
-              <span>Your AI PM Coach</span>
+          <div className="mb-6 text-center">
+            <div className="inline-flex items-center rounded-full px-3 py-1 text-sm font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/40 dark:text-purple-200 mb-3">
+              <Sparkles className="mr-1.5 h-3.5 w-3.5" />
+              <span>PM Coach</span>
             </div>
-            <h1 className="text-3xl font-bold mb-4">Chat with Your PM Coach</h1>
-            <p className="text-muted-foreground max-w-xl mx-auto">
-              Get expert guidance on product management career growth, interview preparation, and strategic decision-making.
+            <h1 className="text-2xl font-bold mb-2">Chat with Your PM Coach</h1>
+            <p className="text-muted-foreground text-sm max-w-md mx-auto">
+              Get expert guidance on product management career growth and strategy
             </p>
           </div>
           
-          <Card className="bg-card/50 backdrop-blur-sm border rounded-xl shadow-md mb-4 p-4 min-h-[400px] flex flex-col">
-            <div className="flex-grow overflow-y-auto mb-4 space-y-4 p-2">
-              {messages.length === 0 ? (
-                <div className="h-full flex flex-col items-center justify-center text-center p-8">
-                  <Sparkles className="h-12 w-12 mb-4 text-purple-500/50" />
-                  <p className="mb-2">Your PM Coach is ready</p>
-                  <p className="text-sm mb-8">Ask about career paths, interview prep, or product strategy</p>
-                  
-                  <div className="max-w-md w-full">
-                    <PreloadedPrompts onSelectPrompt={handleSelectPrompt} />
+          <Card className="bg-card/50 backdrop-blur-sm border rounded-xl shadow-sm mb-4 overflow-hidden flex flex-col">
+            <ScrollArea ref={scrollAreaRef} className="h-[450px] p-4">
+              <div className="space-y-6 pb-2">
+                {messages.length === 0 ? (
+                  <div className="h-full flex flex-col items-center justify-center text-center p-8 min-h-[350px]">
+                    <Sparkles className="h-10 w-10 mb-4 text-purple-500/50" />
+                    <p className="text-lg font-medium mb-1">Your PM Coach is ready</p>
+                    <p className="text-sm text-muted-foreground mb-8 max-w-xs">
+                      Ask about career paths, interview prep, or product strategy
+                    </p>
+                    
+                    <div className="max-w-md w-full">
+                      <PreloadedPrompts onSelectPrompt={handleSelectPrompt} />
+                    </div>
                   </div>
-                </div>
-              ) : (
-                messages.map((message) => (
-                  <MessageBubble key={message.id} message={message} />
-                ))
-              )}
-              {isLoading && (
-                <div className="flex items-center justify-center p-4">
-                  <div className="animate-pulse flex space-x-2">
-                    <div className="h-2 w-2 bg-purple-500 rounded-full"></div>
-                    <div className="h-2 w-2 bg-purple-500 rounded-full"></div>
-                    <div className="h-2 w-2 bg-purple-500 rounded-full"></div>
+                ) : (
+                  messages.map((message) => (
+                    <MessageBubble key={message.id} message={message} />
+                  ))
+                )}
+                {isLoading && (
+                  <div className="flex items-center justify-center py-2">
+                    <div className="flex space-x-1.5">
+                      <div className="h-2 w-2 bg-purple-400 rounded-full animate-bounce"></div>
+                      <div className="h-2 w-2 bg-purple-500 rounded-full animate-bounce animation-delay-200"></div>
+                      <div className="h-2 w-2 bg-purple-600 rounded-full animate-bounce animation-delay-400"></div>
+                    </div>
                   </div>
-                </div>
-              )}
-              <div ref={messagesEndRef} />
-            </div>
+                )}
+                <div ref={messagesEndRef} />
+              </div>
+            </ScrollArea>
             
-            <form onSubmit={handleSubmit} className="flex items-center space-x-2">
-              <Input
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder="Ask your PM coach anything..."
-                disabled={isLoading || usedMessages >= MAX_FREE_MESSAGES}
-                className="flex-grow"
-              />
-              <Button 
-                type="submit" 
-                disabled={isLoading || !input.trim() || usedMessages >= MAX_FREE_MESSAGES}
-                className="bg-purple-600 hover:bg-purple-700"
-              >
-                <Send className="h-4 w-4" />
-              </Button>
-            </form>
+            <div className="p-3 border-t bg-background/80 backdrop-blur-sm">
+              <form onSubmit={handleSubmit} className="flex items-center space-x-2">
+                <Input
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  placeholder="Ask your PM coach anything..."
+                  disabled={isLoading || usedMessages >= MAX_FREE_MESSAGES}
+                  className="flex-grow bg-background/50"
+                />
+                <Button 
+                  type="submit" 
+                  size="icon"
+                  disabled={isLoading || !input.trim() || usedMessages >= MAX_FREE_MESSAGES}
+                  className="bg-purple-600 hover:bg-purple-700 h-10 w-10 rounded-full flex-shrink-0"
+                >
+                  <Send className="h-4 w-4" />
+                </Button>
+              </form>
+            </div>
           </Card>
           
-          <div className="mt-4 mb-8">
-            <div className="flex justify-between text-sm mb-1">
-              <span>Coaching sessions used</span>
+          <div className="mt-4 mb-6">
+            <div className="flex justify-between text-xs mb-1">
+              <span className="text-muted-foreground">Coaching sessions used</span>
               <span className="font-medium">{usedMessages} / {MAX_FREE_MESSAGES}</span>
             </div>
             <Progress 
               value={(usedMessages / MAX_FREE_MESSAGES) * 100} 
-              className="h-2" 
+              className="h-1.5" 
               indicatorClassName="bg-purple-600"
             />
             {usedMessages >= MAX_FREE_MESSAGES && (
-              <div className="mt-2 flex items-center text-destructive text-sm">
-                <AlertCircle className="h-4 w-4 mr-1" />
+              <div className="mt-2 flex items-center text-destructive text-xs">
+                <AlertCircle className="h-3 w-3 mr-1" />
                 <span>You've reached your free coaching limit</span>
               </div>
             )}
@@ -288,9 +306,9 @@ export function Chat() {
           </div>
           
           <div className="text-center mt-8">
-            <h2 className="text-xl font-semibold mb-4">Upgrade to Premium Coaching</h2>
-            <p className="text-muted-foreground mb-6 max-w-md mx-auto">
-              Get unlimited coaching sessions, personalized feedback, and exclusive PM resources and frameworks.
+            <h2 className="text-lg font-semibold mb-3">Upgrade to Premium Coaching</h2>
+            <p className="text-muted-foreground text-sm mb-5 max-w-xs mx-auto">
+              Get unlimited coaching sessions and exclusive PM resources
             </p>
             <Button 
               size="lg" 
