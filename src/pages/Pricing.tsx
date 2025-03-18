@@ -36,7 +36,7 @@ const Pricing = () => {
       price: "$29",
       period: "/month",
       icon: Rocket,
-      priceId: "prod_RxEyhiWdXOWnUk", // Updated with correct product ID
+      priceId: "price_1OW2izFva8nkdRj0l1xRpXHl", // Updated with actual price ID
       features: [
         "50 messages/month",
         "PM career & interview tips"
@@ -53,7 +53,7 @@ const Pricing = () => {
       price: "$99",
       period: " one-time",
       icon: Flame,
-      priceId: "prod_Rxhow56qBX4uRZ", // Updated with correct product ID
+      priceId: "price_1OW2jUFva8nkdRj0XzcjTDBd", // Updated with actual price ID
       features: [
         "Unlimited messages",
         "Resume & interview coaching",
@@ -72,7 +72,7 @@ const Pricing = () => {
       price: "$249",
       period: " one-time",
       icon: Briefcase,
-      priceId: "prod_Rxhqlof4dblRZT", // Updated with correct product ID
+      priceId: "price_1OW2jqFva8nkdRj0qfN0XfKC", // Updated with actual price ID
       features: [
         "Everything in Most Popular",
         "1-on-1 PM coaching call",

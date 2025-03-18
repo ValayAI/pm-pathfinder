@@ -3,7 +3,7 @@ import { loadStripe } from '@stripe/stripe-js';
 
 // Initialize Stripe with your publishable key
 // In a production environment, you should use an environment variable
-const stripePromise = loadStripe('pk_test_51R3J6WK225E53DUIWzPcD3dVqdWIP7UKcpd8ZBXtMLSmzEiEshEa7wAWLWlSQUxVBiQ74HwZ1KWkrsGavumRA8ab00YfrD11Vn');
+const stripePromise = loadStripe('pk_test_51O1JDzFva8nkdRj0T38vBcN1V76QYC5gUpizoWXYUNJcRNi5ICa9JpXuwcIrkD0vkOqgNbIcBOzQY2xVVF6fGxRm00Xc4jTxFF');
 
 export interface CheckoutSessionRequest {
   priceId: string;
@@ -27,7 +27,7 @@ export const createCheckoutSession = async (request: CheckoutSessionRequest) => 
     const { error } = await stripe.redirectToCheckout({
       lineItems: [
         {
-          price: request.priceId,
+          price: request.priceId, // This should be the actual price ID from Stripe, not the product ID
           quantity: 1,
         },
       ],
