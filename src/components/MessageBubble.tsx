@@ -20,7 +20,7 @@ const MessageBubble = ({ message }: MessageBubbleProps) => {
   return (
     <div 
       className={cn(
-        "flex items-start gap-3 animate-fade-in",
+        "flex items-start gap-3 animate-fade-in pb-2",
         isUser ? "justify-end" : "justify-start"
       )}
     >
@@ -32,10 +32,10 @@ const MessageBubble = ({ message }: MessageBubbleProps) => {
       
       <div 
         className={cn(
-          "max-w-[80%] rounded-2xl px-4 py-3 shadow-sm",
+          "max-w-[80%] rounded-2xl px-4 py-3 shadow-sm transition-colors",
           isUser 
             ? "bg-purple-600 text-white rounded-tr-none" 
-            : "bg-secondary/80 text-secondary-foreground rounded-tl-none"
+            : "bg-secondary dark:bg-secondary/80 text-secondary-foreground rounded-tl-none"
         )}
       >
         <p className="text-sm md:text-base whitespace-pre-wrap leading-relaxed">{message.content}</p>

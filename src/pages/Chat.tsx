@@ -50,11 +50,15 @@ export function Chat() {
   // Auto-scroll when messages change
   useEffect(() => {
     if (messages.length > 0) {
-      setTimeout(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-      }, 100);
+      scrollToBottom();
     }
   }, [messages]);
+
+  const scrollToBottom = () => {
+    setTimeout(() => {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, 100);
+  };
 
   useEffect(() => {
     if (usedMessages >= MAX_FREE_MESSAGES) {
@@ -120,6 +124,7 @@ export function Chat() {
     };
     
     setMessages(prev => [...prev, userMessage]);
+    scrollToBottom();
     
     const cachedResponse = checkCache(input);
     
@@ -133,6 +138,7 @@ export function Chat() {
         };
         
         setMessages(prev => [...prev, assistantMessage]);
+        scrollToBottom();
         
         toast("Retrieved from cache", {
           icon: <Clock className="h-4 w-4" />,
@@ -157,6 +163,7 @@ export function Chat() {
       };
       
       setMessages(prev => [...prev, assistantMessage]);
+      scrollToBottom();
       setUsedMessages(prev => prev + 1);
       updateCache(input, data.message);
       
@@ -181,6 +188,7 @@ export function Chat() {
       };
       
       setMessages(prev => [...prev, errorMessage]);
+      scrollToBottom();
     } finally {
       setIsLoading(false);
     }
@@ -229,13 +237,13 @@ export function Chat() {
           </div>
           
           <Card className="bg-card/50 backdrop-blur-sm border rounded-xl shadow-sm mb-4 overflow-hidden flex flex-col">
-            <ScrollArea ref={scrollAreaRef} className="h-[450px] p-4">
-              <div className="space-y-6 pb-2">
+            <ScrollArea className="h-[450px] px-4 py-4 overflow-y-auto" ref={scrollAreaRef}>
+              <div className="space-y-3 pb-2">
                 {messages.length === 0 ? (
                   <div className="h-full flex flex-col items-center justify-center text-center p-8 min-h-[350px]">
                     <Sparkles className="h-10 w-10 mb-4 text-purple-500/50" />
                     <p className="text-lg font-medium mb-1">Your PM Coach is ready</p>
-                    <p className="text-sm text-muted-foreground mb-8 max-w-xs">
+                    <p className="text-sm text-muted-foreground mb-6 max-w-xs">
                       Ask about career paths, interview prep, or product strategy
                     </p>
                     
