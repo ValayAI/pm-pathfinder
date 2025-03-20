@@ -57,6 +57,31 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+				// Category colors for visual distinction
+				strategic: {
+					DEFAULT: '#8B5CF6',
+					light: '#EDE9FE'
+				},
+				prioritization: {
+					DEFAULT: '#0EA5E9',
+					light: '#E0F2FE'
+				},
+				requirements: {
+					DEFAULT: '#F97316',
+					light: '#FFEDD5'
+				},
+				planning: {
+					DEFAULT: '#10B981',
+					light: '#D1FAE5'
+				},
+				discovery: {
+					DEFAULT: '#6366F1',
+					light: '#E0E7FF'
+				},
+				analytics: {
+					DEFAULT: '#EC4899',
+					light: '#FCE7F3'
+				},
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
