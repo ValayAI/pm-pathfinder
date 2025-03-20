@@ -3,6 +3,7 @@ import React, { useRef, useState } from 'react';
 import { toast } from "sonner";
 import { isSubscribed, addSubscriber } from '@/utils/subscriberUtils';
 import { Input } from './ui/input';
+import { Label } from './ui/label';
 
 const EmailSignup = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -17,10 +18,17 @@ const EmailSignup = () => {
     // Get the form data
     const formData = new FormData(formRef.current);
     const email = formData.get('email_address') as string;
+    const firstName = formData.get('fields[first_name]') as string;
     
     if (!email) {
       console.log("No email provided, showing error toast");
       toast.error("Please enter your email address.");
+      return;
+    }
+    
+    if (!firstName) {
+      console.log("No first name provided, showing error toast");
+      toast.error("Please enter your first name.");
       return;
     }
     
@@ -35,10 +43,10 @@ const EmailSignup = () => {
     toast.info("Processing your subscription...");
     setIsSubmitting(true);
     
-    console.log("Submitting to ConvertKit:", email);
+    console.log("Submitting to ConvertKit:", email, firstName);
     
     // Submit the form to ConvertKit
-    fetch("https://app.convertkit.com/forms/7803602/subscriptions", {
+    fetch("https://app.kit.com/forms/7822296/subscriptions", {
       method: "POST",
       body: formData,
       headers: {
@@ -78,11 +86,11 @@ const EmailSignup = () => {
     <div className="bg-muted/30 border border-border rounded-md shadow-sm">
       <form 
         ref={formRef}
-        action="https://app.convertkit.com/forms/7803602/subscriptions" 
+        action="https://app.kit.com/forms/7822296/subscriptions" 
         className="seva-form formkit-form" 
         method="post" 
-        data-sv-form="7803602" 
-        data-uid="51a320fe9d" 
+        data-sv-form="7822296" 
+        data-uid="2090503a89" 
         data-format="inline" 
         data-version="5"
         style={{ backgroundColor: 'transparent', borderRadius: '6px', margin: 0, padding: '1rem' }}
@@ -90,15 +98,25 @@ const EmailSignup = () => {
       >
         <div data-style="full">
           <div className="formkit-field mb-3">
-            <label htmlFor="email-address" className="block text-base font-medium mb-2">Subscribe to our newsletter</label>
+            <Label htmlFor="email_address" className="block text-base font-medium mb-2">Subscribe to our newsletter</Label>
             <p className="text-sm text-muted-foreground mb-3">Get exclusive PM insights, frameworks, and AI tips directly in your inbox!</p>
             <Input 
-              className="formkit-input w-full" 
+              className="formkit-input w-full mb-3" 
               name="email_address" 
+              id="email_address"
               aria-label="Email Address" 
               placeholder="Enter your email" 
               required 
               type="email"
+            />
+            <Input 
+              className="formkit-input w-full" 
+              name="fields[first_name]" 
+              id="first_name"
+              aria-label="First Name" 
+              placeholder="Hi, what's your first name?" 
+              required 
+              type="text"
             />
           </div>
           <button 
