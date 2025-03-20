@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -327,10 +328,6 @@ const Explore = () => {
                 </li>
               </ul>
             </div>
-          </div>
-          
-          <div className="mb-12">
-            <RoadmapGenerator />
           </div>
           
           <div className="mt-12 text-center">
