@@ -64,9 +64,11 @@ export function Hero() {
                 <ArrowRight className="ml-1 h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
               </Button>
             </Link>
-            <Button size="default" variant="outline" className="rounded-md px-4">
-              Explore Resources
-            </Button>
+            <Link to="/explore">
+              <Button size="default" variant="outline" className="rounded-md px-4">
+                Explore Resources
+              </Button>
+            </Link>
           </div>
           
           {/* Features list */}

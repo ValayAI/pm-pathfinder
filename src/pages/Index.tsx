@@ -8,8 +8,7 @@ import TestimonialsSection from "@/components/TestimonialsSection";
 import CTASection from "@/components/CTASection";
 import Footer from "@/components/Footer";
 import EmailSignup from "@/components/EmailSignup";
-import { Button } from "@/components/ui/button";
-import { ArrowRight, MessageSquareText, Leaf } from "lucide-react";
+import { Leaf } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const Index = () => {
@@ -34,15 +33,6 @@ const Index = () => {
           loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
         )}>
           <div className="container mx-auto px-4">
-            <Link to="/chat">
-              <Button size="lg" className="group mb-4 bg-gradient-to-r from-primary to-primary/80">
-                <MessageSquareText className="mr-2 h-5 w-5" />
-                Try AI PM Coach
-                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </Button>
-            </Link>
-            <p className="text-muted-foreground">Get instant answers to your product management questions</p>
-            
             {/* Sustainability message */}
             <div className="mt-4 mb-6 flex items-center justify-center">
               <Leaf className="h-4 w-4 text-green-500 mr-2" />

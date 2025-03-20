@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, MessageSquareText, Sparkles } from "lucide-react";
+import { ArrowRight, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function CTASection() {
@@ -53,16 +53,11 @@ export function CTASection() {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link to="/chat">
-              <Button size="default" className="group bg-gradient-to-r from-blue-600 to-indigo-600 shadow-sm">
-                <MessageSquareText className="mr-1.5 h-3.5 w-3.5" />
-                Chat with AI Coach
-                <ArrowRight className="ml-1.5 h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+            <Link to="/explore">
+              <Button size="default" variant="outline">
+                Explore Resources
               </Button>
             </Link>
-            <Button size="default" variant="outline">
-              Explore Resources
-            </Button>
           </div>
           
           <p className="mt-4 text-xs text-muted-foreground">
