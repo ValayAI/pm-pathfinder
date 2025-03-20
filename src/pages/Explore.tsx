@@ -1,8 +1,8 @@
-
 import React from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import EmailSignup from "../components/EmailSignup";
+import FrameworkChat from "../components/FrameworkChat";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -113,6 +113,10 @@ const Explore = () => {
                 </CardContent>
               </Card>
             </div>
+          </div>
+          
+          <div className="mb-12">
+            <FrameworkChat />
           </div>
           
           <div className="grid md:grid-cols-1 gap-6 mb-12">
@@ -264,7 +268,6 @@ const Explore = () => {
             <p className="text-muted-foreground mb-4">More resources coming soon. Subscribe to our newsletter for updates.</p>
           </div>
           
-          {/* Email signup moved to bottom */}
           <div className="max-w-md mx-auto mt-16">
             <EmailSignup />
           </div>
