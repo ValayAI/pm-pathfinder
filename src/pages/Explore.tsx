@@ -5,7 +5,18 @@ import Footer from '../components/Footer';
 import EmailSignup from "../components/EmailSignup";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { TargetIcon, GridIcon, ClipboardListIcon, FileTextIcon, ExternalLinkIcon, DownloadIcon } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
+import { 
+  TargetIcon, 
+  GridIcon, 
+  ClipboardListIcon, 
+  FileTextIcon, 
+  ExternalLinkIcon, 
+  DownloadIcon,
+  ClockIcon,
+  BookOpenIcon,
+  FileCheck
+} from "lucide-react";
 
 const Explore = () => {
   return (
@@ -104,32 +115,115 @@ const Explore = () => {
             </div>
           </div>
           
-          <div className="grid md:grid-cols-2 gap-6 mb-12">
+          <div className="grid md:grid-cols-1 gap-6 mb-12">
             <div className="bg-card rounded-lg p-6 shadow-sm">
-              <h2 className="text-2xl font-semibold mb-4">Learning Paths</h2>
-              <ul className="space-y-4">
-                <li>
-                  <h3 className="font-medium">Customer Research Techniques</h3>
-                  <p className="text-sm text-muted-foreground mb-1">Learn effective user research methods</p>
-                  <div className="h-2 bg-muted rounded-full overflow-hidden">
-                    <div className="h-full bg-primary" style={{ width: '70%' }}></div>
+              <h2 className="text-2xl font-semibold mb-4">Master Product Management Step-by-Step</h2>
+              <div className="space-y-6">
+                <div className="border border-border rounded-lg p-4">
+                  <div className="flex flex-wrap items-start gap-4 mb-3">
+                    <div className="flex-shrink-0 bg-primary/10 p-3 rounded-full">
+                      <BookOpenIcon className="h-5 w-5 text-primary" />
+                    </div>
+                    <div className="flex-grow">
+                      <div className="flex flex-wrap justify-between items-center gap-2 mb-1">
+                        <h3 className="text-lg font-medium">1️⃣ Customer Research & Discovery 🕵️‍♂️</h3>
+                        <div className="flex items-center text-sm text-muted-foreground">
+                          <ClockIcon className="h-4 w-4 mr-1" /> 
+                          <span>Learn in 3 hours</span>
+                        </div>
+                      </div>
+                      <p className="text-muted-foreground mb-3">Master techniques for user interviews, surveys, and market research.</p>
+                      <div className="mb-4">
+                        <div className="flex justify-between text-sm mb-1">
+                          <span>Progress</span>
+                          <span>70%</span>
+                        </div>
+                        <Progress value={70} className="h-2" />
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        <Button variant="outline" size="sm" className="flex items-center gap-1">
+                          <FileTextIcon className="h-4 w-4" />
+                          Case Study: How Airbnb Conducts User Research
+                        </Button>
+                        <Button variant="outline" size="sm" className="flex items-center gap-1">
+                          <DownloadIcon className="h-4 w-4" />
+                          Download Interview Templates
+                        </Button>
+                      </div>
+                    </div>
                   </div>
-                </li>
-                <li>
-                  <h3 className="font-medium">Data-Driven Decision Making</h3>
-                  <p className="text-sm text-muted-foreground mb-1">Understand metrics that matter</p>
-                  <div className="h-2 bg-muted rounded-full overflow-hidden">
-                    <div className="h-full bg-primary" style={{ width: '50%' }}></div>
+                </div>
+
+                <div className="border border-border rounded-lg p-4">
+                  <div className="flex flex-wrap items-start gap-4 mb-3">
+                    <div className="flex-shrink-0 bg-primary/10 p-3 rounded-full">
+                      <GridIcon className="h-5 w-5 text-primary" />
+                    </div>
+                    <div className="flex-grow">
+                      <div className="flex flex-wrap justify-between items-center gap-2 mb-1">
+                        <h3 className="text-lg font-medium">2️⃣ Data-Driven Decision Making 📊</h3>
+                        <div className="flex items-center text-sm text-muted-foreground">
+                          <ClockIcon className="h-4 w-4 mr-1" /> 
+                          <span>Learn in 4 hours</span>
+                        </div>
+                      </div>
+                      <p className="text-muted-foreground mb-3">Identify key metrics (DAU, NPS, Retention) & leverage analytics.</p>
+                      <div className="mb-4">
+                        <div className="flex justify-between text-sm mb-1">
+                          <span>Progress</span>
+                          <span>50%</span>
+                        </div>
+                        <Progress value={50} className="h-2" />
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        <Button variant="outline" size="sm" className="flex items-center gap-1">
+                          <FileTextIcon className="h-4 w-4" />
+                          Case Study: Spotify's Approach to Analytics
+                        </Button>
+                        <Button variant="outline" size="sm" className="flex items-center gap-1">
+                          <DownloadIcon className="h-4 w-4" />
+                          Download Metrics Dashboard Template
+                        </Button>
+                      </div>
+                    </div>
                   </div>
-                </li>
-                <li>
-                  <h3 className="font-medium">Strategic Roadmapping</h3>
-                  <p className="text-sm text-muted-foreground mb-1">Build effective product roadmaps</p>
-                  <div className="h-2 bg-muted rounded-full overflow-hidden">
-                    <div className="h-full bg-primary" style={{ width: '30%' }}></div>
+                </div>
+
+                <div className="border border-border rounded-lg p-4">
+                  <div className="flex flex-wrap items-start gap-4 mb-3">
+                    <div className="flex-shrink-0 bg-primary/10 p-3 rounded-full">
+                      <TargetIcon className="h-5 w-5 text-primary" />
+                    </div>
+                    <div className="flex-grow">
+                      <div className="flex flex-wrap justify-between items-center gap-2 mb-1">
+                        <h3 className="text-lg font-medium">3️⃣ Strategic Roadmapping & Prioritization 📅</h3>
+                        <div className="flex items-center text-sm text-muted-foreground">
+                          <ClockIcon className="h-4 w-4 mr-1" /> 
+                          <span>Learn in 5 hours</span>
+                        </div>
+                      </div>
+                      <p className="text-muted-foreground mb-3">Build flexible roadmaps that align with business goals.</p>
+                      <div className="mb-4">
+                        <div className="flex justify-between text-sm mb-1">
+                          <span>Progress</span>
+                          <span>30%</span>
+                        </div>
+                        <Progress value={30} className="h-2" />
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        <Button variant="outline" size="sm" className="flex items-center gap-1">
+                          <FileTextIcon className="h-4 w-4" />
+                          Case Study: How Linear Plans Product Roadmaps
+                        </Button>
+                        <Button variant="outline" size="sm" className="flex items-center gap-1">
+                          <DownloadIcon className="h-4 w-4" />
+                          Download Roadmap Templates
+                        </Button>
+                      </div>
+                    </div>
                   </div>
-                </li>
-              </ul>
+                </div>
+              </div>
             </div>
             
             <div className="bg-card rounded-lg p-6 shadow-sm">
