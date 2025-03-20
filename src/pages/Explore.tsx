@@ -1,8 +1,10 @@
+
 import React from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import EmailSignup from "../components/EmailSignup";
 import FrameworkChat from "../components/FrameworkChat";
+import RICECalculator from "../components/RICECalculator";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -113,6 +115,10 @@ const Explore = () => {
                 </CardContent>
               </Card>
             </div>
+          </div>
+          
+          <div className="mb-12">
+            <RICECalculator />
           </div>
           
           <div className="mb-12">
