@@ -1,9 +1,9 @@
-
 import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import EmailSignup from "../components/EmailSignup";
 import FrameworkChat from "../components/FrameworkChat";
+import RoadmapGenerator from "../components/RoadmapGenerator";
 import RICECalculator from "../components/RICECalculator";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -17,7 +17,7 @@ import {
   DownloadIcon,
   ClockIcon,
   BookOpenIcon,
-  FileCheck
+  CalendarIcon
 } from "lucide-react";
 import {
   Dialog,
@@ -137,13 +137,48 @@ const Explore = () => {
                   </div>
                 </CardContent>
               </Card>
+              
+              <Card className="hover:shadow-md transition-shadow">
+                <CardContent className="p-6">
+                  <div className="flex flex-col md:flex-row gap-4">
+                    <div className="flex-shrink-0 bg-primary/10 rounded-lg p-4 flex items-center justify-center">
+                      <CalendarIcon className="h-8 w-8 text-primary" />
+                    </div>
+                    <div className="flex-grow">
+                      <div className="flex flex-wrap justify-between items-start gap-2 mb-2">
+                        <h3 className="text-xl font-medium">Strategic Roadmapping: Plan Feature Releases</h3>
+                        <span className="text-sm bg-primary/10 px-2 py-1 rounded text-primary font-medium">Release Planning</span>
+                      </div>
+                      <p className="text-muted-foreground mb-4">Organize features into a structured timeline based on impact, effort, and dependencies.</p>
+                      <div className="flex flex-wrap gap-2">
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <Button variant="outline" size="sm" className="flex items-center gap-1">
+                              <ExternalLinkIcon className="h-4 w-4" />
+                              Interactive Roadmap Generator
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className="max-w-5xl h-[90vh] overflow-y-auto">
+                            <DialogHeader>
+                              <DialogTitle>Product Roadmap Generator</DialogTitle>
+                              <DialogDescription>
+                                Enter your feature ideas and get an AI-generated roadmap in seconds.
+                              </DialogDescription>
+                            </DialogHeader>
+                            <RoadmapGenerator />
+                          </DialogContent>
+                        </Dialog>
+                        <Button variant="outline" size="sm" className="flex items-center gap-1">
+                          <DownloadIcon className="h-4 w-4" />
+                          Download Template
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
           </div>
-          
-          {/* Hide the inline RICECalculator since we now show it in a dialog */}
-          {/* <div className="mb-12">
-            <RICECalculator />
-          </div> */}
           
           <div className="mb-12">
             <FrameworkChat />
@@ -292,6 +327,10 @@ const Explore = () => {
                 </li>
               </ul>
             </div>
+          </div>
+          
+          <div className="mb-12">
+            <RoadmapGenerator />
           </div>
           
           <div className="mt-12 text-center">

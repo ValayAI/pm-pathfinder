@@ -17,7 +17,37 @@ export async function handleChatRequest(request: ChatRequest): Promise<ChatRespo
   // PM Coach persona - pattern matching for demo purposes
   let response = "";
   
-  if (userMessage.includes("interview") || userMessage.includes("interviewing")) {
+  if (userMessage.includes("generate a product roadmap")) {
+    // Mock roadmap generation response
+    response = `RATIONALE:
+I organized this roadmap based on the following principles:
+1. Quick wins first: Low effort, high impact features are prioritized in Quarter 1
+2. Dependencies: Features that depend on others are scheduled after their dependencies
+3. Strategic balance: Each quarter has a mix of feature types to maintain momentum
+4. Resource allocation: Distributed high-effort items across quarters to balance workload
+
+ROADMAP:
+{
+  "quarters": [
+    {
+      "quarter": "Quarter 1",
+      "theme": "Quick Wins & Foundation",
+      "features": [
+        {"name": "Onboarding Flow Optimization", "description": "Improve the user onboarding experience", "effort": "Low", "impact": "High"},
+        {"name": "Mobile App Bug Fixes", "description": "Fix critical bugs in the mobile application", "effort": "Low", "impact": "Medium"}
+      ]
+    },
+    {
+      "quarter": "Quarter 2",
+      "theme": "Strategic Enhancements",
+      "features": [
+        {"name": "Advanced Analytics Dashboard", "description": "Comprehensive analytics for better insights", "effort": "High", "impact": "High"}
+      ]
+    }
+  ]
+}`;
+  }
+  else if (userMessage.includes("interview") || userMessage.includes("interviewing")) {
     response = "As your PM Coach, here's my advice for interviews:\n\n" +
       "1. Product sense - Practice analyzing products and suggesting improvements\n" +
       "2. Analytical thinking - Work on market sizing and metrics analysis\n" +
