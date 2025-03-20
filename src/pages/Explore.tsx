@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import EmailSignup from "../components/EmailSignup";
@@ -19,8 +19,18 @@ import {
   BookOpenIcon,
   FileCheck
 } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 const Explore = () => {
+  const [isRICECalculatorVisible, setIsRICECalculatorVisible] = useState(false);
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -74,10 +84,23 @@ const Explore = () => {
                       </div>
                       <p className="text-muted-foreground mb-4">Evaluate features based on Reach, Impact, Confidence, and Effort.</p>
                       <div className="flex flex-wrap gap-2">
-                        <Button variant="outline" size="sm" className="flex items-center gap-1">
-                          <ExternalLinkIcon className="h-4 w-4" />
-                          Interactive Calculator
-                        </Button>
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <Button variant="outline" size="sm" className="flex items-center gap-1">
+                              <ExternalLinkIcon className="h-4 w-4" />
+                              Interactive Calculator
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className="max-w-5xl h-[90vh] overflow-y-auto">
+                            <DialogHeader>
+                              <DialogTitle>RICE Score Calculator</DialogTitle>
+                              <DialogDescription>
+                                Calculate and prioritize your features based on Reach, Impact, Confidence, and Effort.
+                              </DialogDescription>
+                            </DialogHeader>
+                            <RICECalculator />
+                          </DialogContent>
+                        </Dialog>
                         <Button variant="outline" size="sm" className="flex items-center gap-1">
                           <DownloadIcon className="h-4 w-4" />
                           Download Template
@@ -117,9 +140,10 @@ const Explore = () => {
             </div>
           </div>
           
-          <div className="mb-12">
+          {/* Hide the inline RICECalculator since we now show it in a dialog */}
+          {/* <div className="mb-12">
             <RICECalculator />
-          </div>
+          </div> */}
           
           <div className="mb-12">
             <FrameworkChat />
