@@ -1,4 +1,3 @@
-
 import { useEffect, useState, useRef, FormEvent } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -47,7 +46,6 @@ export function Chat() {
     setIsVisible(true);
   }, []);
 
-  // Auto-scroll when messages change
   useEffect(() => {
     if (messages.length > 0) {
       scrollToBottom();
