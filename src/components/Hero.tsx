@@ -59,10 +59,13 @@ export function Hero() {
             loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
           )}>
             <Link to="/chat">
-              <Button size="default" className="group rounded-md px-4 bg-gradient-to-r from-blue-600 to-indigo-600 shadow-sm">
-                Chat with AI Coach
-                <ArrowRight className="ml-1 h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-              </Button>
+              <div className="flex flex-col items-center">
+                <Button size="default" className="group rounded-md px-4 bg-gradient-to-r from-blue-600 to-indigo-600 shadow-sm">
+                  Chat with AI Coach
+                  <ArrowRight className="ml-1 h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+                </Button>
+                <span className="text-xs text-muted-foreground mt-1">Get free AI-powered product management advice now!</span>
+              </div>
             </Link>
             <Link to="/explore">
               <Button size="default" variant="outline" className="rounded-md px-4">
