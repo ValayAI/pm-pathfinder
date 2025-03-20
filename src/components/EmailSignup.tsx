@@ -46,7 +46,7 @@ const EmailSignup = () => {
     console.log("Submitting to ConvertKit:", email, firstName);
     
     // Submit the form to ConvertKit
-    fetch("https://app.kit.com/forms/7822296/subscriptions", {
+    fetch("https://app.convertkit.com/forms/7822296/subscriptions", {
       method: "POST",
       body: formData,
       headers: {
@@ -86,7 +86,7 @@ const EmailSignup = () => {
     <div className="bg-muted/30 border border-border rounded-md shadow-sm">
       <form 
         ref={formRef}
-        action="https://app.kit.com/forms/7822296/subscriptions" 
+        action="https://app.convertkit.com/forms/7822296/subscriptions" 
         className="seva-form formkit-form" 
         method="post" 
         data-sv-form="7822296" 
