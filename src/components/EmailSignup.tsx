@@ -90,7 +90,7 @@ const EmailSignup = () => {
       >
         <div data-style="full">
           <div className="formkit-field mb-3">
-            <label htmlFor="email-address" className="block text-base font-medium mb-2">Stay updated with PM resources</label>
+            <label htmlFor="email-address" className="block text-base font-medium mb-2">Subscribe to our newsletter</label>
             <Input 
               className="formkit-input w-full" 
               name="email_address" 
