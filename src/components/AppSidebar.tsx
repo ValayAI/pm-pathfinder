@@ -90,28 +90,36 @@ export const Sidebar = ({
   );
 };
 
-export const SidebarBody = ({ 
+interface SidebarBodyProps {
+  className?: string;
+  children: React.ReactNode;
+}
+
+export const SidebarBody: React.FC<SidebarBodyProps> = ({ 
   className, 
-  children, 
-  ...props 
-}: React.ComponentProps<typeof motion.div>) => {
+  children 
+}) => {
   return (
     <>
-      <DesktopSidebar className={className} {...props}>
+      <DesktopSidebar className={className}>
         {children}
       </DesktopSidebar>
       <MobileSidebar className={className}>
-        {React.isValidElement(children) ? children : null}
+        {children}
       </MobileSidebar>
     </>
   );
 };
 
-export const DesktopSidebar = ({
+interface DesktopSidebarProps {
+  className?: string;
+  children: React.ReactNode;
+}
+
+export const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
   className,
   children,
-  ...props
-}: React.ComponentProps<typeof motion.div>) => {
+}) => {
   const { open, animate } = useSidebar();
   return (
     <motion.div
@@ -122,21 +130,23 @@ export const DesktopSidebar = ({
       animate={{
         width: "300px", // Always keep the width at 300px
       }}
-      {...props}
     >
       {children}
     </motion.div>
   );
 };
 
-export const MobileSidebar = ({
-  className,
-  children,
-}: {
+interface MobileSidebarProps {
   className?: string;
   children: React.ReactNode;
+}
+
+export const MobileSidebar: React.FC<MobileSidebarProps> = ({
+  className,
+  children,
 }) => {
   const { open, setOpen } = useSidebar();
+  
   return (
     <>
       <div
