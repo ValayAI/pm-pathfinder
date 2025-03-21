@@ -42,9 +42,9 @@ export const useSidebar = () => {
 
 export const SidebarProvider = ({
   children,
-  open: openProp,
-  setOpen: setOpenProp,
-  animate = true,
+  open: openProp = true,
+  setOpen: setOpenProp = () => {},
+  animate = false,
 }: {
   children: React.ReactNode;
   open?: boolean;
@@ -65,9 +65,9 @@ export const SidebarProvider = ({
 
 export const Sidebar = ({
   children,
-  open,
-  setOpen,
-  animate,
+  open = true,
+  setOpen = () => {},
+  animate = false,
 }: {
   children: React.ReactNode;
   open?: boolean;
@@ -85,7 +85,6 @@ export const SidebarBody = (props: React.ComponentProps<typeof motion.div>) => {
   return (
     <>
       <DesktopSidebar {...props} />
-      {/* Remove the direct prop spreading and use a separate props object for MobileSidebar */}
       <MobileSidebar className={props.className} />
     </>
   );
@@ -96,7 +95,7 @@ export const DesktopSidebar = ({
   children,
   ...props
 }: React.ComponentProps<typeof motion.div>) => {
-  const { open, setOpen, animate } = useSidebar();
+  const { open, animate } = useSidebar();
   return (
     <motion.div
       className={cn(
@@ -104,10 +103,8 @@ export const DesktopSidebar = ({
         className
       )}
       animate={{
-        width: animate ? (open ? "300px" : "60px") : "300px",
+        width: "300px", // Always keep the width at 300px
       }}
-      onMouseEnter={() => setOpen(true)}
-      onMouseLeave={() => setOpen(false)}
       {...props}
     >
       {children}
@@ -173,7 +170,6 @@ export const SidebarLink = ({
   link: Links;
   className?: string;
 }) => {
-  const { open, animate } = useSidebar();
   return (
     <Link
       to={link.href}
@@ -184,15 +180,9 @@ export const SidebarLink = ({
       {...props}
     >
       {link.icon}
-      <motion.span
-        animate={{
-          display: animate ? (open ? "inline-block" : "none") : "inline-block",
-          opacity: animate ? (open ? 1 : 0) : 1,
-        }}
-        className="text-neutral-700 dark:text-neutral-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0"
-      >
+      <span className="text-neutral-700 dark:text-neutral-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0">
         {link.label}
-      </motion.span>
+      </span>
     </Link>
   );
 };

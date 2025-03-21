@@ -51,12 +51,12 @@ const Dashboard = ({ children }: DashboardProps) => {
     { label: "PM Coach", href: "/chat", icon: <Sparkles className="h-5 w-5" /> },
     { label: "Coaching", href: "/coaching", icon: <MessageSquare className="h-5 w-5" /> },
     { label: "Roadmap", href: "/roadmap", icon: <BarChart3 className="h-5 w-5" /> },
-    { label: "Settings", href: "/settings", icon: <Settings className="h-5 w-5" /> }, // Combined Settings page
+    { label: "Settings", href: "/settings", icon: <Settings className="h-5 w-5" /> },
   ];
   
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
-      <SidebarProvider>
+      <SidebarProvider open={true} setOpen={() => {}} animate={false}>
         <SidebarBody>
           <div className="flex items-center justify-center p-4">
             <div className="w-8 h-8 rounded-md bg-primary flex items-center justify-center">
