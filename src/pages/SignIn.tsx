@@ -38,6 +38,7 @@ const SignIn = () => {
     setIsLoading(true);
     
     try {
+      // Sign in without a captcha token
       const { error: signInError, success } = await signIn(email, password);
       
       if (signInError) {
