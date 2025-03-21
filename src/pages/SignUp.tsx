@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { User, KeyRound, ArrowRight, Mail } from 'lucide-react';
 import Navbar from '@/components/Navbar';
+import ReCaptcha from '@/components/ReCaptcha';
 
 const SignUp = () => {
   const [firstName, setFirstName] = useState('');
@@ -16,6 +17,7 @@ const SignUp = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { signUp } = useAuth();
@@ -33,7 +35,7 @@ const SignUp = () => {
     setIsLoading(true);
     
     try {
-      const { error, success } = await signUp(email, password, { firstName, lastName });
+      const { error, success } = await signUp(email, password, captchaToken, { firstName, lastName });
       
       if (error) {
         toast.error('Sign up failed', {
@@ -56,6 +58,10 @@ const SignUp = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleCaptchaChange = (token: string | null) => {
+    setCaptchaToken(token);
   };
 
   return (
@@ -138,9 +144,10 @@ const SignUp = () => {
                   />
                 </div>
               </div>
+              <ReCaptcha onChange={handleCaptchaChange} />
             </CardContent>
             <CardFooter className="flex flex-col space-y-4">
-              <Button type="submit" className="w-full" disabled={isLoading}>
+              <Button type="submit" className="w-full" disabled={isLoading || !captchaToken}>
                 {isLoading ? (
                   <div className="flex items-center justify-center">
                     <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>

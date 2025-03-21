@@ -9,11 +9,11 @@ type AuthContextType = {
   user: User | null;
   session: Session | null;
   isLoading: boolean;
-  signIn: (email: string, password: string) => Promise<{
+  signIn: (email: string, password: string, captchaToken: string | null) => Promise<{
     error: Error | null;
     success: boolean;
   }>;
-  signUp: (email: string, password: string, userData?: { firstName?: string; lastName?: string }) => Promise<{
+  signUp: (email: string, password: string, captchaToken: string | null, userData?: { firstName?: string; lastName?: string }) => Promise<{
     error: Error | null;
     success: boolean;
   }>;
@@ -122,8 +122,23 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     failedAttempts.delete(email);
   };
 
-  const signIn = async (email: string, password: string) => {
+  const verifyCaptcha = (token: string | null): boolean => {
+    if (!token) {
+      toast.error('CAPTCHA verification failed', {
+        description: 'Please complete the CAPTCHA verification.',
+      });
+      return false;
+    }
+    return true;
+  };
+
+  const signIn = async (email: string, password: string, captchaToken: string | null) => {
     try {
+      // Verify CAPTCHA first
+      if (!verifyCaptcha(captchaToken)) {
+        return { error: new Error("CAPTCHA verification failed"), success: false };
+      }
+
       // Check if user is rate limited
       if (!checkRateLimit(email)) {
         return { error: new Error("Too many login attempts. Please try again later."), success: false };
@@ -152,8 +167,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const signUp = async (email: string, password: string, userData?: { firstName?: string; lastName?: string }) => {
+  const signUp = async (email: string, password: string, captchaToken: string | null, userData?: { firstName?: string; lastName?: string }) => {
     try {
+      // Verify CAPTCHA first
+      if (!verifyCaptcha(captchaToken)) {
+        return { error: new Error("CAPTCHA verification failed"), success: false };
+      }
+
       console.log('Signing up with:', email);
       const { data, error } = await supabase.auth.signUp({ 
         email, 
