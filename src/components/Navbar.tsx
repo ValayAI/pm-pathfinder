@@ -6,6 +6,17 @@ import { Button } from "@/components/ui/button";
 import { 
   Menu, X, Compass, BookOpen, MessageSquare, User, Moon, Sun, DollarSign, Sparkles
 } from "lucide-react";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 type NavItem = {
   name: string;
@@ -18,6 +29,7 @@ export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isDark, setIsDark] = useState(false);
+  const isMobile = useIsMobile();
   
   // Handle scrolling effect
   useEffect(() => {
@@ -111,7 +123,7 @@ export function Navbar() {
             </div>
           </div>
           
-          {/* Mobile menu button */}
+          {/* Mobile menu button - Hamburger icon */}
           <div className="md:hidden flex items-center">
             <Button 
               variant="ghost" 
@@ -122,51 +134,65 @@ export function Navbar() {
             >
               {isDark ? <Sun className="h-[0.9rem] w-[0.9rem]" /> : <Moon className="h-[0.9rem] w-[0.9rem]" />}
             </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsOpen(!isOpen)}
-              aria-label="Toggle menu"
-              className="h-7 w-7 rounded-md"
-            >
-              {isOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
-            </Button>
+            
+            {/* Drawer for hamburger menu */}
+            <Drawer>
+              <DrawerTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  aria-label="Menu"
+                  className="h-7 w-7 rounded-md"
+                >
+                  <Menu className="h-4 w-4" />
+                </Button>
+              </DrawerTrigger>
+              <DrawerContent>
+                <DrawerHeader className="text-left">
+                  <DrawerTitle>Menu</DrawerTitle>
+                  <DrawerDescription>
+                    Navigate to different sections
+                  </DrawerDescription>
+                </DrawerHeader>
+                <div className="p-4 space-y-3">
+                  {navItems.map((item) => (
+                    <NavLink
+                      key={item.name}
+                      to={item.path}
+                      className={({ isActive }) => cn(
+                        "flex items-center p-2 rounded-md text-sm font-medium transition-colors duration-200 w-full",
+                        isActive 
+                          ? "text-primary bg-primary/5" 
+                          : "text-foreground/70 hover:text-primary hover:bg-primary/5",
+                        item.highlight && !isActive && "bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400",
+                        item.highlight && isActive && "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300"
+                      )}
+                    >
+                      {item.icon}
+                      <span className="ml-2">{item.name}</span>
+                    </NavLink>
+                  ))}
+                  <NavLink 
+                    to="/profile"
+                    className={({ isActive }) => cn(
+                      "flex items-center p-2 rounded-md text-sm font-medium transition-colors duration-200 w-full",
+                      isActive 
+                        ? "text-primary bg-primary/5" 
+                        : "text-foreground/70 hover:text-primary hover:bg-primary/5"
+                    )}
+                  >
+                    <User className="h-4 w-4 mr-1" />
+                    <span className="ml-2">Profile</span>
+                  </NavLink>
+                </div>
+                <DrawerFooter>
+                  <DrawerClose asChild>
+                    <Button variant="outline">Close</Button>
+                  </DrawerClose>
+                </DrawerFooter>
+              </DrawerContent>
+            </Drawer>
           </div>
-        </div>
-      </div>
-      
-      {/* Mobile menu */}
-      <div className={cn(
-        "md:hidden transition-all duration-300 ease-in-out overflow-hidden",
-        isOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
-      )}>
-        <div className="px-4 pt-2 pb-3 space-y-1 glass-effect">
-          {navItems.map(item => (
-            <NavLink
-              key={item.name}
-              to={item.path}
-              className={({ isActive }) => cn(
-                "flex items-center px-3 py-1.5 rounded-md text-sm font-medium transition-colors duration-200",
-                isActive 
-                  ? "text-primary bg-primary/5" 
-                  : "text-foreground/70 hover:text-primary hover:bg-primary/5",
-                item.highlight && !isActive && "bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400",
-                item.highlight && isActive && "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300"
-              )}
-              onClick={() => setIsOpen(false)}
-            >
-              {item.icon}
-              {item.name}
-            </NavLink>
-          ))}
-          <NavLink 
-            to="/profile"
-            className="flex items-center px-3 py-1.5 rounded-md text-sm font-medium text-foreground/70 hover:text-primary hover:bg-primary/5"
-            onClick={() => setIsOpen(false)}
-          >
-            <User className="h-4 w-4 mr-1" />
-            Profile
-          </NavLink>
         </div>
       </div>
     </nav>

@@ -29,12 +29,12 @@ const Index = () => {
       <main>
         <Hero />
         <div className={cn(
-          "py-12 text-center transition-all duration-1000",
+          "py-6 text-center transition-all duration-1000",
           loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
         )}>
           <div className="container mx-auto px-4">
             {/* Sustainability message */}
-            <div className="mt-4 mb-6 flex items-center justify-center">
+            <div className="flex items-center justify-center">
               <Leaf className="h-4 w-4 text-green-500 mr-2" />
               <p className="font-eco text-sm text-green-600 dark:text-green-400">
                 1% of your purchase goes to removing CO₂ from the atmosphere
@@ -42,7 +42,7 @@ const Index = () => {
             </div>
             
             {/* Email signup component */}
-            <div className="max-w-md mx-auto mt-8">
+            <div className="max-w-md mx-auto mt-4">
               <EmailSignup />
             </div>
           </div>
