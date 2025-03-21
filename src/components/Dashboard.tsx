@@ -34,11 +34,14 @@ const Dashboard: React.FC<DashboardProps> = ({ children }) => {
   
   // Fetch user profile
   useEffect(() => {
-    if (user) {
-      getUserProfile(user.id).then(profileData => {
+    const fetchProfile = async () => {
+      if (user) {
+        const profileData = await getUserProfile(user.id);
         setProfile(profileData);
-      });
-    }
+      }
+    };
+    
+    fetchProfile();
   }, [user]);
   
   // Set time-based greeting

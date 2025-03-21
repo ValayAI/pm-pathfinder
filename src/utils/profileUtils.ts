@@ -50,12 +50,15 @@ export const updateUserProfile = async (
       updated_at: new Date().toISOString()
     };
     
+    console.log('Updating profile with:', updatedProfile);
+    
     const { error } = await supabase
       .from('profiles')
       .update(updatedProfile)
       .eq('id', userId);
     
     if (error) {
+      console.error('Supabase error:', error);
       throw error;
     }
     
