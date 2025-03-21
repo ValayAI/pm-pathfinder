@@ -1,4 +1,3 @@
-
 import React, { useEffect } from "react";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { 
@@ -43,12 +42,17 @@ const Pricing = () => {
   
   useEffect(() => {
     // Show toast if user was redirected here due to required feature
-    if (requiredFeature) {
+    if (requiredFeature && user) {
       toast.info(`Upgrade required`, {
         description: `The "${requiredFeature}" feature requires a subscription upgrade.`,
       });
+    } else if (requiredFeature && !user) {
+      // If user is not logged in but was redirected for a required feature
+      toast.info(`Sign in required`, {
+        description: `Please sign in to access the "${requiredFeature}" feature.`,
+      });
     }
-  }, [requiredFeature]);
+  }, [requiredFeature, user]);
 
   const plans = [
     {
@@ -108,11 +112,13 @@ const Pricing = () => {
   ];
 
   const handlePlanSuccess = (planId: string) => {
-    updateSubscription(planId);
-    
-    // If the user was redirected here from another page, navigate back
-    if (location.state?.from) {
-      navigate(location.state.from.pathname);
+    if (user) {
+      updateSubscription(planId);
+      
+      // If the user was redirected here from another page, navigate back
+      if (location.state?.from) {
+        navigate(location.state.from.pathname);
+      }
     }
   };
 
@@ -126,8 +132,10 @@ const Pricing = () => {
     }
   };
 
-  // Determine button text based on current subscription
+  // Determine button text based on current subscription and login status
   const getButtonText = (planId: string) => {
+    if (!user) return "Sign in to Subscribe";
+    
     if (!subscription) return "Select Plan";
     
     if (subscription.planId === planId) {
@@ -157,10 +165,18 @@ const Pricing = () => {
             Select the plan that best fits your needs and ambitions.
           </p>
           
-          {requiredFeature && (
+          {requiredFeature && user && (
             <div className="mt-4 p-3 bg-amber-50 border border-amber-200 rounded-md max-w-lg mx-auto">
               <p className="text-amber-700">
                 Upgrade your plan to access the <strong>{requiredFeature}</strong> feature.
+              </p>
+            </div>
+          )}
+          
+          {requiredFeature && !user && (
+            <div className="mt-4 p-3 bg-amber-50 border border-amber-200 rounded-md max-w-lg mx-auto">
+              <p className="text-amber-700">
+                Please <Button variant="link" className="p-0 h-auto" onClick={() => navigate('/signin')}>sign in</Button> to access the <strong>{requiredFeature}</strong> feature.
               </p>
             </div>
           )}
@@ -185,9 +201,9 @@ const Pricing = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-12">
           {plans.map((plan) => {
             const isCurrentPlan = subscription?.planId === plan.id;
-            const isDisabled = isCurrentPlan || 
-              (plan.id === 'popular' && subscription?.planId === 'pro') || 
-              (plan.id === 'starter' && (subscription?.planId === 'popular' || subscription?.planId === 'pro'));
+            const isDisabled = (user && isCurrentPlan) || 
+              (user && plan.id === 'popular' && subscription?.planId === 'pro') || 
+              (user && plan.id === 'starter' && (subscription?.planId === 'popular' || subscription?.planId === 'pro'));
             
             return (
               <Card 
@@ -245,6 +261,13 @@ const Pricing = () => {
                       disabled
                     >
                       {isCurrentPlan ? "Current Plan" : "Already Included"}
+                    </Button>
+                  ) : !user ? (
+                    <Button 
+                      variant={plan.buttonVariant}
+                      onClick={() => navigate('/signin', { state: { from: location, planId: plan.id } })}
+                    >
+                      Sign in to Subscribe
                     </Button>
                   ) : (
                     <StripeCheckout 

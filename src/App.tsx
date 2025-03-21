@@ -32,7 +32,7 @@ function App() {
               <Route path="/signin" element={<SignIn />} />
               <Route path="/sign-up" element={<SignUp />} />
               <Route path="/signup" element={<Navigate to="/sign-up" replace />} />
-              <Route path="/pricing" element={<ProtectedRoute><Pricing /></ProtectedRoute>} />
+              <Route path="/pricing" element={<Pricing />} />
               
               {/* Protected Routes */}
               <Route path="/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} />

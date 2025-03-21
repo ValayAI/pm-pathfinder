@@ -173,6 +173,7 @@ export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ 
   };
 
   const getRemainingMessages = (): number => {
+    if (!user) return 0; // No messages for non-authenticated users
     if (!subscription) return 0;
     
     // For unlimited plans, return Infinity
@@ -185,6 +186,7 @@ export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ 
   };
 
   const isFeatureEnabled = (feature: string): boolean => {
+    if (!user) return false; // No features for non-authenticated users
     if (!subscription) return false;
     
     // Check if the feature is included in the user's plan

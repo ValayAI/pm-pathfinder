@@ -1,6 +1,6 @@
 
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'sonner';
 import { useAuth } from '@/providers/AuthProvider';
 import { Button } from '@/components/ui/button';
@@ -14,7 +14,21 @@ const SignIn = () => {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const { signIn } = useAuth();
+
+  // Check if the user was directed from pricing page with a specific plan
+  const fromPricing = location.state?.from?.pathname === '/pricing';
+  const selectedPlanId = location.state?.planId;
+
+  useEffect(() => {
+    // Show a message if redirected from pricing with a plan
+    if (fromPricing && selectedPlanId) {
+      toast.info('Sign in to subscribe', {
+        description: `Complete sign in to subscribe to the ${selectedPlanId} plan.`,
+      });
+    }
+  }, [fromPricing, selectedPlanId]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,6 +48,11 @@ const SignIn = () => {
         toast.success('Welcome back!', {
           description: 'You have successfully signed in.',
         });
+
+        // If the user came from pricing with a plan, redirect back to pricing
+        if (fromPricing) {
+          navigate('/pricing', { state: location.state });
+        }
       }
     } catch (error) {
       console.error('Unexpected error during sign-in:', error);
@@ -52,6 +71,11 @@ const SignIn = () => {
           <CardTitle className="text-2xl font-bold">Sign in</CardTitle>
           <CardDescription>
             Enter your email and password to access your account
+            {fromPricing && selectedPlanId && (
+              <p className="mt-2 text-sm font-medium text-purple-600 dark:text-purple-400">
+                Sign in to subscribe to the {selectedPlanId} plan
+              </p>
+            )}
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
