@@ -8,13 +8,11 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { User, KeyRound, ArrowRight, Mail, AlertCircle } from 'lucide-react';
-import ReCaptcha from '@/components/ReCaptcha';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 
 const SignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
@@ -39,15 +37,8 @@ const SignIn = () => {
     setError(null);
     setIsLoading(true);
     
-    if (!captchaToken) {
-      setError('Please complete the CAPTCHA verification');
-      setIsLoading(false);
-      return;
-    }
-    
     try {
-      console.log('Attempting sign in with captcha token:', captchaToken ? 'Token exists' : 'No token');
-      const { error: signInError, success } = await signIn(email, password, captchaToken);
+      const { error: signInError, success } = await signIn(email, password);
       
       if (signInError) {
         setError(signInError.message || 'Please check your credentials and try again.');
@@ -71,14 +62,6 @@ const SignIn = () => {
       setError('An unexpected error occurred. Please try again.');
     } finally {
       setIsLoading(false);
-    }
-  };
-
-  const handleCaptchaChange = (token: string | null) => {
-    console.log('CAPTCHA changed:', token ? 'Token received' : 'No token');
-    setCaptchaToken(token);
-    if (token) {
-      setError(null);
     }
   };
 
@@ -138,10 +121,6 @@ const SignIn = () => {
                   required
                 />
               </div>
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground mb-2">Please verify you are human</p>
-              <ReCaptcha onChange={handleCaptchaChange} />
             </div>
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">

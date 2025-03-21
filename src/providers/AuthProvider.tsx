@@ -8,11 +8,11 @@ type AuthContextType = {
   user: User | null;
   session: Session | null;
   isLoading: boolean;
-  signIn: (email: string, password: string, captchaToken: string | null) => Promise<{
+  signIn: (email: string, password: string, captchaToken?: string | null) => Promise<{
     error: Error | null;
     success: boolean;
   }>;
-  signUp: (email: string, password: string, captchaToken: string | null, userData?: { firstName?: string; lastName?: string }) => Promise<{
+  signUp: (email: string, password: string, captchaToken?: string | null, userData?: { firstName?: string; lastName?: string }) => Promise<{
     error: Error | null;
     success: boolean;
   }>;
@@ -133,26 +133,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return true;
   };
 
-  const signIn = async (email: string, password: string, captchaToken: string | null) => {
+  const signIn = async (email: string, password: string, captchaToken?: string | null) => {
     try {
-      // Verify CAPTCHA first
-      if (!verifyCaptcha(captchaToken)) {
-        return { error: new Error("CAPTCHA verification failed"), success: false };
-      }
-
       // Check if user is rate limited
       if (!checkRateLimit(email)) {
         return { error: new Error("Too many login attempts. Please try again later."), success: false };
       }
 
-      console.log('Signing in with:', email, 'CAPTCHA token present:', !!captchaToken);
+      console.log('Signing in with:', email);
       
-      // Pass the captchaToken explicitly in the options
+      // Sign in without requiring CAPTCHA
       const { data, error } = await supabase.auth.signInWithPassword({ 
         email, 
         password,
         options: {
-          captchaToken: captchaToken || undefined
+          captchaToken: captchaToken // Only pass if provided, but don't require it
         }
       });
       
@@ -176,13 +171,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const signUp = async (email: string, password: string, captchaToken: string | null, userData?: { firstName?: string; lastName?: string }) => {
+  const signUp = async (email: string, password: string, captchaToken?: string | null, userData?: { firstName?: string; lastName?: string }) => {
     try {
-      // Verify CAPTCHA first
-      if (!verifyCaptcha(captchaToken)) {
-        return { error: new Error("CAPTCHA verification failed"), success: false };
-      }
-
       console.log('Signing up with:', email);
       const { data, error } = await supabase.auth.signUp({ 
         email, 
@@ -192,7 +182,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             first_name: userData?.firstName || '',
             last_name: userData?.lastName || '',
           },
-          captchaToken: captchaToken || undefined
+          captchaToken: captchaToken // Only pass if provided, but don't require it
         }
       });
       
