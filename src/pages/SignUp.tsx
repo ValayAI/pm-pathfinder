@@ -35,7 +35,8 @@ const SignUp = () => {
     setIsLoading(true);
     
     try {
-      const { error, success } = await signUp(email, password, captchaToken, { firstName, lastName });
+      // Updated to match the new signUp function signature
+      const { error, success } = await signUp(email, password, { firstName, lastName });
       
       if (error) {
         toast.error('Sign up failed', {
