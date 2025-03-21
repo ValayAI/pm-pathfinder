@@ -1,27 +1,28 @@
 
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '@/providers/AuthProvider';
-import { 
-  Home, 
-  Compass, 
-  BookOpen, 
-  MessageSquare, 
-  Sparkles,
-  ArrowUpRight,
-  Settings,
-  User
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { getUserProfile, UserProfile } from '@/utils/profileUtils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import { Card, CardHeader, CardContent, CardFooter, CardTitle, CardDescription } from '@/components/ui/card';
 import {
   Sidebar,
   SidebarBody,
   SidebarLink,
 } from '@/components/AppSidebar';
+import {
+  Home,
+  Compass,
+  BookOpen,
+  MessageSquare,
+  Sparkles,
+  Settings,
+  User,
+  ArrowRight
+} from 'lucide-react';
 
 interface DashboardProps {
   children?: React.ReactNode;
@@ -30,7 +31,6 @@ interface DashboardProps {
 const Dashboard: React.FC<DashboardProps> = ({ children }) => {
   const { user } = useAuth();
   const [greeting, setGreeting] = useState('Good day');
-  const [loaded, setLoaded] = useState(false);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   
   // Fetch user profile
@@ -48,10 +48,6 @@ const Dashboard: React.FC<DashboardProps> = ({ children }) => {
     if (hour < 12) setGreeting('Good morning');
     else if (hour < 18) setGreeting('Good afternoon');
     else setGreeting('Good evening');
-    
-    // Set loaded state for animations after a brief delay
-    const timer = setTimeout(() => setLoaded(true), 100);
-    return () => clearTimeout(timer);
   }, []);
   
   if (!user) {
@@ -69,44 +65,44 @@ const Dashboard: React.FC<DashboardProps> = ({ children }) => {
     {
       label: "Home",
       href: "/",
-      icon: <Home className="h-5 w-5 text-neutral-700 dark:text-neutral-200" />,
+      icon: <Home className="h-5 w-5" />,
     },
     {
       label: "Explore Resources",
       href: "/explore",
-      icon: <Compass className="h-5 w-5 text-neutral-700 dark:text-neutral-200" />,
+      icon: <Compass className="h-5 w-5" />,
     },
     {
       label: "Ask PM Coach",
       href: "/chat",
-      icon: <Sparkles className="h-5 w-5 text-neutral-700 dark:text-neutral-200" />,
+      icon: <Sparkles className="h-5 w-5" />,
     },
     {
       label: "Get Coaching",
       href: "/coaching",
-      icon: <MessageSquare className="h-5 w-5 text-neutral-700 dark:text-neutral-200" />,
+      icon: <MessageSquare className="h-5 w-5" />,
     },
     {
       label: "Roadmap",
       href: "/roadmap",
-      icon: <BookOpen className="h-5 w-5 text-neutral-700 dark:text-neutral-200" />,
+      icon: <BookOpen className="h-5 w-5" />,
     },
     {
       label: "Profile",
       href: "/profile",
-      icon: <User className="h-5 w-5 text-neutral-700 dark:text-neutral-200" />,
+      icon: <User className="h-5 w-5" />,
     },
     {
       label: "Settings",
       href: "/settings",
-      icon: <Settings className="h-5 w-5 text-neutral-700 dark:text-neutral-200" />,
+      icon: <Settings className="h-5 w-5" />,
     }
   ];
 
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <div className="flex w-full min-h-[calc(100vh-4rem)] pt-4">
+      <div className="flex w-full min-h-[calc(100vh-4rem)] pt-16">
         <Sidebar>
           <SidebarBody>
             <div className="flex flex-col space-y-6">
@@ -120,7 +116,7 @@ const Dashboard: React.FC<DashboardProps> = ({ children }) => {
               </div>
               
               <div className="mt-4">
-                <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400 mb-2 px-2">
+                <p className="text-xs font-medium text-muted-foreground mb-2 px-2">
                   Navigation
                 </p>
                 <div className="space-y-1">
@@ -133,48 +129,103 @@ const Dashboard: React.FC<DashboardProps> = ({ children }) => {
           </SidebarBody>
         </Sidebar>
         
-        <div className="flex-1 px-6 py-4">
+        <div className="flex-1 px-6 py-6">
           {children ? children : (
-            <div className="space-y-8">
-              <section>
-                <div className="flex items-center gap-3 mb-4">
-                  <Avatar className="h-12 w-12">
-                    <AvatarImage src={profile?.avatar_url || undefined} alt={displayName} />
-                    <AvatarFallback>{displayName.charAt(0).toUpperCase()}</AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <h1 className="text-2xl font-semibold">{greeting}, {displayName}!</h1>
-                    <p className="text-muted-foreground">Welcome to your PM Pathfinder dashboard.</p>
-                  </div>
-                </div>
-              </section>
-
-              {/* Simplified Dashboard Content */}
-              <section className="grid grid-cols-1 gap-6">
-                {/* Progress Overview */}
-                <div className="bg-card rounded-lg shadow-sm p-5 hover:shadow-md transition-shadow duration-300 border border-border">
-                  <h2 className="text-lg font-semibold mb-3">Continue Your Learning</h2>
-                  <p className="text-muted-foreground text-sm mb-4">
-                    Pick up where you left off with your current learning path
-                  </p>
-                  <div className="space-y-3 mb-4">
-                    <div className="flex items-center justify-between p-3 bg-accent/10 rounded-md">
-                      <div>
-                        <h3 className="font-medium">Mastering Prioritization</h3>
-                        <p className="text-xs text-muted-foreground">4 of 6 modules completed</p>
-                      </div>
-                      <Button size="sm" variant="ghost">
-                        <ArrowUpRight className="h-4 w-4" />
-                      </Button>
+            <div className="space-y-8 max-w-4xl mx-auto">
+              {/* User Welcome Section */}
+              <Card className="border-none shadow-none bg-transparent">
+                <CardHeader className="px-0 pt-0">
+                  <div className="flex items-center gap-3">
+                    <Avatar className="h-16 w-16">
+                      <AvatarImage src={profile?.avatar_url || undefined} alt={displayName} />
+                      <AvatarFallback>{displayName.charAt(0).toUpperCase()}</AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <CardTitle className="text-3xl font-semibold">
+                        {greeting}, {displayName}
+                      </CardTitle>
+                      <CardDescription className="text-base">
+                        Welcome back to your PM learning journey
+                      </CardDescription>
                     </div>
                   </div>
-                  <Button asChild variant="default" className="w-full justify-center">
-                    <Link to="/roadmap">
-                      Continue Learning
-                    </Link>
-                  </Button>
-                </div>
-              </section>
+                </CardHeader>
+              </Card>
+              
+              {/* Learning Progress */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Current Path</CardTitle>
+                    <CardDescription>Continue where you left off</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div className="p-4 rounded-md bg-accent/10">
+                        <h3 className="font-medium">Mastering Prioritization</h3>
+                        <div className="mt-1 mb-2">
+                          <div className="h-2 w-full bg-muted rounded-full overflow-hidden">
+                            <div className="h-full bg-primary" style={{ width: '66%' }}></div>
+                          </div>
+                        </div>
+                        <p className="text-sm text-muted-foreground">4 of 6 modules completed</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                  <CardFooter>
+                    <Button asChild className="w-full">
+                      <Link to="/roadmap">
+                        Continue Learning
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                      </Link>
+                    </Button>
+                  </CardFooter>
+                </Card>
+                
+                <Card>
+                  <CardHeader>
+                    <CardTitle>PM Coach</CardTitle>
+                    <CardDescription>Get instant answers to your PM questions</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex items-center justify-center h-24">
+                      <Sparkles className="h-12 w-12 text-primary opacity-80" />
+                    </div>
+                  </CardContent>
+                  <CardFooter>
+                    <Button asChild variant="outline" className="w-full">
+                      <Link to="/chat">
+                        Ask PM Coach
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                      </Link>
+                    </Button>
+                  </CardFooter>
+                </Card>
+              </div>
+
+              {/* Quick Actions */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Quick Actions</CardTitle>
+                  <CardDescription>Shortcuts to help you navigate</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {menuItems.slice(0, 4).map((item) => (
+                      <Link 
+                        key={item.label} 
+                        to={item.href}
+                        className="flex flex-col items-center justify-center p-4 rounded-lg border bg-card hover:bg-accent/20 transition-colors"
+                      >
+                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mb-2">
+                          {React.cloneElement(item.icon as React.ReactElement, { className: "h-5 w-5 text-primary" })}
+                        </div>
+                        <span className="text-sm font-medium">{item.label}</span>
+                      </Link>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
             </div>
           )}
         </div>
