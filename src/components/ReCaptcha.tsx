@@ -19,12 +19,17 @@ const ReCaptcha: React.FC<ReCaptchaProps> = ({ onChange }) => {
     }
   }, []);
 
+  const handleChange = (token: string | null) => {
+    console.log('CAPTCHA token received:', token ? 'Token present' : 'No token');
+    onChange(token);
+  };
+
   return (
     <div className="my-4">
       <ReCAPTCHA
         ref={recaptchaRef}
         sitekey={RECAPTCHA_SITE_KEY}
-        onChange={onChange}
+        onChange={handleChange}
         size="normal"
       />
     </div>

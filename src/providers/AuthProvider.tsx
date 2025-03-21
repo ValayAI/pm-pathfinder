@@ -1,4 +1,3 @@
-
 import { createContext, useContext, useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { Session, User } from '@supabase/supabase-js';
@@ -124,11 +123,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const verifyCaptcha = (token: string | null): boolean => {
     if (!token) {
+      console.error('CAPTCHA verification failed: No token provided');
       toast.error('CAPTCHA verification failed', {
         description: 'Please complete the CAPTCHA verification.',
       });
       return false;
     }
+    console.log('CAPTCHA verification successful');
     return true;
   };
 
@@ -144,8 +145,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         return { error: new Error("Too many login attempts. Please try again later."), success: false };
       }
 
-      console.log('Signing in with:', email);
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      console.log('Signing in with:', email, 'CAPTCHA token present:', !!captchaToken);
+      
+      // Pass the captchaToken explicitly in the options
+      const { data, error } = await supabase.auth.signInWithPassword({ 
+        email, 
+        password,
+        options: {
+          captchaToken: captchaToken || undefined
+        }
+      });
       
       if (error) {
         console.error('Error signing in:', error);
@@ -182,7 +191,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           data: {
             first_name: userData?.firstName || '',
             last_name: userData?.lastName || '',
-          }
+          },
+          captchaToken: captchaToken || undefined
         }
       });
       

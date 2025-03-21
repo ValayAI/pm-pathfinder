@@ -46,6 +46,7 @@ const SignIn = () => {
     }
     
     try {
+      console.log('Attempting sign in with captcha token:', captchaToken ? 'Token exists' : 'No token');
       const { error: signInError, success } = await signIn(email, password, captchaToken);
       
       if (signInError) {
@@ -74,6 +75,7 @@ const SignIn = () => {
   };
 
   const handleCaptchaChange = (token: string | null) => {
+    console.log('CAPTCHA changed:', token ? 'Token received' : 'No token');
     setCaptchaToken(token);
     if (token) {
       setError(null);
