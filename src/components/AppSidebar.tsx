@@ -101,8 +101,7 @@ export const SidebarBody = ({
         {children}
       </DesktopSidebar>
       <MobileSidebar className={className}>
-        {/* Make sure we're only passing the children prop to MobileSidebar */}
-        {React.Children.only(children)}
+        {React.isValidElement(children) ? children : null}
       </MobileSidebar>
     </>
   );
