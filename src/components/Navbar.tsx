@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { 
-  Menu, X, Compass, BookOpen, MessageSquare, User, Moon, Sun, DollarSign, Sparkles
+  Menu, X, Compass, BookOpen, MessageSquare, User, Moon, Sun, DollarSign, Sparkles, Home
 } from "lucide-react";
 import {
   Drawer,
@@ -56,6 +56,8 @@ export function Navbar() {
   };
   
   const navItems: NavItem[] = [
+    // Home link that directs to dashboard when logged in, otherwise to index page
+    { name: 'Home', path: '/', icon: <Home className="h-4 w-4 mr-1" /> },
     { name: 'Explore', path: '/explore', icon: <Compass className="h-4 w-4 mr-1" /> },
     { name: 'Resources', path: '/resources', icon: <BookOpen className="h-4 w-4 mr-1" /> },
     { 

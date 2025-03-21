@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useAuth } from "@/providers/AuthProvider";
 import { useSubscription } from '@/providers/SubscriptionProvider';
@@ -30,13 +29,14 @@ import {
   SidebarGroupLabel,
   SidebarGroupContent,
 } from "@/components/ui/sidebar";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { toast } from "sonner";
 
 const Dashboard = () => {
   const { user, signOut } = useAuth();
   const { isFeatureEnabled } = useSubscription();
   const navigate = useNavigate();
+  const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   
   const handleSignOut = async () => {
@@ -54,15 +54,15 @@ const Dashboard = () => {
   const hasRoadmapAccess = isFeatureEnabled('roadmap_generator');
   
   const mainNavItems = [
-    { title: 'Home', icon: Home, href: '/' },
-    { title: 'Explore', icon: Compass, href: '/explore' },
-    { title: 'Resources', icon: BookOpen, href: '/resources' },
-    { title: 'PM Coach', icon: Sparkles, href: '/chat', premium: !hasPMCoachAccess },
-    { title: 'Coaching', icon: MessageSquare, href: '/coaching' },
+    { title: 'Home', icon: Home, href: '/', active: location.pathname === '/' },
+    { title: 'Explore', icon: Compass, href: '/explore', active: location.pathname === '/explore' },
+    { title: 'Resources', icon: BookOpen, href: '/resources', active: location.pathname === '/resources' },
+    { title: 'PM Coach', icon: Sparkles, href: '/chat', active: location.pathname === '/chat', premium: !hasPMCoachAccess },
+    { title: 'Coaching', icon: MessageSquare, href: '/coaching', active: location.pathname === '/coaching' },
   ];
   
   const toolsNavItems = [
-    { title: 'Roadmap Generator', icon: BarChart3, href: '/roadmap', premium: !hasRoadmapAccess },
+    { title: 'Roadmap Generator', icon: BarChart3, href: '/roadmap', active: location.pathname === '/roadmap', premium: !hasRoadmapAccess },
   ];
   
   const accountNavItems = [
@@ -94,6 +94,7 @@ const Dashboard = () => {
                       <SidebarMenuButton 
                         asChild
                         tooltip={item.title}
+                        isActive={item.active}
                       >
                         <Button
                           variant="ghost" 
@@ -129,6 +130,7 @@ const Dashboard = () => {
                       <SidebarMenuButton 
                         asChild
                         tooltip={item.title}
+                        isActive={item.active}
                       >
                         <Button
                           variant="ghost" 
