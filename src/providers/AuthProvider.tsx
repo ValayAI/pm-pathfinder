@@ -1,7 +1,9 @@
+
 import { createContext, useContext, useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { Session, User } from '@supabase/supabase-js';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 type AuthContextType = {
   user: User | null;
@@ -17,6 +19,11 @@ type AuthContextType = {
   }>;
   signOut: () => Promise<void>;
 };
+
+// Track failed login attempts
+const failedAttempts = new Map<string, { count: number, lastAttempt: number }>();
+const MAX_ATTEMPTS = 5;
+const LOCKOUT_DURATION = 15 * 60 * 1000; // 15 minutes in milliseconds
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -63,15 +70,77 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     };
   }, []);
 
+  const checkRateLimit = (email: string): boolean => {
+    const now = Date.now();
+    const userAttempts = failedAttempts.get(email);
+
+    if (!userAttempts) {
+      return true; // First attempt, no rate limiting
+    }
+
+    // Check if the lockout period has passed
+    if (now - userAttempts.lastAttempt > LOCKOUT_DURATION) {
+      // Reset attempts if lockout period has passed
+      failedAttempts.set(email, { count: 0, lastAttempt: now });
+      return true;
+    }
+
+    // If user is over the attempt limit and still in lockout period
+    if (userAttempts.count >= MAX_ATTEMPTS) {
+      const remainingLockout = Math.ceil((LOCKOUT_DURATION - (now - userAttempts.lastAttempt)) / 60000);
+      toast.error(`Account temporarily locked`, {
+        description: `Too many failed attempts. Please try again in ${remainingLockout} minutes.`,
+      });
+      return false;
+    }
+
+    return true;
+  };
+
+  const recordFailedAttempt = (email: string) => {
+    const now = Date.now();
+    const userAttempts = failedAttempts.get(email);
+    
+    if (!userAttempts) {
+      failedAttempts.set(email, { count: 1, lastAttempt: now });
+    } else {
+      failedAttempts.set(email, { 
+        count: userAttempts.count + 1, 
+        lastAttempt: now 
+      });
+      
+      // Show warning after multiple failed attempts
+      if (userAttempts.count + 1 >= MAX_ATTEMPTS - 1) {
+        toast.warning(`Login attempt ${userAttempts.count + 1} of ${MAX_ATTEMPTS}`, {
+          description: "Your account will be temporarily locked after too many failed attempts.",
+        });
+      }
+    }
+  };
+
+  const resetAttempts = (email: string) => {
+    failedAttempts.delete(email);
+  };
+
   const signIn = async (email: string, password: string) => {
     try {
+      // Check if user is rate limited
+      if (!checkRateLimit(email)) {
+        return { error: new Error("Too many login attempts. Please try again later."), success: false };
+      }
+
       console.log('Signing in with:', email);
       const { data, error } = await supabase.auth.signInWithPassword({ email, password });
       
       if (error) {
         console.error('Error signing in:', error);
+        // Record failed attempt
+        recordFailedAttempt(email);
         throw error;
       }
+
+      // Reset failed attempts counter on successful login
+      resetAttempts(email);
 
       const from = location.state?.from?.pathname || '/';
       navigate(from, { replace: true });
