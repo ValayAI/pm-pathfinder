@@ -47,10 +47,3 @@ vector_port = 54328
 gcp_project_id = ""
 gcp_project_number = ""
 gcp_jwt_path = "supabase/gcloud.json"
-
-[experimental]
-trace = false
-
-[edge_functions]
-[edge_functions.handle_subscription]
-verify_jwt = true

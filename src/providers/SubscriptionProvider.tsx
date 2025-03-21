@@ -98,13 +98,23 @@ export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ 
       if (subscriptionData) {
         const planId = subscriptionData.plan_id as PlanType;
         
+        // Convert JSON features array to string array with fallback to plan features
+        let featuresArray: string[] = [];
+        if (subscriptionData.features) {
+          // Safely typecast and filter to ensure only strings
+          const jsonFeatures = subscriptionData.features as any;
+          featuresArray = Array.isArray(jsonFeatures) 
+            ? jsonFeatures.filter(item => typeof item === 'string').map(item => String(item))
+            : planFeatures[planId];
+        } else {
+          featuresArray = planFeatures[planId];
+        }
+        
         // Create subscription data based on plan
         const subscriptionInfo: SubscriptionData = {
           planId: planId,
           messageLimit: subscriptionData.message_limit ?? (planId === 'starter' ? 50 : planId === 'free' ? 10 : Infinity),
-          features: Array.isArray(subscriptionData.features) && subscriptionData.features.length > 0 
-            ? subscriptionData.features 
-            : planFeatures[planId],
+          features: featuresArray,
           expiresAt: subscriptionData.expires_at ? new Date(subscriptionData.expires_at) : null
         };
         
@@ -131,11 +141,9 @@ export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ 
           .insert({
             user_id: user.id,
             messages_used: 0
-          })
-          .onConflict('user_id')
-          .ignore();
+          });
         
-        if (msgUsageError) {
+        if (msgUsageError && msgUsageError.code !== '23505') { // Ignore duplicate key errors
           console.error('Error initializing message usage:', msgUsageError);
         }
         
