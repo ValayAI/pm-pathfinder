@@ -6,8 +6,10 @@ import {
   Sidebar, 
   SidebarBody, 
   SidebarProvider, 
-  SidebarLink 
+  SidebarLink,
+  useSidebar
 } from '@/components/AppSidebar';
+import { useIsMobile } from '@/hooks/use-mobile';
 import {
   Home,
   Compass,
@@ -27,6 +29,13 @@ const Dashboard = ({ children }: DashboardProps) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [firstName, setFirstName] = useState('');
+  const isMobile = useIsMobile();
+  const [initialRender, setInitialRender] = useState(true);
+  
+  // Set initial render flag to false after component mounts
+  useEffect(() => {
+    setInitialRender(false);
+  }, []);
   
   // Fetch user's first name from localStorage if available
   useEffect(() => {
@@ -54,11 +63,14 @@ const Dashboard = ({ children }: DashboardProps) => {
     { label: "Settings", href: "/settings", icon: <Settings className="h-5 w-5" /> },
   ];
   
+  // Conditional initial sidebar state for mobile vs desktop
+  const [sidebarOpen, setSidebarOpen] = useState(!isMobile);
+  
   return (
-    <div className="min-h-screen flex flex-col md:flex-row">
-      <SidebarProvider open={true} setOpen={() => {}} animate={false}>
+    <div className={`min-h-screen flex flex-col md:flex-row ${initialRender ? 'invisible' : 'visible'}`}>
+      <SidebarProvider open={sidebarOpen} setOpen={setSidebarOpen} animate={false}>
         <SidebarBody>
-          <div className="flex items-center justify-center p-4">
+          <div className="flex items-center justify-center p-4 md:p-4">
             <div className="w-8 h-8 rounded-md bg-primary flex items-center justify-center">
               <span className="text-primary-foreground font-bold text-lg">P</span>
             </div>
@@ -83,7 +95,7 @@ const Dashboard = ({ children }: DashboardProps) => {
           </div>
         </SidebarBody>
         
-        <main className="flex-1 p-6 md:p-10 overflow-auto">
+        <main className="flex-1 p-4 md:p-6 lg:p-10 overflow-auto pb-24 md:pb-10 mt-16 md:mt-0">
           {children}
         </main>
       </SidebarProvider>

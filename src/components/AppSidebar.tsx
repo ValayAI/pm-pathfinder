@@ -1,7 +1,7 @@
 
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
-import React, { useState, createContext, useContext } from "react";
+import React, { useState, createContext, useContext, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Menu, 
@@ -15,6 +15,7 @@ import {
   Settings,
   User
 } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface Links {
   label: string;
@@ -51,10 +52,18 @@ export const SidebarProvider = ({
   setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   animate?: boolean;
 }) => {
-  const [openState, setOpenState] = useState(true);
+  const isMobile = useIsMobile();
+  const [openState, setOpenState] = useState(!isMobile);
 
   const open = openProp !== undefined ? openProp : openState;
   const setOpen = setOpenProp !== undefined ? setOpenProp : setOpenState;
+  
+  // Update sidebar state when mobile status changes
+  useEffect(() => {
+    if (openProp === undefined) {
+      setOpenState(!isMobile);
+    }
+  }, [isMobile, openProp]);
 
   return (
     <SidebarContext.Provider value={{ open, setOpen, animate }}>
@@ -122,16 +131,20 @@ export const MobileSidebar = ({
     <>
       <div
         className={cn(
-          "h-10 px-4 py-4 flex flex-row md:hidden items-center justify-between bg-neutral-100 dark:bg-neutral-800 w-full"
+          "h-16 px-4 py-2 flex flex-row md:hidden items-center justify-between bg-neutral-100 dark:bg-neutral-800 w-full fixed top-0 left-0 z-50"
         )}
         {...props}
       >
-        <div className="flex justify-end z-20 w-full">
-          <Menu
-            className="text-neutral-800 dark:text-neutral-200 cursor-pointer"
-            onClick={() => setOpen(!open)}
-          />
+        <div className="flex items-center">
+          <div className="w-8 h-8 rounded-md bg-primary flex items-center justify-center mr-2">
+            <span className="text-primary-foreground font-bold text-lg">P</span>
+          </div>
+          <span className="text-xl font-semibold">PM Pathfinder</span>
         </div>
+        <Menu
+          className="text-neutral-800 dark:text-neutral-200 cursor-pointer"
+          onClick={() => setOpen(!open)}
+        />
         <AnimatePresence>
           {open && (
             <motion.div
@@ -143,15 +156,15 @@ export const MobileSidebar = ({
                 ease: "easeInOut",
               }}
               className={cn(
-                "fixed h-full w-full inset-0 bg-white dark:bg-neutral-900 p-10 z-[100] flex flex-col justify-between",
+                "fixed h-full w-full inset-0 bg-white dark:bg-neutral-900 p-6 z-[100] flex flex-col",
                 className
               )}
             >
               <div
-                className="absolute right-10 top-10 z-50 text-neutral-800 dark:text-neutral-200 cursor-pointer"
+                className="absolute right-6 top-6 z-50 text-neutral-800 dark:text-neutral-200 cursor-pointer"
                 onClick={() => setOpen(!open)}
               >
-                <X />
+                <X className="h-6 w-6" />
               </div>
               {children}
             </motion.div>
@@ -170,6 +183,15 @@ export const SidebarLink = ({
   link: Links;
   className?: string;
 }) => {
+  const { setOpen } = useSidebar();
+  const isMobile = useIsMobile();
+  
+  const handleClick = () => {
+    if (isMobile) {
+      setOpen(false);
+    }
+  };
+  
   return (
     <Link
       to={link.href}
@@ -177,6 +199,7 @@ export const SidebarLink = ({
         "flex items-center justify-start gap-2 group/sidebar py-2",
         className
       )}
+      onClick={handleClick}
       {...props}
     >
       {link.icon}
