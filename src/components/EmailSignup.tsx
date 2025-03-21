@@ -40,7 +40,7 @@ const EmailSignup = () => {
     }
     
     // Show processing toast
-    toast.info("Processing your subscription...");
+    const loadingToast = toast.loading("Processing your subscription...");
     setIsSubmitting(true);
     
     console.log("Submitting to ConvertKit:", email, firstName);
@@ -55,6 +55,8 @@ const EmailSignup = () => {
     })
     .then(response => {
       console.log("ConvertKit response received:", response.status);
+      toast.dismiss(loadingToast);
+      
       if (response.ok) {
         // Show success toast
         console.log("Showing success toast");
@@ -74,6 +76,7 @@ const EmailSignup = () => {
     })
     .catch(error => {
       console.error("Subscription error:", error);
+      toast.dismiss(loadingToast);
       console.log("Showing error toast");
       toast.error("There was an error subscribing to the newsletter. Please try again later.");
     })

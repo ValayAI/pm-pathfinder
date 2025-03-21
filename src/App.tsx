@@ -21,7 +21,14 @@ function App() {
   return (
     <AuthProvider>
       <Router>
-        <Toaster position="top-center" richColors closeButton />
+        <Toaster 
+          position="top-center" 
+          richColors 
+          closeButton 
+          expand={true}
+          duration={4000}
+          visibleToasts={3}
+        />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
