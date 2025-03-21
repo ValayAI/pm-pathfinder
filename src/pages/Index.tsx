@@ -8,12 +8,13 @@ import TestimonialsSection from "@/components/TestimonialsSection";
 import CTASection from "@/components/CTASection";
 import Footer from "@/components/Footer";
 import EmailSignup from "@/components/EmailSignup";
-import { Leaf, ArrowRight, BarChart3, BookOpen, Compass, MessageSquare, Sparkles } from "lucide-react";
+import { Leaf, ArrowRight, BarChart3, BookOpen, Compass, MessageSquare, Sparkles, Calendar, CheckCircle2, LightbulbIcon, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/providers/AuthProvider";
 import Dashboard from "@/components/Dashboard";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 const Index = () => {
   const [loaded, setLoaded] = useState(false);
@@ -34,57 +35,62 @@ const Index = () => {
       <Dashboard>
         <div className="max-w-6xl mx-auto space-y-8">
           <section>
-            <h1 className="text-3xl font-bold mb-2">Welcome to PM Pathfinder</h1>
-            <p className="text-lg text-muted-foreground mb-6">
-              Your product management journey starts here. Navigate through the dashboard to access all your PM tools and resources.
-            </p>
+            <div className="bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-indigo-950/30 dark:to-blue-950/20 p-6 rounded-xl mb-6">
+              <h1 className="text-3xl font-bold mb-2 text-gradient-primary bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Welcome to PM Pathfinder</h1>
+              <p className="text-lg text-muted-foreground mb-6">
+                Your product management journey starts here. Navigate through the dashboard to access all your PM tools and resources.
+              </p>
+            </div>
           </section>
           
           {/* Quick Actions Section */}
           <section>
-            <h2 className="text-2xl font-semibold mb-4">Quick Actions</h2>
+            <h2 className="text-2xl font-semibold mb-4 flex items-center">
+              <Sparkles className="h-5 w-5 mr-2 text-primary" />
+              Quick Actions
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Card className="hover:shadow-md transition-shadow">
-                <CardHeader className="pb-2">
+              <Card className="hover:shadow-md transition-shadow border-l-4 border-l-prioritization-DEFAULT hover:translate-y-[-4px] duration-300">
+                <CardHeader className="pb-2 bg-gradient-to-br from-prioritization-light/50 to-transparent">
                   <CardTitle className="text-lg flex items-center">
-                    <Sparkles className="h-5 w-5 mr-2 text-primary" />
+                    <MessageSquare className="h-5 w-5 mr-2 text-prioritization-DEFAULT" />
                     Chat with PM Coach
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-sm text-muted-foreground mb-4">Get instant answers to your product management questions</p>
                   <Link to="/chat">
-                    <Button size="sm">Start Chat</Button>
+                    <Button size="sm" className="bg-prioritization-DEFAULT hover:bg-prioritization-DEFAULT/90">Start Chat</Button>
                   </Link>
                 </CardContent>
               </Card>
               
-              <Card className="hover:shadow-md transition-shadow">
-                <CardHeader className="pb-2">
+              <Card className="hover:shadow-md transition-shadow border-l-4 border-l-requirements-DEFAULT hover:translate-y-[-4px] duration-300">
+                <CardHeader className="pb-2 bg-gradient-to-br from-requirements-light/50 to-transparent">
                   <CardTitle className="text-lg flex items-center">
-                    <BookOpen className="h-5 w-5 mr-2 text-primary" />
+                    <BookOpen className="h-5 w-5 mr-2 text-requirements-DEFAULT" />
                     Browse Resources
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-sm text-muted-foreground mb-4">Access templates, guides, and frameworks</p>
                   <Link to="/resources">
-                    <Button size="sm">View Resources</Button>
+                    <Button size="sm" className="bg-requirements-DEFAULT hover:bg-requirements-DEFAULT/90">View Resources</Button>
                   </Link>
                 </CardContent>
               </Card>
               
-              <Card className="hover:shadow-md transition-shadow">
-                <CardHeader className="pb-2">
+              <Card className="hover:shadow-md transition-shadow border-l-4 border-l-planning-DEFAULT hover:translate-y-[-4px] duration-300">
+                <CardHeader className="pb-2 bg-gradient-to-br from-planning-light/50 to-transparent">
                   <CardTitle className="text-lg flex items-center">
-                    <BarChart3 className="h-5 w-5 mr-2 text-primary" />
+                    <BarChart3 className="h-5 w-5 mr-2 text-planning-DEFAULT" />
                     Plan Your Roadmap
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-sm text-muted-foreground mb-4">Create and manage your product roadmap</p>
                   <Link to="/roadmap">
-                    <Button size="sm">Open Roadmap</Button>
+                    <Button size="sm" className="bg-planning-DEFAULT hover:bg-planning-DEFAULT/90">Open Roadmap</Button>
                   </Link>
                 </CardContent>
               </Card>
@@ -93,17 +99,20 @@ const Index = () => {
           
           {/* Recent Activity Section */}
           <section>
-            <h2 className="text-2xl font-semibold mb-4">Recent Activity</h2>
-            <Card>
+            <h2 className="text-2xl font-semibold mb-4 flex items-center">
+              <Users className="h-5 w-5 mr-2 text-strategic-DEFAULT" />
+              Recent Activity
+            </h2>
+            <Card className="border border-strategic-light/50 shadow-sm">
               <CardContent className="p-6">
                 <div className="space-y-4">
                   {[
-                    { icon: <Sparkles className="h-4 w-4" />, text: "You started a new chat with PM Coach", time: "Today at 10:30 AM" },
-                    { icon: <BookOpen className="h-4 w-4" />, text: "Downloaded Product Requirements Template", time: "Yesterday at 3:45 PM" },
-                    { icon: <MessageSquare className="h-4 w-4" />, text: "Booked coaching session with Sarah", time: "2 days ago" },
+                    { icon: <Sparkles className="h-4 w-4 text-strategic-DEFAULT" />, text: "You started a new chat with PM Coach", time: "Today at 10:30 AM", color: "bg-strategic-light" },
+                    { icon: <BookOpen className="h-4 w-4 text-requirements-DEFAULT" />, text: "Downloaded Product Requirements Template", time: "Yesterday at 3:45 PM", color: "bg-requirements-light" },
+                    { icon: <MessageSquare className="h-4 w-4 text-discovery-DEFAULT" />, text: "Booked coaching session with Sarah", time: "2 days ago", color: "bg-discovery-light" },
                   ].map((activity, index) => (
                     <div key={index} className="flex items-start pb-3 border-b last:border-b-0 last:pb-0">
-                      <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center mr-3 flex-shrink-0">
+                      <div className={`h-8 w-8 rounded-full ${activity.color} flex items-center justify-center mr-3 flex-shrink-0`}>
                         {activity.icon}
                       </div>
                       <div>
@@ -119,30 +128,39 @@ const Index = () => {
           
           {/* Recommended Resources Section */}
           <section>
-            <h2 className="text-2xl font-semibold mb-4">Recommended for You</h2>
+            <h2 className="text-2xl font-semibold mb-4 flex items-center">
+              <LightbulbIcon className="h-5 w-5 mr-2 text-analytics-DEFAULT" />
+              Recommended for You
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Card className="hover:shadow-md transition-shadow">
+              <Card className="hover:shadow-md transition-shadow border-t-4 border-t-analytics-DEFAULT hover:translate-y-[-4px] duration-300">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-lg">RICE Prioritization Framework</CardTitle>
-                  <CardDescription>Popular resource</CardDescription>
+                  <div className="flex justify-between items-start">
+                    <CardTitle className="text-lg">RICE Prioritization Framework</CardTitle>
+                    <Badge className="bg-analytics-light text-analytics-DEFAULT">Popular</Badge>
+                  </div>
+                  <CardDescription>Strategic planning tool</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <p className="text-sm text-muted-foreground mb-4">Learn how to prioritize features using the RICE scoring model</p>
                   <Link to="/resources">
-                    <Button variant="outline" size="sm">View Resource</Button>
+                    <Button variant="outline" size="sm" className="text-analytics-DEFAULT border-analytics-DEFAULT/30 hover:bg-analytics-light">View Resource</Button>
                   </Link>
                 </CardContent>
               </Card>
               
-              <Card className="hover:shadow-md transition-shadow">
+              <Card className="hover:shadow-md transition-shadow border-t-4 border-t-discovery-DEFAULT hover:translate-y-[-4px] duration-300">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-lg">Product Strategy Template</CardTitle>
-                  <CardDescription>Trending this week</CardDescription>
+                  <div className="flex justify-between items-start">
+                    <CardTitle className="text-lg">Product Strategy Template</CardTitle>
+                    <Badge className="bg-discovery-light text-discovery-DEFAULT">Trending</Badge>
+                  </div>
+                  <CardDescription>Strategic planning</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <p className="text-sm text-muted-foreground mb-4">A comprehensive template to define your product strategy</p>
                   <Link to="/resources">
-                    <Button variant="outline" size="sm">View Template</Button>
+                    <Button variant="outline" size="sm" className="text-discovery-DEFAULT border-discovery-DEFAULT/30 hover:bg-discovery-light">View Template</Button>
                   </Link>
                 </CardContent>
               </Card>
@@ -151,12 +169,15 @@ const Index = () => {
           
           {/* Upcoming Events Section */}
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4">Upcoming Events</h2>
-            <Card>
+            <h2 className="text-2xl font-semibold mb-4 flex items-center">
+              <Calendar className="h-5 w-5 mr-2 text-primary" />
+              Upcoming Events
+            </h2>
+            <Card className="bg-gradient-to-br from-white to-blue-50/50 dark:from-gray-900 dark:to-blue-950/20 border border-blue-100 dark:border-blue-900/30">
               <CardContent className="p-6">
                 <div className="space-y-4">
                   <div className="flex items-start">
-                    <div className="mr-4 p-2 bg-primary/10 rounded-md text-center min-w-16">
+                    <div className="mr-4 p-2 bg-primary/10 text-primary rounded-md text-center min-w-16 border border-primary/20">
                       <p className="text-sm font-bold">MAY</p>
                       <p className="text-xl font-bold">15</p>
                     </div>
@@ -167,8 +188,8 @@ const Index = () => {
                     </div>
                   </div>
                   
-                  <div className="flex items-start pt-4 border-t">
-                    <div className="mr-4 p-2 bg-primary/10 rounded-md text-center min-w-16">
+                  <div className="flex items-start pt-4 border-t border-blue-100 dark:border-blue-900/30">
+                    <div className="mr-4 p-2 bg-primary/10 text-primary rounded-md text-center min-w-16 border border-primary/20">
                       <p className="text-sm font-bold">MAY</p>
                       <p className="text-xl font-bold">22</p>
                     </div>
