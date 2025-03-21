@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react';
 import { Navigate, Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
@@ -28,7 +29,16 @@ const Index = () => {
 
   // If user is logged in, redirect to dashboard
   if (user) {
-    return <Dashboard />;
+    return (
+      <Dashboard>
+        <div className="max-w-6xl mx-auto">
+          <h1 className="text-3xl font-bold mb-6">Welcome to PM Pathfinder</h1>
+          <p className="text-lg text-muted-foreground mb-6">
+            Your product management journey starts here. Navigate through the dashboard to access all your PM tools and resources.
+          </p>
+        </div>
+      </Dashboard>
+    );
   }
 
   return (
