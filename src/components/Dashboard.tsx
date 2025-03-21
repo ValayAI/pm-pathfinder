@@ -32,6 +32,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { getUserProfile, UserProfile } from '@/utils/profileUtils';
 
 interface DashboardProps {
   children?: React.ReactNode;
@@ -41,6 +42,16 @@ const Dashboard: React.FC<DashboardProps> = ({ children }) => {
   const { user } = useAuth();
   const [greeting, setGreeting] = useState('Good day');
   const [loaded, setLoaded] = useState(false);
+  const [profile, setProfile] = useState<UserProfile | null>(null);
+  
+  // Fetch user profile
+  useEffect(() => {
+    if (user) {
+      getUserProfile(user.id).then(profileData => {
+        setProfile(profileData);
+      });
+    }
+  }, [user]);
   
   // Set time-based greeting
   useEffect(() => {
@@ -57,6 +68,12 @@ const Dashboard: React.FC<DashboardProps> = ({ children }) => {
   if (!user) {
     return null; // This shouldn't happen due to ProtectedRoute, but just in case
   }
+
+  // Display name - use first name from profile, or fallback to user metadata, or fallback to email
+  const displayName = profile?.first_name || 
+                      (user.user_metadata?.first_name as string) || 
+                      user.email?.split('@')[0] || 
+                      'there';
 
   // Menu items for the sidebar
   const menuItems = [
@@ -137,7 +154,7 @@ const Dashboard: React.FC<DashboardProps> = ({ children }) => {
               {children ? children : (
                 <div className="space-y-8">
                   <section>
-                    <h1 className="text-3xl font-semibold">{greeting}, {user?.email}!</h1>
+                    <h1 className="text-3xl font-semibold">{greeting}, {displayName}!</h1>
                     <p className="text-muted-foreground">Welcome to your PM Pathfinder dashboard.</p>
                   </section>
 
