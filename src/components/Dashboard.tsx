@@ -63,8 +63,13 @@ const Dashboard = ({ children }: DashboardProps) => {
     { label: "Settings", href: "/settings", icon: <Settings className="h-5 w-5" /> },
   ];
   
-  // Conditional initial sidebar state for mobile vs desktop
-  const [sidebarOpen, setSidebarOpen] = useState(!isMobile);
+  // Set sidebar to always closed on mobile, open on desktop
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  
+  // Update sidebar state when screen size changes
+  useEffect(() => {
+    setSidebarOpen(!isMobile);
+  }, [isMobile]);
   
   return (
     <div className={`min-h-screen flex flex-col md:flex-row ${initialRender ? 'invisible' : 'visible'}`}>

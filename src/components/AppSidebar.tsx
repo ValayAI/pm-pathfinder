@@ -142,17 +142,17 @@ export const MobileSidebar = ({
           <span className="text-xl font-semibold">PM Pathfinder</span>
         </div>
         <Menu
-          className="text-neutral-800 dark:text-neutral-200 cursor-pointer"
-          onClick={() => setOpen(!open)}
+          className="text-neutral-800 dark:text-neutral-200 cursor-pointer h-6 w-6"
+          onClick={() => setOpen(true)}
         />
         <AnimatePresence>
           {open && (
             <motion.div
-              initial={{ x: "-100%", opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={{ x: "-100%", opacity: 0 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
               transition={{
-                duration: 0.3,
+                duration: 0.2,
                 ease: "easeInOut",
               }}
               className={cn(
@@ -162,7 +162,7 @@ export const MobileSidebar = ({
             >
               <div
                 className="absolute right-6 top-6 z-50 text-neutral-800 dark:text-neutral-200 cursor-pointer"
-                onClick={() => setOpen(!open)}
+                onClick={() => setOpen(false)}
               >
                 <X className="h-6 w-6" />
               </div>
