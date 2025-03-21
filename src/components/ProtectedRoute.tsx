@@ -19,9 +19,9 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
     );
   }
   
-  // If not authenticated, redirect to sign-in page
+  // If not authenticated, redirect to signin page
   if (!user) {
-    return <Navigate to="/sign-in" state={{ from: location }} replace />;
+    return <Navigate to="/signin" state={{ from: location }} replace />;
   }
   
   // If authenticated, render the protected content

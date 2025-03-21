@@ -19,8 +19,8 @@ import "./App.css";
 
 function App() {
   return (
-    <AuthProvider>
-      <Router>
+    <Router>
+      <AuthProvider>
         <Toaster 
           position="top-center" 
           richColors 
@@ -41,8 +41,8 @@ function App() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
-      </Router>
-    </AuthProvider>
+      </AuthProvider>
+    </Router>
   );
 }
 
