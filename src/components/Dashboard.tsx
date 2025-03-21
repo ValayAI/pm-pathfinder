@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '@/providers/AuthProvider';
 import { Link } from 'react-router-dom';
@@ -13,7 +12,7 @@ import {
   SidebarLink,
 } from '@/components/AppSidebar';
 import {
-  Home,
+  LayoutDashboard,
   Compass,
   BookOpen,
   MessageSquare,
@@ -62,9 +61,9 @@ const Dashboard: React.FC<DashboardProps> = ({ children }) => {
   // Menu items for the sidebar
   const menuItems = [
     {
-      label: "Home",
+      label: "Dashboard",
       href: "/",
-      icon: <Home className="h-5 w-5" />,
+      icon: <LayoutDashboard className="h-5 w-5" />,
     },
     {
       label: "Explore Resources",
@@ -108,7 +107,7 @@ const Dashboard: React.FC<DashboardProps> = ({ children }) => {
               <div className="px-2">
                 <div className="flex items-center space-x-2">
                   <div className="w-6 h-6 rounded-md bg-primary flex items-center justify-center">
-                    <span className="text-primary-foreground font-bold text-sm">P</span>
+                    <LayoutDashboard className="h-4 w-4 text-primary-foreground" />
                   </div>
                   <span className="font-outfit font-medium text-md">PM Pathfinder</span>
                 </div>
