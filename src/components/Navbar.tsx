@@ -28,7 +28,9 @@ type NavItem = {
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isDark, setIsDark] = useState(false);
+  const [isDark, setIsDark] = useState(
+    document.documentElement.classList.contains('dark')
+  );
   const isMobile = useIsMobile();
   const { user } = useAuth();
   

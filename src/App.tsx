@@ -22,7 +22,7 @@ import './App.css';
 function App() {
   return (
     <Router>
-      <ThemeProvider defaultTheme="system" storageKey="ui-theme">
+      <ThemeProvider defaultTheme="light" storageKey="ui-theme">
         <AuthProvider>
           <SubscriptionProvider>
             <Routes>
