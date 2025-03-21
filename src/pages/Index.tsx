@@ -50,55 +50,58 @@ const Index = () => {
               Quick Actions
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Card className="hover:shadow-md transition-shadow border-l-4 border-l-prioritization-DEFAULT hover:translate-y-[-4px] duration-300">
-                <CardHeader className="pb-2 bg-gradient-to-br from-prioritization-light/50 to-transparent">
-                  <CardTitle className="text-lg flex items-center">
-                    <MessageSquare className="h-5 w-5 mr-2 text-prioritization-DEFAULT" />
-                    Chat with PM Coach
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground mb-4">Get instant answers to your product management questions</p>
+              {/* Chat with PM Coach Card */}
+              <Card className="border-none shadow-sm hover:shadow-md transition-shadow hover:translate-y-[-4px] duration-300 overflow-hidden">
+                <div className="bg-[#F1F0FB] dark:bg-blue-950/20 p-8">
+                  <div className="mb-4">
+                    <MessageSquare className="h-6 w-6 text-[#8B5CF6]" />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2">Chat with PM Coach</h3>
+                  <p className="text-muted-foreground mb-6">
+                    Get instant answers to your product management questions
+                  </p>
                   <Link to="/chat">
-                    <Button size="sm" className="bg-prioritization-DEFAULT hover:bg-prioritization-DEFAULT/90 text-white font-medium shadow-md hover:shadow-lg">
-                      Start Chat <ArrowRight className="ml-1 h-4 w-4" />
+                    <Button variant="outline" size="sm" className="text-[#8B5CF6] border-[#8B5CF6] hover:bg-[#E5DEFF]/50">
+                      Start Chat
                     </Button>
                   </Link>
-                </CardContent>
+                </div>
               </Card>
               
-              <Card className="hover:shadow-md transition-shadow border-l-4 border-l-requirements-DEFAULT hover:translate-y-[-4px] duration-300">
-                <CardHeader className="pb-2 bg-gradient-to-br from-requirements-light/50 to-transparent">
-                  <CardTitle className="text-lg flex items-center">
-                    <BookOpen className="h-5 w-5 mr-2 text-requirements-DEFAULT" />
-                    Browse Resources
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground mb-4">Access templates, guides, and frameworks</p>
+              {/* Browse Resources Card */}
+              <Card className="border-none shadow-sm hover:shadow-md transition-shadow hover:translate-y-[-4px] duration-300 overflow-hidden">
+                <div className="bg-[#FEF7CD] dark:bg-amber-950/20 p-8">
+                  <div className="mb-4">
+                    <BookOpen className="h-6 w-6 text-[#F97316]" />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2">Browse Resources</h3>
+                  <p className="text-muted-foreground mb-6">
+                    Access templates, guides, and frameworks
+                  </p>
                   <Link to="/resources">
-                    <Button size="sm" className="bg-requirements-DEFAULT hover:bg-requirements-DEFAULT/90 text-white font-medium shadow-md hover:shadow-lg">
-                      View Resources <ArrowRight className="ml-1 h-4 w-4" />
+                    <Button variant="outline" size="sm" className="text-[#F97316] border-[#F97316] hover:bg-[#FFEDD5]/50">
+                      View Resources
                     </Button>
                   </Link>
-                </CardContent>
+                </div>
               </Card>
               
-              <Card className="hover:shadow-md transition-shadow border-l-4 border-l-planning-DEFAULT hover:translate-y-[-4px] duration-300">
-                <CardHeader className="pb-2 bg-gradient-to-br from-planning-light/50 to-transparent">
-                  <CardTitle className="text-lg flex items-center">
-                    <BarChart3 className="h-5 w-5 mr-2 text-planning-DEFAULT" />
-                    Plan Your Roadmap
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground mb-4">Create and manage your product roadmap</p>
+              {/* Plan Your Roadmap Card */}
+              <Card className="border-none shadow-sm hover:shadow-md transition-shadow hover:translate-y-[-4px] duration-300 overflow-hidden">
+                <div className="bg-[#F2FCE2] dark:bg-green-950/20 p-8">
+                  <div className="mb-4">
+                    <BarChart3 className="h-6 w-6 text-[#10B981]" />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2">Plan Your Roadmap</h3>
+                  <p className="text-muted-foreground mb-6">
+                    Create and manage your product roadmap
+                  </p>
                   <Link to="/roadmap">
-                    <Button size="sm" className="bg-planning-DEFAULT hover:bg-planning-DEFAULT/90 text-white font-medium shadow-md hover:shadow-lg">
-                      Open Roadmap <ArrowRight className="ml-1 h-4 w-4" />
+                    <Button variant="outline" size="sm" className="text-[#10B981] border-[#10B981] hover:bg-[#D1FAE5]/50">
+                      Open Roadmap
                     </Button>
                   </Link>
-                </CardContent>
+                </div>
               </Card>
             </div>
           </section>
