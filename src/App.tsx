@@ -21,10 +21,10 @@ import './App.css';
 
 function App() {
   return (
-    <ThemeProvider defaultTheme="system" storageKey="ui-theme">
-      <AuthProvider>
-        <SubscriptionProvider>
-          <Router>
+    <Router>
+      <ThemeProvider defaultTheme="system" storageKey="ui-theme">
+        <AuthProvider>
+          <SubscriptionProvider>
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/explore" element={<Explore />} />
@@ -43,10 +43,10 @@ function App() {
               <Route path="*" element={<NotFound />} />
             </Routes>
             <Toaster />
-          </Router>
-        </SubscriptionProvider>
-      </AuthProvider>
-    </ThemeProvider>
+          </SubscriptionProvider>
+        </AuthProvider>
+      </ThemeProvider>
+    </Router>
   );
 }
 
