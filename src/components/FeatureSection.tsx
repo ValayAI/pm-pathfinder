@@ -3,30 +3,9 @@ import { cn } from "@/lib/utils";
 import { 
   MessageSquareText, Lightbulb, Compass, BarChart3, Target, Award
 } from "lucide-react";
-import { useState, useEffect } from "react";
+import { ContainerScroll } from "./ContainerScroll";
 
 export function FeatureSection() {
-  const [inView, setInView] = useState(false);
-  
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setInView(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.1 }
-    );
-    
-    const element = document.getElementById('feature-section');
-    if (element) observer.observe(element);
-    
-    return () => {
-      if (element) observer.unobserve(element);
-    };
-  }, []);
-  
   const features = [
     {
       title: "AI PM Assistant",
@@ -60,33 +39,25 @@ export function FeatureSection() {
     },
   ];
   
+  const FeatureTitle = (
+    <div className="mb-10">
+      <h2 className="text-xl sm:text-2xl font-outfit font-semibold text-center">
+        Everything You Need to Excel in Product Management
+      </h2>
+      <p className="mt-2 text-sm text-muted-foreground max-w-xl mx-auto text-center">
+        Simple, powerful tools and resources to help you become a better product manager
+      </p>
+    </div>
+  );
+  
   return (
-    <section id="feature-section" className="py-12 relative bg-muted/30">
-      <div className="container mx-auto">
-        <div className="text-center mb-10">
-          <h2 className={cn(
-            "text-xl sm:text-2xl font-outfit font-semibold transition-all duration-700",
-            inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-          )}>
-            Everything You Need to Excel in Product Management
-          </h2>
-          <p className={cn(
-            "mt-2 text-sm text-muted-foreground max-w-xl mx-auto transition-all duration-700 delay-100",
-            inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-          )}>
-            Simple, powerful tools and resources to help you become a better product manager
-          </p>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <section id="feature-section" className="relative bg-muted/30">
+      <ContainerScroll titleComponent={FeatureTitle}>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4 h-full overflow-y-auto">
           {features.map((feature, index) => (
             <div 
               key={index}
-              className={cn(
-                "bg-card rounded-lg p-5 shadow-soft hover-lift border border-border/40 transition-all duration-700",
-                inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6",
-                inView && `delay-[${200 + (index * 50)}ms]`
-              )}
+              className="bg-card rounded-lg p-5 shadow-soft hover-lift border border-border/40 transition-all"
             >
               <div className="h-8 w-8 rounded-md bg-primary/10 flex items-center justify-center text-primary mb-3">
                 {feature.icon}
@@ -96,7 +67,7 @@ export function FeatureSection() {
             </div>
           ))}
         </div>
-      </div>
+      </ContainerScroll>
     </section>
   );
 }
