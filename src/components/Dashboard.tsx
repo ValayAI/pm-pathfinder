@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '@/providers/AuthProvider';
 import { Link } from 'react-router-dom';
-import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { getUserProfile, UserProfile } from '@/utils/profileUtils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -101,8 +100,8 @@ const Dashboard: React.FC<DashboardProps> = ({ children }) => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navbar />
-      <div className="flex w-full min-h-[calc(100vh-4rem)] pt-16">
+      {/* Navbar is intentionally removed from Dashboard page */}
+      <div className="flex w-full min-h-screen">
         <Sidebar>
           <SidebarBody>
             <div className="flex flex-col space-y-6">
@@ -150,6 +149,30 @@ const Dashboard: React.FC<DashboardProps> = ({ children }) => {
                     </div>
                   </div>
                 </CardHeader>
+              </Card>
+              
+              {/* Quick Actions - moved to the top */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Quick Actions</CardTitle>
+                  <CardDescription>Shortcuts to help you navigate</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {menuItems.slice(0, 4).map((item) => (
+                      <Link 
+                        key={item.label} 
+                        to={item.href}
+                        className="flex flex-col items-center justify-center p-4 rounded-lg border bg-card hover:bg-accent/20 transition-colors"
+                      >
+                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mb-2">
+                          {React.cloneElement(item.icon as React.ReactElement, { className: "h-5 w-5 text-primary" })}
+                        </div>
+                        <span className="text-sm font-medium">{item.label}</span>
+                      </Link>
+                    ))}
+                  </div>
+                </CardContent>
               </Card>
               
               {/* Learning Progress */}
@@ -202,30 +225,6 @@ const Dashboard: React.FC<DashboardProps> = ({ children }) => {
                   </CardFooter>
                 </Card>
               </div>
-
-              {/* Quick Actions */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Quick Actions</CardTitle>
-                  <CardDescription>Shortcuts to help you navigate</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {menuItems.slice(0, 4).map((item) => (
-                      <Link 
-                        key={item.label} 
-                        to={item.href}
-                        className="flex flex-col items-center justify-center p-4 rounded-lg border bg-card hover:bg-accent/20 transition-colors"
-                      >
-                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mb-2">
-                          {React.cloneElement(item.icon as React.ReactElement, { className: "h-5 w-5 text-primary" })}
-                        </div>
-                        <span className="text-sm font-medium">{item.label}</span>
-                      </Link>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
             </div>
           )}
         </div>
