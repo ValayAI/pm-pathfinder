@@ -143,7 +143,7 @@ export function Navbar() {
             )}
           </div>
           
-          {/* Mobile menu button */}
+          {/* Mobile menu button - always shown on mobile regardless of auth state */}
           <div className="md:hidden flex items-center">
             <Button 
               variant="ghost" 
