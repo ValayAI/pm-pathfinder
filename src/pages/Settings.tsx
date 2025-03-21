@@ -10,6 +10,8 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
+import { updateUserProfile, getUserProfile, UserProfile } from '@/utils/profileUtils';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Settings = () => {
   const { user } = useAuth();
@@ -23,21 +25,48 @@ const Settings = () => {
     weeklyDigest: true
   });
   
+  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [loading, setLoading] = useState(false);
+  
+  // Fetch user profile
+  useEffect(() => {
+    const fetchProfile = async () => {
+      if (user) {
+        const profileData = await getUserProfile(user.id);
+        setProfile(profileData);
+        if (profileData) {
+          setFirstName(profileData.first_name || '');
+          setLastName(profileData.last_name || '');
+        }
+      }
+    };
+    
+    fetchProfile();
+  }, [user]);
   
   // Toggle dark mode using the ThemeProvider
   const toggleDarkMode = () => {
     setTheme(theme === "dark" ? "light" : "dark");
   };
   
-  const handleSaveSettings = () => {
+  const handleSaveSettings = async () => {
     setLoading(true);
     
-    // Simulate saving settings
-    setTimeout(() => {
-      setLoading(false);
-      toast.success("Settings saved successfully");
-    }, 500);
+    if (user) {
+      // Save profile information
+      const success = await updateUserProfile(user.id, {
+        first_name: firstName,
+        last_name: lastName
+      });
+      
+      if (success) {
+        toast.success("Settings saved successfully");
+      }
+    }
+    
+    setLoading(false);
   };
   
   return (
@@ -48,116 +77,121 @@ const Settings = () => {
           Manage your account preferences and settings
         </p>
         
-        <div className="space-y-8">
-          {/* Profile Settings */}
-          <div>
-            <h2 className="text-xl font-semibold mb-4">Profile</h2>
-            <div className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="name">Name</Label>
-                  <Input id="name" defaultValue={user?.email?.split('@')[0]} />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input id="email" type="email" defaultValue={user?.email} readOnly />
-                </div>
+        <Tabs defaultValue="account" className="space-y-8">
+          <TabsList>
+            <TabsTrigger value="account">Account</TabsTrigger>
+            <TabsTrigger value="notifications">Notifications</TabsTrigger>
+            <TabsTrigger value="appearance">Appearance</TabsTrigger>
+          </TabsList>
+          
+          {/* Account Settings */}
+          <TabsContent value="account" className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="firstName">First Name</Label>
+                <Input 
+                  id="firstName" 
+                  value={firstName} 
+                  onChange={(e) => setFirstName(e.target.value)} 
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="lastName">Last Name</Label>
+                <Input 
+                  id="lastName" 
+                  value={lastName} 
+                  onChange={(e) => setLastName(e.target.value)} 
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input id="email" type="email" defaultValue={user?.email} readOnly />
               </div>
             </div>
-          </div>
-          
-          <Separator />
+          </TabsContent>
           
           {/* Notification Settings */}
-          <div>
-            <h2 className="text-xl font-semibold mb-4">Notifications</h2>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="space-y-0.5">
-                  <Label htmlFor="email-notifications">Email Notifications</Label>
-                  <p className="text-sm text-muted-foreground">
-                    Receive notifications via email
-                  </p>
-                </div>
-                <Switch 
-                  id="email-notifications" 
-                  checked={notifications.email}
-                  onCheckedChange={(checked) => setNotifications({...notifications, email: checked})}
-                />
+          <TabsContent value="notifications" className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="space-y-0.5">
+                <Label htmlFor="email-notifications">Email Notifications</Label>
+                <p className="text-sm text-muted-foreground">
+                  Receive notifications via email
+                </p>
               </div>
-              
-              <div className="flex items-center justify-between">
-                <div className="space-y-0.5">
-                  <Label htmlFor="marketing">Marketing Emails</Label>
-                  <p className="text-sm text-muted-foreground">
-                    Receive emails about new products and features
-                  </p>
-                </div>
-                <Switch 
-                  id="marketing" 
-                  checked={notifications.marketing}
-                  onCheckedChange={(checked) => setNotifications({...notifications, marketing: checked})}
-                />
-              </div>
-              
-              <div className="flex items-center justify-between">
-                <div className="space-y-0.5">
-                  <Label htmlFor="new-features">New Feature Notifications</Label>
-                  <p className="text-sm text-muted-foreground">
-                    Get notified when we launch new features
-                  </p>
-                </div>
-                <Switch 
-                  id="new-features" 
-                  checked={notifications.newFeatures}
-                  onCheckedChange={(checked) => setNotifications({...notifications, newFeatures: checked})}
-                />
-              </div>
-              
-              <div className="flex items-center justify-between">
-                <div className="space-y-0.5">
-                  <Label htmlFor="weekly-digest">Weekly Digest</Label>
-                  <p className="text-sm text-muted-foreground">
-                    Receive a weekly summary of product management resources
-                  </p>
-                </div>
-                <Switch 
-                  id="weekly-digest" 
-                  checked={notifications.weeklyDigest}
-                  onCheckedChange={(checked) => setNotifications({...notifications, weeklyDigest: checked})}
-                />
-              </div>
+              <Switch 
+                id="email-notifications" 
+                checked={notifications.email}
+                onCheckedChange={(checked) => setNotifications({...notifications, email: checked})}
+              />
             </div>
-          </div>
-          
-          <Separator />
+            
+            <div className="flex items-center justify-between">
+              <div className="space-y-0.5">
+                <Label htmlFor="marketing">Marketing Emails</Label>
+                <p className="text-sm text-muted-foreground">
+                  Receive emails about new products and features
+                </p>
+              </div>
+              <Switch 
+                id="marketing" 
+                checked={notifications.marketing}
+                onCheckedChange={(checked) => setNotifications({...notifications, marketing: checked})}
+              />
+            </div>
+            
+            <div className="flex items-center justify-between">
+              <div className="space-y-0.5">
+                <Label htmlFor="new-features">New Feature Notifications</Label>
+                <p className="text-sm text-muted-foreground">
+                  Get notified when we launch new features
+                </p>
+              </div>
+              <Switch 
+                id="new-features" 
+                checked={notifications.newFeatures}
+                onCheckedChange={(checked) => setNotifications({...notifications, newFeatures: checked})}
+              />
+            </div>
+            
+            <div className="flex items-center justify-between">
+              <div className="space-y-0.5">
+                <Label htmlFor="weekly-digest">Weekly Digest</Label>
+                <p className="text-sm text-muted-foreground">
+                  Receive a weekly summary of product management resources
+                </p>
+              </div>
+              <Switch 
+                id="weekly-digest" 
+                checked={notifications.weeklyDigest}
+                onCheckedChange={(checked) => setNotifications({...notifications, weeklyDigest: checked})}
+              />
+            </div>
+          </TabsContent>
           
           {/* Appearance Settings */}
-          <div>
-            <h2 className="text-xl font-semibold mb-4">Appearance</h2>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="space-y-0.5">
-                  <Label htmlFor="dark-mode">Dark Mode</Label>
-                  <p className="text-sm text-muted-foreground">
-                    Toggle between light and dark mode
-                  </p>
-                </div>
-                <Switch 
-                  id="dark-mode" 
-                  checked={theme === "dark"}
-                  onCheckedChange={toggleDarkMode}
-                />
+          <TabsContent value="appearance" className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="space-y-0.5">
+                <Label htmlFor="dark-mode">Dark Mode</Label>
+                <p className="text-sm text-muted-foreground">
+                  Toggle between light and dark mode
+                </p>
               </div>
+              <Switch 
+                id="dark-mode" 
+                checked={theme === "dark"}
+                onCheckedChange={toggleDarkMode}
+              />
             </div>
-          </div>
+          </TabsContent>
           
           <div className="pt-4">
             <Button onClick={handleSaveSettings} disabled={loading}>
               {loading ? "Saving..." : "Save Settings"}
             </Button>
           </div>
-        </div>
+        </Tabs>
       </div>
     </Dashboard>
   );
