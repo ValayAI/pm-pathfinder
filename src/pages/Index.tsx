@@ -60,7 +60,9 @@ const Index = () => {
                 <CardContent>
                   <p className="text-sm text-muted-foreground mb-4">Get instant answers to your product management questions</p>
                   <Link to="/chat">
-                    <Button size="sm" className="bg-prioritization-DEFAULT hover:bg-prioritization-DEFAULT/90">Start Chat</Button>
+                    <Button size="sm" className="bg-prioritization-DEFAULT hover:bg-prioritization-DEFAULT/90 text-white font-medium shadow-md hover:shadow-lg">
+                      Start Chat <ArrowRight className="ml-1 h-4 w-4" />
+                    </Button>
                   </Link>
                 </CardContent>
               </Card>
@@ -75,7 +77,9 @@ const Index = () => {
                 <CardContent>
                   <p className="text-sm text-muted-foreground mb-4">Access templates, guides, and frameworks</p>
                   <Link to="/resources">
-                    <Button size="sm" className="bg-requirements-DEFAULT hover:bg-requirements-DEFAULT/90">View Resources</Button>
+                    <Button size="sm" className="bg-requirements-DEFAULT hover:bg-requirements-DEFAULT/90 text-white font-medium shadow-md hover:shadow-lg">
+                      View Resources <ArrowRight className="ml-1 h-4 w-4" />
+                    </Button>
                   </Link>
                 </CardContent>
               </Card>
@@ -90,7 +94,9 @@ const Index = () => {
                 <CardContent>
                   <p className="text-sm text-muted-foreground mb-4">Create and manage your product roadmap</p>
                   <Link to="/roadmap">
-                    <Button size="sm" className="bg-planning-DEFAULT hover:bg-planning-DEFAULT/90">Open Roadmap</Button>
+                    <Button size="sm" className="bg-planning-DEFAULT hover:bg-planning-DEFAULT/90 text-white font-medium shadow-md hover:shadow-lg">
+                      Open Roadmap <ArrowRight className="ml-1 h-4 w-4" />
+                    </Button>
                   </Link>
                 </CardContent>
               </Card>
@@ -144,7 +150,9 @@ const Index = () => {
                 <CardContent>
                   <p className="text-sm text-muted-foreground mb-4">Learn how to prioritize features using the RICE scoring model</p>
                   <Link to="/resources">
-                    <Button variant="outline" size="sm" className="text-analytics-DEFAULT border-analytics-DEFAULT/30 hover:bg-analytics-light">View Resource</Button>
+                    <Button variant="outline" size="sm" className="text-analytics-DEFAULT border-analytics-DEFAULT hover:bg-analytics-light/50 font-medium shadow-sm hover:shadow-md">
+                      View Resource <ArrowRight className="ml-1 h-4 w-4" />
+                    </Button>
                   </Link>
                 </CardContent>
               </Card>
@@ -160,7 +168,9 @@ const Index = () => {
                 <CardContent>
                   <p className="text-sm text-muted-foreground mb-4">A comprehensive template to define your product strategy</p>
                   <Link to="/resources">
-                    <Button variant="outline" size="sm" className="text-discovery-DEFAULT border-discovery-DEFAULT/30 hover:bg-discovery-light">View Template</Button>
+                    <Button variant="outline" size="sm" className="text-discovery-DEFAULT border-discovery-DEFAULT hover:bg-discovery-light/50 font-medium shadow-sm hover:shadow-md">
+                      View Template <ArrowRight className="ml-1 h-4 w-4" />
+                    </Button>
                   </Link>
                 </CardContent>
               </Card>
@@ -185,6 +195,11 @@ const Index = () => {
                       <h3 className="font-medium">Product Metrics Workshop</h3>
                       <p className="text-sm text-muted-foreground">10:00 AM - 11:30 AM</p>
                       <p className="text-sm mt-1">Learn how to define and track the right metrics for your product</p>
+                      <Link to="/events" className="inline-block mt-2">
+                        <Button size="sm" variant="outline" className="bg-primary/5 hover:bg-primary/10 text-primary border-primary/20 shadow-sm hover:shadow-md">
+                          Register Now <ArrowRight className="ml-1 h-4 w-4" />
+                        </Button>
+                      </Link>
                     </div>
                   </div>
                   
@@ -197,6 +212,11 @@ const Index = () => {
                       <h3 className="font-medium">User Research Fundamentals</h3>
                       <p className="text-sm text-muted-foreground">2:00 PM - 3:30 PM</p>
                       <p className="text-sm mt-1">Master the basics of conducting effective user research</p>
+                      <Link to="/events" className="inline-block mt-2">
+                        <Button size="sm" variant="outline" className="bg-primary/5 hover:bg-primary/10 text-primary border-primary/20 shadow-sm hover:shadow-md">
+                          Register Now <ArrowRight className="ml-1 h-4 w-4" />
+                        </Button>
+                      </Link>
                     </div>
                   </div>
                 </div>
@@ -234,9 +254,9 @@ const Index = () => {
             {/* Sign up button */}
             <div className="mt-4">
               <Link to="/signup">
-                <Button variant="outline" className="group">
+                <Button variant="default" size="lg" className="group bg-primary shadow-md hover:shadow-lg">
                   Create an Account
-                  <ArrowRight className="ml-1 h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+                  <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                 </Button>
               </Link>
             </div>
