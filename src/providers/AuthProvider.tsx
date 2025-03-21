@@ -1,4 +1,3 @@
-
 import { createContext, useContext, useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { Session, User } from '@supabase/supabase-js';
@@ -12,7 +11,7 @@ type AuthContextType = {
     error: Error | null;
     success: boolean;
   }>;
-  signUp: (email: string, password: string) => Promise<{
+  signUp: (email: string, password: string, userData?: { firstName?: string; lastName?: string }) => Promise<{
     error: Error | null;
     success: boolean;
   }>;
@@ -29,7 +28,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
 
   useEffect(() => {
-    // Get initial session
     const getInitialSession = async () => {
       setIsLoading(true);
       try {
@@ -53,7 +51,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     getInitialSession();
 
-    // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       console.log('Auth state changed:', _event, session);
       setSession(session);
@@ -76,7 +73,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         throw error;
       }
 
-      // Redirect to the page the user was trying to access, or to home page
       const from = location.state?.from?.pathname || '/';
       navigate(from, { replace: true });
       
@@ -87,10 +83,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const signUp = async (email: string, password: string) => {
+  const signUp = async (email: string, password: string, userData?: { firstName?: string; lastName?: string }) => {
     try {
       console.log('Signing up with:', email);
-      const { data, error } = await supabase.auth.signUp({ email, password });
+      const { data, error } = await supabase.auth.signUp({ 
+        email, 
+        password,
+        options: {
+          data: {
+            first_name: userData?.firstName || '',
+            last_name: userData?.lastName || '',
+          }
+        }
+      });
       
       if (error) {
         console.error('Error signing up:', error);
