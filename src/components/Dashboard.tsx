@@ -108,31 +108,13 @@ const Dashboard: React.FC<DashboardProps> = ({ children }) => {
               <div className="px-2">
                 <div className="flex items-center space-x-3">
                   <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center">
-                    <svg 
-                      viewBox="0 0 24 24" 
-                      width="24" 
-                      height="24" 
-                      stroke="currentColor" 
-                      strokeWidth="2" 
-                      fill="none" 
-                      strokeLinecap="round" 
-                      strokeLinejoin="round" 
-                      className="text-primary-foreground"
-                    >
-                      <rect x="3" y="3" width="7" height="7" />
-                      <rect x="14" y="3" width="7" height="7" />
-                      <rect x="14" y="14" width="7" height="7" />
-                      <rect x="3" y="14" width="7" height="7" />
-                    </svg>
+                    <span className="text-primary-foreground font-bold text-xl">P</span>
                   </div>
                   <span className="font-outfit font-semibold text-lg">PM Pathfinder</span>
                 </div>
               </div>
               
               <div className="mt-4">
-                <p className="text-xs font-medium text-muted-foreground mb-2 px-2">
-                  Navigation
-                </p>
                 <div className="space-y-1">
                   {menuItems.map((item) => (
                     <SidebarLink key={item.label} link={item} />
