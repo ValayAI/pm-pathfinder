@@ -7,14 +7,16 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { User, KeyRound, ArrowRight, Mail } from 'lucide-react';
+import { User, KeyRound, ArrowRight, Mail, AlertCircle } from 'lucide-react';
 import ReCaptcha from '@/components/ReCaptcha';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 const SignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
   const { signIn } = useAuth();
@@ -34,15 +36,20 @@ const SignIn = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
     setIsLoading(true);
     
+    if (!captchaToken) {
+      setError('Please complete the CAPTCHA verification');
+      setIsLoading(false);
+      return;
+    }
+    
     try {
-      const { error, success } = await signIn(email, password, captchaToken);
+      const { error: signInError, success } = await signIn(email, password, captchaToken);
       
-      if (error) {
-        toast.error('Sign in failed', {
-          description: error.message || 'Please check your credentials and try again.',
-        });
+      if (signInError) {
+        setError(signInError.message || 'Please check your credentials and try again.');
         return;
       }
       
@@ -54,13 +61,13 @@ const SignIn = () => {
         // If the user came from pricing with a plan, redirect back to pricing
         if (fromPricing) {
           navigate('/pricing', { state: location.state });
+        } else {
+          navigate('/');
         }
       }
     } catch (error) {
       console.error('Unexpected error during sign-in:', error);
-      toast.error('Sign in failed', {
-        description: 'An unexpected error occurred. Please try again.',
-      });
+      setError('An unexpected error occurred. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -68,6 +75,9 @@ const SignIn = () => {
 
   const handleCaptchaChange = (token: string | null) => {
     setCaptchaToken(token);
+    if (token) {
+      setError(null);
+    }
   };
 
   return (
@@ -86,6 +96,13 @@ const SignIn = () => {
         </CardHeader>
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">
+            {error && (
+              <Alert variant="destructive">
+                <AlertCircle className="h-4 w-4" />
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
+            
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <div className="relative">
@@ -120,10 +137,17 @@ const SignIn = () => {
                 />
               </div>
             </div>
-            <ReCaptcha onChange={handleCaptchaChange} />
+            <div>
+              <p className="text-sm text-muted-foreground mb-2">Please verify you are human</p>
+              <ReCaptcha onChange={handleCaptchaChange} />
+            </div>
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">
-            <Button type="submit" className="w-full" disabled={isLoading || !captchaToken}>
+            <Button 
+              type="submit" 
+              className="w-full" 
+              disabled={isLoading || !email || !password}
+            >
               {isLoading ? (
                 <div className="flex items-center justify-center">
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
