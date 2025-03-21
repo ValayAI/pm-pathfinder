@@ -141,72 +141,42 @@ const Dashboard: React.FC<DashboardProps> = ({ children }) => {
                 <p className="text-muted-foreground">Welcome to your PM Pathfinder dashboard.</p>
               </section>
 
-              <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {/* Quick Actions */}
-                <div className="bg-card rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-300">
-                  <h2 className="text-lg font-semibold mb-2">Quick Actions</h2>
-                  <div className="space-y-3">
-                    <Button asChild variant="secondary" className="w-full justify-start">
-                      <Link to="/chat" className="flex items-center w-full">
-                        <Sparkles className="mr-2 h-4 w-4" />
-                        <span>Ask PM Coach</span>
-                        <ArrowUpRight className="ml-auto h-4 w-4" />
-                      </Link>
-                    </Button>
-                    <Button asChild variant="secondary" className="w-full justify-start">
-                      <Link to="/explore" className="flex items-center w-full">
-                        <Compass className="mr-2 h-4 w-4" />
-                        <span>Explore Resources</span>
-                        <ArrowUpRight className="ml-auto h-4 w-4" />
-                      </Link>
-                    </Button>
-                    <Button asChild variant="secondary" className="w-full justify-start">
-                      <Link to="/coaching" className="flex items-center w-full">
-                        <MessageSquare className="mr-2 h-4 w-4" />
-                        <span>Get Coaching</span>
-                        <ArrowUpRight className="ml-auto h-4 w-4" />
-                      </Link>
-                    </Button>
-                  </div>
-                </div>
-
-                {/* Learning Paths */}
-                <div className="bg-card rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-300">
-                  <h2 className="text-lg font-semibold mb-2">Learning Paths</h2>
-                  <p className="text-muted-foreground text-sm mb-3">
-                    Start a guided learning path to master product management skills.
+              {/* Simplified Dashboard Content - Reduced redundant navigation */}
+              <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Progress Overview */}
+                <div className="bg-card rounded-lg shadow-md p-5 hover:shadow-lg transition-shadow duration-300">
+                  <h2 className="text-lg font-semibold mb-3">Progress Overview</h2>
+                  <p className="text-muted-foreground text-sm mb-4">
+                    Track your progress and see how far you've come.
                   </p>
-                  <ul className="space-y-2">
-                    <li className="flex items-center justify-between hover:bg-accent/5 rounded-md p-2 transition-colors duration-200">
-                      <Link to="/roadmap" className="flex items-center w-full">
-                        <span className="font-medium">Mastering Prioritization</span>
-                        <ArrowUpRight className="ml-auto h-4 w-4" />
-                      </Link>
-                    </li>
-                    <li className="flex items-center justify-between hover:bg-accent/5 rounded-md p-2 transition-colors duration-200">
-                      <Link to="/roadmap" className="flex items-center w-full">
-                        <span className="font-medium">Effective Communication</span>
-                        <ArrowUpRight className="ml-auto h-4 w-4" />
-                      </Link>
-                    </li>
-                  </ul>
-                  <Button asChild variant="link" className="mt-4">
-                    <Link to="/roadmap">
-                      View All Paths
-                    </Link>
+                  <div className="flex items-center justify-center flex-col mb-4">
+                    <BarChart3 className="h-12 w-12 mb-2 text-primary" />
+                    <p className="text-center">Complete 65% of your current path</p>
+                  </div>
+                  <Button variant="outline" className="w-full">
+                    See Detailed Progress
                   </Button>
                 </div>
 
-                {/* Progress Overview */}
-                <div className="bg-card rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-300">
-                  <h2 className="text-lg font-semibold mb-2">Progress Overview</h2>
-                  <p className="text-muted-foreground text-sm">
-                    Track your progress and see how far you've come.
+                {/* Learning Paths */}
+                <div className="bg-card rounded-lg shadow-md p-5 hover:shadow-lg transition-shadow duration-300">
+                  <h2 className="text-lg font-semibold mb-3">Current Learning Path</h2>
+                  <p className="text-muted-foreground text-sm mb-4">
+                    Continue your guided learning journey
                   </p>
-                  <BarChart3 className="mx-auto h-10 w-10 mt-4 text-primary" />
-                  <p className="text-center mt-2">Complete 65% of your current path</p>
-                  <Button variant="outline" className="w-full mt-4">
-                    See Detailed Progress
+                  <div className="space-y-3 mb-4">
+                    <div className="flex items-center justify-between p-3 bg-accent/10 rounded-md">
+                      <div>
+                        <h3 className="font-medium">Mastering Prioritization</h3>
+                        <p className="text-xs text-muted-foreground">4 of 6 modules completed</p>
+                      </div>
+                      <ArrowUpRight className="h-4 w-4" />
+                    </div>
+                  </div>
+                  <Button asChild variant="link" className="w-full justify-center">
+                    <Link to="/roadmap">
+                      View All Learning Paths
+                    </Link>
                   </Button>
                 </div>
               </section>
