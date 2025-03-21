@@ -9,11 +9,11 @@ type AuthContextType = {
   user: User | null;
   session: Session | null;
   isLoading: boolean;
-  signIn: (email: string, password: string, captchaToken?: string | null) => Promise<{
+  signIn: (email: string, password: string) => Promise<{
     error: Error | null;
     success: boolean;
   }>;
-  signUp: (email: string, password: string, captchaToken?: string | null, userData?: { firstName?: string; lastName?: string }) => Promise<{
+  signUp: (email: string, password: string, userData?: { firstName?: string; lastName?: string }) => Promise<{
     error: Error | null;
     success: boolean;
   }>;
@@ -122,7 +122,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     failedAttempts.delete(email);
   };
 
-  const signIn = async (email: string, password: string, captchaToken?: string | null) => {
+  const signIn = async (email: string, password: string) => {
     try {
       // Check if user is rate limited
       if (!checkRateLimit(email)) {
@@ -131,7 +131,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       console.log('Signing in with:', email);
       
-      // Sign in without CAPTCHA options
+      // Simplified sign in without any CAPTCHA options
       const { data, error } = await supabase.auth.signInWithPassword({ 
         email, 
         password
@@ -157,7 +157,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const signUp = async (email: string, password: string, captchaToken?: string | null, userData?: { firstName?: string; lastName?: string }) => {
+  const signUp = async (email: string, password: string, userData?: { firstName?: string; lastName?: string }) => {
     try {
       console.log('Signing up with:', email);
       const { data, error } = await supabase.auth.signUp({ 
