@@ -1,6 +1,6 @@
 
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { ThemeProvider } from '@/components/ui/theme-provider';
+import { ThemeProvider } from './components/ui/theme-provider';
 import Index from './pages/Index';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
@@ -14,7 +14,7 @@ import Explore from './pages/Explore';
 import Resources from './pages/Resources';
 import Coaching from './pages/Coaching';
 import Roadmap from './pages/Roadmap';
-import { Toaster } from "@/components/ui/sonner";
+import { Toaster } from "./components/ui/sonner";
 import { AuthProvider } from './providers/AuthProvider';
 import { SubscriptionProvider } from './providers/SubscriptionProvider';
 import './App.css';
