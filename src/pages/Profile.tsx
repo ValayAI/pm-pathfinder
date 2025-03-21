@@ -1,6 +1,7 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '@/providers/AuthProvider';
+import { useSubscription } from '@/providers/SubscriptionProvider';
 import { toast } from 'sonner';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -9,25 +10,78 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { User, Mail, LogOut } from 'lucide-react';
+import { getUserProfile, updateUserProfile, UserProfile } from '@/utils/profileUtils';
+import { Link } from 'react-router-dom';
 
 const Profile = () => {
   const { user, signOut } = useAuth();
+  const { subscription } = useSubscription();
   const [isUpdating, setIsUpdating] = useState(false);
+  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: ''
+  });
+  
+  // Load profile data
+  useEffect(() => {
+    const loadProfile = async () => {
+      if (user) {
+        const profileData = await getUserProfile(user.id);
+        setProfile(profileData);
+        
+        if (profileData) {
+          setFormData({
+            firstName: profileData.first_name || '',
+            lastName: profileData.last_name || ''
+          });
+        }
+      }
+    };
+    
+    loadProfile();
+  }, [user]);
   
   const handleSignOut = async () => {
     await signOut();
     toast.success('Signed out successfully');
   };
   
-  const handleUpdateProfile = (e: React.FormEvent) => {
+  const handleUpdateProfile = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!user) return;
+    
     setIsUpdating(true);
     
-    // This is a placeholder for future profile update functionality
-    setTimeout(() => {
+    try {
+      const success = await updateUserProfile(user.id, {
+        first_name: formData.firstName,
+        last_name: formData.lastName
+      });
+      
+      if (success) {
+        toast.success('Profile updated successfully');
+        
+        // Refresh profile data
+        const updatedProfile = await getUserProfile(user.id);
+        setProfile(updatedProfile);
+      }
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      toast.error('Failed to update profile');
+    } finally {
       setIsUpdating(false);
-      toast.success('Profile updated successfully');
-    }, 1000);
+    }
+  };
+  
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+    
+    setFormData(prev => ({
+      ...prev,
+      [id === 'first-name' ? 'firstName' : 'lastName']: value
+    }));
   };
   
   return (
@@ -58,7 +112,7 @@ const Profile = () => {
                   
                   <div className="text-sm text-muted-foreground">
                     <p>Account ID: {user?.id?.substring(0, 8)}...</p>
-                    <p>Last sign in: {new Date().toLocaleDateString()}</p>
+                    <p>Last sign in: {new Date(user?.last_sign_in_at || '').toLocaleDateString()}</p>
                   </div>
                 </CardContent>
                 <CardFooter>
@@ -82,13 +136,26 @@ const Profile = () => {
                 </CardHeader>
                 <form onSubmit={handleUpdateProfile}>
                   <CardContent className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="display-name">Display Name</Label>
-                      <Input 
-                        id="display-name" 
-                        placeholder="Your name" 
-                        defaultValue={user?.user_metadata?.name || ''}
-                      />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="first-name">First Name</Label>
+                        <Input 
+                          id="first-name" 
+                          placeholder="Your first name" 
+                          value={formData.firstName}
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <Label htmlFor="last-name">Last Name</Label>
+                        <Input 
+                          id="last-name" 
+                          placeholder="Your last name" 
+                          value={formData.lastName}
+                          onChange={handleInputChange}
+                        />
+                      </div>
                     </div>
                     
                     <div className="space-y-2">
@@ -120,17 +187,48 @@ const Profile = () => {
                   <CardDescription>Your current subscription plan</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="bg-primary/10 p-4 rounded-lg">
-                    <h3 className="font-semibold text-primary">Free Plan</h3>
+                  <div className={`p-4 rounded-lg ${
+                    subscription?.planId === 'free' ? 'bg-blue-50 dark:bg-blue-950' :
+                    subscription?.planId === 'starter' ? 'bg-green-50 dark:bg-green-950' :
+                    subscription?.planId === 'popular' ? 'bg-purple-50 dark:bg-purple-950' :
+                    'bg-amber-50 dark:bg-amber-950'
+                  }`}>
+                    <h3 className={`font-semibold ${
+                      subscription?.planId === 'free' ? 'text-blue-600 dark:text-blue-400' :
+                      subscription?.planId === 'starter' ? 'text-green-600 dark:text-green-400' :
+                      subscription?.planId === 'popular' ? 'text-purple-600 dark:text-purple-400' :
+                      'text-amber-600 dark:text-amber-400'
+                    }`}>
+                      {subscription?.planId === 'free' ? 'Free Plan' :
+                       subscription?.planId === 'starter' ? 'Starter Plan' :
+                       subscription?.planId === 'popular' ? 'Most Popular Plan' :
+                       subscription?.planId === 'pro' ? 'Pro Coaching Plan' : 'Loading...'}
+                    </h3>
+                    
                     <p className="text-sm text-muted-foreground mt-1">
-                      You're currently on the free plan. Upgrade to access premium features.
+                      {subscription?.planId === 'free' 
+                        ? "You're currently on the free plan. Upgrade to access premium features."
+                        : `You have access to ${subscription?.features.length} premium features.`}
                     </p>
+                    
+                    {subscription?.planId !== 'free' && (
+                      <div className="mt-2">
+                        <p className="text-sm font-medium">Available features:</p>
+                        <ul className="text-sm text-muted-foreground mt-1 space-y-1">
+                          {subscription?.features.map((feature, index) => (
+                            <li key={index}>• {feature}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
                   </div>
                 </CardContent>
                 <CardFooter>
-                  <Button variant="outline" className="w-full">
-                    View Pricing
-                  </Button>
+                  <Link to="/pricing" className="w-full">
+                    <Button variant="outline" className="w-full">
+                      {subscription?.planId === 'free' ? 'View Pricing' : 'Manage Subscription'}
+                    </Button>
+                  </Link>
                 </CardFooter>
               </Card>
             </div>

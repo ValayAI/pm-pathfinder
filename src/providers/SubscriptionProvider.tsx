@@ -1,7 +1,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useAuth } from './AuthProvider';
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
 export type PlanType = 'free' | 'starter' | 'popular' | 'pro';
@@ -19,12 +19,13 @@ interface SubscriptionContextType {
   hasFeature: (feature: string) => boolean;
   getRemainingMessages: () => number;
   isFeatureEnabled: (feature: string) => boolean;
+  refreshSubscription: () => Promise<void>;
 }
 
 const defaultSubscription: SubscriptionData = {
   planId: 'free',
   messageLimit: 10,
-  features: ['50 messages/month', 'PM career & interview tips'],
+  features: ['Basic chat access', 'Limited messages'],
   expiresAt: null
 };
 
@@ -53,52 +54,110 @@ export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ 
   const { user } = useAuth();
   const [subscription, setSubscription] = useState<SubscriptionData | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [messagesUsed, setMessagesUsed] = useState<number>(0);
+
+  const fetchSubscription = async () => {
+    setIsLoading(true);
+    
+    // If user is not authenticated, set the default subscription
+    if (!user) {
+      setSubscription(defaultSubscription);
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      // Fetch the user's subscription from Supabase
+      const { data: subscriptionData, error: subscriptionError } = await supabase
+        .from('subscriptions')
+        .select('*')
+        .eq('user_id', user.id)
+        .eq('active', true)
+        .maybeSingle();
+      
+      if (subscriptionError) {
+        throw subscriptionError;
+      }
+      
+      // Fetch message usage
+      const { data: usageData, error: usageError } = await supabase
+        .from('message_usage')
+        .select('messages_used')
+        .eq('user_id', user.id)
+        .maybeSingle();
+      
+      if (usageError) {
+        throw usageError;
+      }
+      
+      if (usageData) {
+        setMessagesUsed(usageData.messages_used);
+      }
+      
+      // If subscription found, use it
+      if (subscriptionData) {
+        const planId = subscriptionData.plan_id as PlanType;
+        
+        // Create subscription data based on plan
+        const subscriptionInfo: SubscriptionData = {
+          planId: planId,
+          messageLimit: subscriptionData.message_limit ?? (planId === 'starter' ? 50 : planId === 'free' ? 10 : Infinity),
+          features: Array.isArray(subscriptionData.features) && subscriptionData.features.length > 0 
+            ? subscriptionData.features 
+            : planFeatures[planId],
+          expiresAt: subscriptionData.expires_at ? new Date(subscriptionData.expires_at) : null
+        };
+        
+        setSubscription(subscriptionInfo);
+        console.log(`User subscription loaded from DB: ${planId}`);
+      } else {
+        // If no active subscription found, create default free subscription in DB
+        const { error: insertError } = await supabase
+          .from('subscriptions')
+          .insert({
+            user_id: user.id,
+            plan_id: 'free',
+            message_limit: 10,
+            features: planFeatures.free
+          });
+        
+        if (insertError) {
+          console.error('Error creating default subscription:', insertError);
+        }
+        
+        // Initialize message usage counter if not exists
+        const { error: msgUsageError } = await supabase
+          .from('message_usage')
+          .insert({
+            user_id: user.id,
+            messages_used: 0
+          })
+          .onConflict('user_id')
+          .ignore();
+        
+        if (msgUsageError) {
+          console.error('Error initializing message usage:', msgUsageError);
+        }
+        
+        setSubscription(defaultSubscription);
+        console.log('No subscription found, created free plan');
+      }
+    } catch (error) {
+      console.error('Error fetching subscription:', error);
+      toast.error('Failed to load subscription data');
+      setSubscription(defaultSubscription);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchSubscription = async () => {
-      setIsLoading(true);
-      
-      // If user is not authenticated, set the default subscription
-      if (!user) {
-        setSubscription(defaultSubscription);
-        setIsLoading(false);
-        return;
-      }
-
-      try {
-        // Fetch the user's subscription from localStorage first (temporary solution)
-        // In a real application, this would come from a database
-        const storedPlan = localStorage.getItem('userSubscription');
-        
-        if (storedPlan) {
-          const planId = JSON.parse(storedPlan) as PlanType;
-          
-          // Create subscription data based on plan
-          const subscriptionData: SubscriptionData = {
-            planId: planId,
-            messageLimit: planId === 'starter' ? 50 : planId === 'free' ? 10 : Infinity,
-            features: planFeatures[planId],
-            expiresAt: planId === 'starter' ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) : null // 30 days for starter
-          };
-          
-          setSubscription(subscriptionData);
-          console.log(`User subscription loaded: ${planId}`);
-        } else {
-          // If no subscription found, set the default free plan
-          setSubscription(defaultSubscription);
-          console.log('No subscription found, using free plan');
-        }
-      } catch (error) {
-        console.error('Error fetching subscription:', error);
-        toast.error('Failed to load subscription data');
-        setSubscription(defaultSubscription);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     fetchSubscription();
   }, [user]);
+
+  const refreshSubscription = async () => {
+    await fetchSubscription();
+  };
 
   const hasFeature = (feature: string): boolean => {
     if (!subscription) return false;
@@ -113,10 +172,8 @@ export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ 
       return Infinity;
     }
     
-    // For limited plans, we would normally calculate remaining messages
-    // based on usage data from the database
-    const usedMessages = parseInt(localStorage.getItem('usedMessages') || '0');
-    return Math.max(subscription.messageLimit - usedMessages, 0);
+    // For limited plans, calculate remaining based on usage from DB
+    return Math.max(subscription.messageLimit - messagesUsed, 0);
   };
 
   const isFeatureEnabled = (feature: string): boolean => {
@@ -131,7 +188,8 @@ export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ 
     isLoading,
     hasFeature,
     getRemainingMessages,
-    isFeatureEnabled
+    isFeatureEnabled,
+    refreshSubscription
   };
 
   return (

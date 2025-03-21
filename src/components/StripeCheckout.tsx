@@ -4,6 +4,8 @@ import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { DollarSign } from 'lucide-react';
 import { createCheckoutSession } from '@/services/stripe';
+import { useAuth } from '@/providers/AuthProvider';
+import { useSubscription } from '@/providers/SubscriptionProvider';
 
 interface StripeCheckoutProps {
   planId: string;
@@ -23,8 +25,17 @@ const StripeCheckout: React.FC<StripeCheckoutProps> = ({
   highlight = false 
 }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const { user } = useAuth();
+  const { refreshSubscription } = useSubscription();
 
   const handleCheckout = async () => {
+    if (!user) {
+      toast.error("You need to be signed in", {
+        description: "Please sign in to subscribe to a plan"
+      });
+      return;
+    }
+    
     setIsLoading(true);
     
     try {
@@ -47,6 +58,10 @@ const StripeCheckout: React.FC<StripeCheckoutProps> = ({
       
       // Note: The redirect happens in the createCheckoutSession function
       // This code might not execute due to the redirect
+      
+      // Update subscription state
+      await refreshSubscription();
+      
       if (onSuccess) {
         onSuccess();
       }
