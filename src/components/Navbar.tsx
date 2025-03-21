@@ -17,6 +17,7 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useAuth } from "@/providers/AuthProvider";
 
 type NavItem = {
   name: string;
@@ -26,10 +27,10 @@ type NavItem = {
 };
 
 export function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isDark, setIsDark] = useState(false);
   const isMobile = useIsMobile();
+  const { user } = useAuth();
   
   // Handle scrolling effect
   useEffect(() => {
@@ -78,7 +79,7 @@ export function Navbar() {
         <div className="flex items-center justify-between h-12">
           {/* Logo and brand */}
           <div className="flex items-center">
-            <NavLink to="/" className="flex items-center space-x-2" onClick={() => setIsOpen(false)}>
+            <NavLink to="/" className="flex items-center space-x-2">
               <div className="w-6 h-6 rounded-md bg-primary flex items-center justify-center">
                 <span className="text-primary-foreground font-bold text-sm">P</span>
               </div>
@@ -86,44 +87,91 @@ export function Navbar() {
             </NavLink>
           </div>
           
-          {/* Desktop navigation */}
-          <div className="hidden md:block">
-            <div className="ml-6 flex items-center space-x-1">
-              {navItems.map(item => (
-                <NavLink 
-                  key={item.name}
-                  to={item.path}
-                  className={({ isActive }) => cn(
-                    "flex items-center px-2 py-1 rounded-md text-sm font-medium transition-colors duration-200",
-                    isActive 
-                      ? "text-primary bg-primary/5" 
-                      : "text-foreground/70 hover:text-primary hover:bg-primary/5",
-                    item.highlight && !isActive && "bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400",
-                    item.highlight && isActive && "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300"
-                  )}
+          {/* Condensed desktop menu with hamburger */}
+          <div className="hidden md:flex items-center space-x-1">
+            <Drawer>
+              <DrawerTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  aria-label="Menu"
+                  className="h-7 w-7 rounded-md"
                 >
-                  {item.icon}
-                  {item.name}
-                </NavLink>
-              ))}
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                onClick={toggleDarkMode} 
-                className="ml-1 h-7 w-7 rounded-md"
-                aria-label="Toggle dark mode"
-              >
-                {isDark ? <Sun className="h-[0.9rem] w-[0.9rem]" /> : <Moon className="h-[0.9rem] w-[0.9rem]" />}
-              </Button>
+                  <Menu className="h-4 w-4" />
+                </Button>
+              </DrawerTrigger>
+              <DrawerContent>
+                <DrawerHeader className="text-left">
+                  <DrawerTitle>Menu</DrawerTitle>
+                  <DrawerDescription>
+                    Navigate to different sections
+                  </DrawerDescription>
+                </DrawerHeader>
+                <div className="p-4 space-y-3">
+                  {navItems.map((item) => (
+                    <NavLink
+                      key={item.name}
+                      to={item.path}
+                      className={({ isActive }) => cn(
+                        "flex items-center p-2 rounded-md text-sm font-medium transition-colors duration-200 w-full",
+                        isActive 
+                          ? "text-primary bg-primary/5" 
+                          : "text-foreground/70 hover:text-primary hover:bg-primary/5",
+                        item.highlight && !isActive && "bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400",
+                        item.highlight && isActive && "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300"
+                      )}
+                    >
+                      {item.icon}
+                      <span className="ml-2">{item.name}</span>
+                    </NavLink>
+                  ))}
+                  <NavLink 
+                    to="/profile"
+                    className={({ isActive }) => cn(
+                      "flex items-center p-2 rounded-md text-sm font-medium transition-colors duration-200 w-full",
+                      isActive 
+                        ? "text-primary bg-primary/5" 
+                        : "text-foreground/70 hover:text-primary hover:bg-primary/5"
+                    )}
+                  >
+                    <User className="h-4 w-4 mr-1" />
+                    <span className="ml-2">Profile</span>
+                  </NavLink>
+                </div>
+                <DrawerFooter>
+                  <DrawerClose asChild>
+                    <Button variant="outline">Close</Button>
+                  </DrawerClose>
+                </DrawerFooter>
+              </DrawerContent>
+            </Drawer>
+          
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={toggleDarkMode} 
+              className="ml-1 h-7 w-7 rounded-md"
+              aria-label="Toggle dark mode"
+            >
+              {isDark ? <Sun className="h-[0.9rem] w-[0.9rem]" /> : <Moon className="h-[0.9rem] w-[0.9rem]" />}
+            </Button>
+            
+            {user ? (
               <NavLink to="/profile">
                 <Button variant="outline" size="sm" className="ml-1 h-7 px-2">
                   <User className="h-3.5 w-3.5" />
                 </Button>
               </NavLink>
-            </div>
+            ) : (
+              <NavLink to="/signin">
+                <Button variant="default" size="sm" className="ml-1 h-7">
+                  Sign In
+                </Button>
+              </NavLink>
+            )}
           </div>
           
-          {/* Mobile menu button - Hamburger icon */}
+          {/* Mobile menu button */}
           <div className="md:hidden flex items-center">
             <Button 
               variant="ghost" 
@@ -173,7 +221,7 @@ export function Navbar() {
                     </NavLink>
                   ))}
                   <NavLink 
-                    to="/profile"
+                    to={user ? "/profile" : "/signin"}
                     className={({ isActive }) => cn(
                       "flex items-center p-2 rounded-md text-sm font-medium transition-colors duration-200 w-full",
                       isActive 
@@ -182,7 +230,7 @@ export function Navbar() {
                     )}
                   >
                     <User className="h-4 w-4 mr-1" />
-                    <span className="ml-2">Profile</span>
+                    <span className="ml-2">{user ? "Profile" : "Sign In"}</span>
                   </NavLink>
                 </div>
                 <DrawerFooter>

@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from 'react';
-import { Link } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import FeatureSection from "@/components/FeatureSection";
@@ -10,9 +10,12 @@ import Footer from "@/components/Footer";
 import EmailSignup from "@/components/EmailSignup";
 import { Leaf } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/providers/AuthProvider";
+import Dashboard from "@/components/Dashboard";
 
 const Index = () => {
   const [loaded, setLoaded] = useState(false);
+  const { user } = useAuth();
 
   // Smooth scroll to top on page load and set loaded state for animations
   useEffect(() => {
@@ -23,13 +26,18 @@ const Index = () => {
     setLoaded(true);
   }, []);
 
+  // If user is logged in, redirect to dashboard
+  if (user) {
+    return <Dashboard />;
+  }
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Navbar />
-      <main>
+      <main className="space-y-8">
         <Hero />
         <div className={cn(
-          "py-6 text-center transition-all duration-1000",
+          "py-4 text-center transition-all duration-1000",
           loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
         )}>
           <div className="container mx-auto px-4">

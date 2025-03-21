@@ -12,6 +12,7 @@ import Resources from "./pages/Resources";
 import Coaching from "./pages/Coaching";
 import Pricing from "./pages/Pricing";
 import Profile from "./pages/Profile";
+import Settings from "./pages/Settings";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import NotFound from "./pages/NotFound";
@@ -39,6 +40,7 @@ function App() {
             <Route path="/coaching" element={<Coaching />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+            <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
             <Route path="/signin" element={<SignIn />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="*" element={<NotFound />} />
