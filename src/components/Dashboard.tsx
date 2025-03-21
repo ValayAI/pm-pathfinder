@@ -6,7 +6,6 @@ import {
   Compass, 
   BookOpen, 
   MessageSquare, 
-  BarChart3, 
   Sparkles,
   ArrowUpRight,
   Settings,
@@ -17,6 +16,7 @@ import { Link } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { getUserProfile, UserProfile } from '@/utils/profileUtils';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   Sidebar,
   SidebarBody,
@@ -137,32 +137,25 @@ const Dashboard: React.FC<DashboardProps> = ({ children }) => {
           {children ? children : (
             <div className="space-y-8">
               <section>
-                <h1 className="text-3xl font-semibold">{greeting}, {displayName}!</h1>
-                <p className="text-muted-foreground">Welcome to your PM Pathfinder dashboard.</p>
+                <div className="flex items-center gap-3 mb-4">
+                  <Avatar className="h-12 w-12">
+                    <AvatarImage src={profile?.avatar_url || undefined} alt={displayName} />
+                    <AvatarFallback>{displayName.charAt(0).toUpperCase()}</AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <h1 className="text-2xl font-semibold">{greeting}, {displayName}!</h1>
+                    <p className="text-muted-foreground">Welcome to your PM Pathfinder dashboard.</p>
+                  </div>
+                </div>
               </section>
 
-              {/* Simplified Dashboard Content - Reduced redundant navigation */}
-              <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Simplified Dashboard Content */}
+              <section className="grid grid-cols-1 gap-6">
                 {/* Progress Overview */}
-                <div className="bg-card rounded-lg shadow-md p-5 hover:shadow-lg transition-shadow duration-300">
-                  <h2 className="text-lg font-semibold mb-3">Progress Overview</h2>
+                <div className="bg-card rounded-lg shadow-sm p-5 hover:shadow-md transition-shadow duration-300 border border-border">
+                  <h2 className="text-lg font-semibold mb-3">Continue Your Learning</h2>
                   <p className="text-muted-foreground text-sm mb-4">
-                    Track your progress and see how far you've come.
-                  </p>
-                  <div className="flex items-center justify-center flex-col mb-4">
-                    <BarChart3 className="h-12 w-12 mb-2 text-primary" />
-                    <p className="text-center">Complete 65% of your current path</p>
-                  </div>
-                  <Button variant="outline" className="w-full">
-                    See Detailed Progress
-                  </Button>
-                </div>
-
-                {/* Learning Paths */}
-                <div className="bg-card rounded-lg shadow-md p-5 hover:shadow-lg transition-shadow duration-300">
-                  <h2 className="text-lg font-semibold mb-3">Current Learning Path</h2>
-                  <p className="text-muted-foreground text-sm mb-4">
-                    Continue your guided learning journey
+                    Pick up where you left off with your current learning path
                   </p>
                   <div className="space-y-3 mb-4">
                     <div className="flex items-center justify-between p-3 bg-accent/10 rounded-md">
@@ -170,12 +163,14 @@ const Dashboard: React.FC<DashboardProps> = ({ children }) => {
                         <h3 className="font-medium">Mastering Prioritization</h3>
                         <p className="text-xs text-muted-foreground">4 of 6 modules completed</p>
                       </div>
-                      <ArrowUpRight className="h-4 w-4" />
+                      <Button size="sm" variant="ghost">
+                        <ArrowUpRight className="h-4 w-4" />
+                      </Button>
                     </div>
                   </div>
-                  <Button asChild variant="link" className="w-full justify-center">
+                  <Button asChild variant="default" className="w-full justify-center">
                     <Link to="/roadmap">
-                      View All Learning Paths
+                      Continue Learning
                     </Link>
                   </Button>
                 </div>
