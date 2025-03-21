@@ -30,7 +30,8 @@ function App() {
               <Route path="/explore" element={<ProtectedRoute><Explore /></ProtectedRoute>} />
               <Route path="/resources" element={<ProtectedRoute><Resources /></ProtectedRoute>} />
               <Route path="/signin" element={<SignIn />} />
-              <Route path="/signup" element={<SignUp />} />
+              <Route path="/sign-up" element={<SignUp />} />
+              <Route path="/signup" element={<Navigate to="/sign-up" replace />} />
               <Route path="/pricing" element={<ProtectedRoute><Pricing /></ProtectedRoute>} />
               
               {/* Protected Routes */}
