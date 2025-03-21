@@ -128,11 +128,18 @@ export function Navbar() {
                 </Button>
               </NavLink>
             ) : (
-              <NavLink to="/signin">
-                <Button variant="default" size="sm" className="ml-1 h-7">
-                  Sign In
-                </Button>
-              </NavLink>
+              <div className="flex items-center space-x-2">
+                <NavLink to="/signin">
+                  <Button variant="outline" size="sm" className="h-7">
+                    Sign In
+                  </Button>
+                </NavLink>
+                <NavLink to="/signup">
+                  <Button variant="default" size="sm" className="h-7">
+                    Sign Up
+                  </Button>
+                </NavLink>
+              </div>
             )}
           </div>
           
@@ -185,18 +192,48 @@ export function Navbar() {
                       <span className="ml-2">{item.name}</span>
                     </NavLink>
                   ))}
-                  <NavLink 
-                    to={user ? "/profile" : "/signin"}
-                    className={({ isActive }) => cn(
-                      "flex items-center p-2 rounded-md text-sm font-medium transition-colors duration-200 w-full",
-                      isActive 
-                        ? "text-primary bg-primary/5" 
-                        : "text-foreground/70 hover:text-primary hover:bg-primary/5"
-                    )}
-                  >
-                    <User className="h-4 w-4 mr-1" />
-                    <span className="ml-2">{user ? "Profile" : "Sign In"}</span>
-                  </NavLink>
+                  {/* Add login/signup for mobile menu */}
+                  {!user ? (
+                    <>
+                      <NavLink 
+                        to="/signin"
+                        className={({ isActive }) => cn(
+                          "flex items-center p-2 rounded-md text-sm font-medium transition-colors duration-200 w-full",
+                          isActive 
+                            ? "text-primary bg-primary/5" 
+                            : "text-foreground/70 hover:text-primary hover:bg-primary/5"
+                        )}
+                      >
+                        <User className="h-4 w-4 mr-1" />
+                        <span className="ml-2">Sign In</span>
+                      </NavLink>
+                      <NavLink 
+                        to="/signup"
+                        className={({ isActive }) => cn(
+                          "flex items-center p-2 rounded-md text-sm font-medium transition-colors duration-200 w-full bg-primary/10",
+                          isActive 
+                            ? "text-primary bg-primary/20" 
+                            : "text-primary hover:bg-primary/20"
+                        )}
+                      >
+                        <User className="h-4 w-4 mr-1" />
+                        <span className="ml-2">Sign Up</span>
+                      </NavLink>
+                    </>
+                  ) : (
+                    <NavLink 
+                      to="/profile"
+                      className={({ isActive }) => cn(
+                        "flex items-center p-2 rounded-md text-sm font-medium transition-colors duration-200 w-full",
+                        isActive 
+                          ? "text-primary bg-primary/5" 
+                          : "text-foreground/70 hover:text-primary hover:bg-primary/5"
+                      )}
+                    >
+                      <User className="h-4 w-4 mr-1" />
+                      <span className="ml-2">Profile</span>
+                    </NavLink>
+                  )}
                 </div>
                 <DrawerFooter>
                   <DrawerClose asChild>

@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from 'react';
-import { Navigate } from "react-router-dom";
+import { Navigate, Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import FeatureSection from "@/components/FeatureSection";
@@ -8,10 +8,11 @@ import TestimonialsSection from "@/components/TestimonialsSection";
 import CTASection from "@/components/CTASection";
 import Footer from "@/components/Footer";
 import EmailSignup from "@/components/EmailSignup";
-import { Leaf } from "lucide-react";
+import { Leaf, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/providers/AuthProvider";
 import Dashboard from "@/components/Dashboard";
+import { Button } from "@/components/ui/button";
 
 const Index = () => {
   const [loaded, setLoaded] = useState(false);
@@ -52,6 +53,16 @@ const Index = () => {
             {/* Email signup component */}
             <div className="max-w-md mx-auto mt-4">
               <EmailSignup />
+            </div>
+            
+            {/* Sign up button */}
+            <div className="mt-4">
+              <Link to="/signup">
+                <Button variant="outline" className="group">
+                  Create an Account
+                  <ArrowRight className="ml-1 h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
