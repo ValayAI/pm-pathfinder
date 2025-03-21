@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '@/providers/AuthProvider';
 import { Link } from 'react-router-dom';
@@ -105,11 +106,26 @@ const Dashboard: React.FC<DashboardProps> = ({ children }) => {
           <SidebarBody>
             <div className="flex flex-col space-y-6">
               <div className="px-2">
-                <div className="flex items-center space-x-2">
-                  <div className="w-6 h-6 rounded-md bg-primary flex items-center justify-center">
-                    <LayoutDashboard className="h-4 w-4 text-primary-foreground" />
+                <div className="flex items-center space-x-3">
+                  <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center">
+                    <svg 
+                      viewBox="0 0 24 24" 
+                      width="24" 
+                      height="24" 
+                      stroke="currentColor" 
+                      strokeWidth="2" 
+                      fill="none" 
+                      strokeLinecap="round" 
+                      strokeLinejoin="round" 
+                      className="text-primary-foreground"
+                    >
+                      <rect x="3" y="3" width="7" height="7" />
+                      <rect x="14" y="3" width="7" height="7" />
+                      <rect x="14" y="14" width="7" height="7" />
+                      <rect x="3" y="14" width="7" height="7" />
+                    </svg>
                   </div>
-                  <span className="font-outfit font-medium text-md">PM Pathfinder</span>
+                  <span className="font-outfit font-semibold text-lg">PM Pathfinder</span>
                 </div>
               </div>
               
@@ -130,27 +146,7 @@ const Dashboard: React.FC<DashboardProps> = ({ children }) => {
         <div className="flex-1 px-6 py-6">
           {children ? children : (
             <div className="space-y-8 max-w-4xl mx-auto">
-              {/* User Welcome Section */}
-              <Card className="border-none shadow-none bg-transparent">
-                <CardHeader className="px-0 pt-0">
-                  <div className="flex items-center gap-3">
-                    <Avatar className="h-16 w-16">
-                      <AvatarImage src={profile?.avatar_url || undefined} alt={displayName} />
-                      <AvatarFallback>{displayName.charAt(0).toUpperCase()}</AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <CardTitle className="text-3xl font-semibold">
-                        {greeting}, {displayName}
-                      </CardTitle>
-                      <CardDescription className="text-base">
-                        Welcome back to your PM learning journey
-                      </CardDescription>
-                    </div>
-                  </div>
-                </CardHeader>
-              </Card>
-              
-              {/* Quick Actions - moved to the top */}
+              {/* Quick Actions - at the top */}
               <Card>
                 <CardHeader>
                   <CardTitle>Quick Actions</CardTitle>
@@ -172,6 +168,26 @@ const Dashboard: React.FC<DashboardProps> = ({ children }) => {
                     ))}
                   </div>
                 </CardContent>
+              </Card>
+              
+              {/* User Welcome Section */}
+              <Card className="border-none shadow-none bg-transparent">
+                <CardHeader className="px-0 pt-0">
+                  <div className="flex items-center gap-3">
+                    <Avatar className="h-16 w-16">
+                      <AvatarImage src={profile?.avatar_url || undefined} alt={displayName} />
+                      <AvatarFallback>{displayName.charAt(0).toUpperCase()}</AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <CardTitle className="text-3xl font-semibold">
+                        {greeting}, {displayName}
+                      </CardTitle>
+                      <CardDescription className="text-base">
+                        Welcome back to your PM learning journey
+                      </CardDescription>
+                    </div>
+                  </div>
+                </CardHeader>
               </Card>
               
               {/* Learning Progress */}
