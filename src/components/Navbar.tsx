@@ -89,65 +89,26 @@ export function Navbar() {
             </NavLink>
           </div>
           
-          {/* Condensed desktop menu with hamburger */}
-          <div className="hidden md:flex items-center space-x-1">
-            <Drawer>
-              <DrawerTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  aria-label="Menu"
-                  className="h-7 w-7 rounded-md"
-                >
-                  <Menu className="h-4 w-4" />
-                </Button>
-              </DrawerTrigger>
-              <DrawerContent>
-                <DrawerHeader className="text-left">
-                  <DrawerTitle>Menu</DrawerTitle>
-                  <DrawerDescription>
-                    Navigate to different sections
-                  </DrawerDescription>
-                </DrawerHeader>
-                <div className="p-4 space-y-3">
-                  {navItems.map((item) => (
-                    <NavLink
-                      key={item.name}
-                      to={item.path}
-                      className={({ isActive }) => cn(
-                        "flex items-center p-2 rounded-md text-sm font-medium transition-colors duration-200 w-full",
-                        isActive 
-                          ? "text-primary bg-primary/5" 
-                          : "text-foreground/70 hover:text-primary hover:bg-primary/5",
-                        item.highlight && !isActive && "bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400",
-                        item.highlight && isActive && "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300"
-                      )}
-                    >
-                      {item.icon}
-                      <span className="ml-2">{item.name}</span>
-                    </NavLink>
-                  ))}
-                  <NavLink 
-                    to="/profile"
-                    className={({ isActive }) => cn(
-                      "flex items-center p-2 rounded-md text-sm font-medium transition-colors duration-200 w-full",
-                      isActive 
-                        ? "text-primary bg-primary/5" 
-                        : "text-foreground/70 hover:text-primary hover:bg-primary/5"
-                    )}
-                  >
-                    <User className="h-4 w-4 mr-1" />
-                    <span className="ml-2">Profile</span>
-                  </NavLink>
-                </div>
-                <DrawerFooter>
-                  <DrawerClose asChild>
-                    <Button variant="outline">Close</Button>
-                  </DrawerClose>
-                </DrawerFooter>
-              </DrawerContent>
-            </Drawer>
-          
+          {/* Desktop menu */}
+          <div className="hidden md:flex items-center space-x-4">
+            {navItems.map((item) => (
+              <NavLink
+                key={item.name}
+                to={item.path}
+                className={({ isActive }) => cn(
+                  "flex items-center text-sm font-medium transition-colors duration-200",
+                  isActive 
+                    ? "text-primary" 
+                    : "text-foreground/70 hover:text-primary",
+                  item.highlight && !isActive && "text-blue-600 dark:text-blue-400",
+                  item.highlight && isActive && "text-blue-700 dark:text-blue-300"
+                )}
+              >
+                {item.icon}
+                <span>{item.name}</span>
+              </NavLink>
+            ))}
+            
             <Button 
               variant="ghost" 
               size="icon" 

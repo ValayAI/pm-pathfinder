@@ -27,11 +27,11 @@ function App() {
           <SubscriptionProvider>
             <Routes>
               <Route path="/" element={<Index />} />
-              <Route path="/explore" element={<Explore />} />
-              <Route path="/resources" element={<Resources />} />
+              <Route path="/explore" element={<ProtectedRoute><Explore /></ProtectedRoute>} />
+              <Route path="/resources" element={<ProtectedRoute><Resources /></ProtectedRoute>} />
               <Route path="/signin" element={<SignIn />} />
               <Route path="/signup" element={<SignUp />} />
-              <Route path="/pricing" element={<Pricing />} />
+              <Route path="/pricing" element={<ProtectedRoute><Pricing /></ProtectedRoute>} />
               
               {/* Protected Routes */}
               <Route path="/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
