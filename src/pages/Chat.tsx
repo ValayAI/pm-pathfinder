@@ -1,4 +1,6 @@
+
 import { useEffect, useState, useRef, FormEvent } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -14,6 +16,7 @@ import PaywallModal from "@/components/PaywallModal";
 import { handleChatRequest } from "@/api/chat.tsx";
 import PreloadedPrompts from "@/components/PreloadedPrompts";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useSubscription, PlanType } from "@/providers/SubscriptionProvider";
 
 type Message = {
   id: string;
@@ -28,7 +31,6 @@ type CachedResponse = {
   timestamp: number;
 };
 
-const MAX_FREE_MESSAGES = 10;
 const CACHE_EXPIRY_HOURS = 24;
 
 export function Chat() {
@@ -41,6 +43,14 @@ export function Chat() {
   const [isVisible, setIsVisible] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
+  
+  // Get subscription details
+  const { subscription, getRemainingMessages } = useSubscription();
+  const remainingMessages = getRemainingMessages();
+  const messageLimit = subscription?.messageLimit || 10;
+  const hasLimitedMessages = subscription?.planId === 'free' || subscription?.planId === 'starter';
+  const isPremium = subscription?.planId === 'popular' || subscription?.planId === 'pro';
 
   useEffect(() => {
     setIsVisible(true);
@@ -59,10 +69,13 @@ export function Chat() {
   };
 
   useEffect(() => {
-    if (usedMessages >= MAX_FREE_MESSAGES) {
+    // Show paywall if:
+    // 1. User is on free plan and has used 10+ messages
+    // 2. User is on starter plan and has used 50+ messages
+    if (hasLimitedMessages && remainingMessages <= 0) {
       setShowPaywall(true);
     }
-  }, [usedMessages]);
+  }, [usedMessages, hasLimitedMessages, remainingMessages]);
 
   useEffect(() => {
     toast.success("Your PM Coach is ready", {
@@ -109,7 +122,8 @@ export function Chat() {
     
     if (!input.trim()) return;
     
-    if (usedMessages >= MAX_FREE_MESSAGES) {
+    // Check if user has remaining messages
+    if (hasLimitedMessages && remainingMessages <= 0) {
       setShowPaywall(true);
       return;
     }
@@ -162,12 +176,22 @@ export function Chat() {
       
       setMessages(prev => [...prev, assistantMessage]);
       scrollToBottom();
-      setUsedMessages(prev => prev + 1);
+      
+      // Only increment the used messages counter for limited plans
+      if (hasLimitedMessages) {
+        setUsedMessages(prev => prev + 1);
+      }
+      
       updateCache(input, data.message);
       
-      if (usedMessages + 1 >= MAX_FREE_MESSAGES) {
-        toast.error("Free limit reached", {
+      // Show limit warning for limited plans
+      if (hasLimitedMessages && remainingMessages <= 1) {
+        toast.error("Message limit reached", {
           description: "You've used all your free messages. Please upgrade to continue.",
+        });
+      } else if (hasLimitedMessages && remainingMessages <= 5) {
+        toast.warning("Message limit approaching", {
+          description: `You have ${remainingMessages - 1} messages remaining in your plan.`,
         });
       }
       
@@ -193,26 +217,28 @@ export function Chat() {
   };
 
   const handleUpgrade = (plan: string) => {
-    toast.success("Upgrade initiated", {
-      description: `You selected the ${plan} plan. Redirecting to payment...`,
+    toast.success("Upgrade successful!", {
+      description: `You now have unlimited access to your PM Coach with the ${plan} plan.`,
     });
     
-    setTimeout(() => {
-      setShowPaywall(false);
-      setUsedMessages(0);
-      
-      toast.success("Upgrade successful!", {
-        description: "You now have unlimited access to your PM Coach.",
-      });
-    }, 2000);
+    setShowPaywall(false);
   };
 
   const handleLogin = () => {
-    toast.success("Login successful", {
-      description: "Welcome back! You now have full access.",
-    });
-    setShowPaywall(false);
-    setUsedMessages(0);
+    navigate('/signin');
+  };
+
+  const getPlanFeatureMessage = () => {
+    switch (subscription?.planId) {
+      case 'pro':
+        return "Pro plan features: Unlimited messages, coaching calls, resume review & all resources";
+      case 'popular':
+        return "Popular plan features: Unlimited messages, frameworks & all PM resources";
+      case 'starter':
+        return "Starter plan features: 50 messages/month & career tips";
+      default:
+        return "Free plan: 10 messages limit";
+    }
   };
 
   return (
@@ -232,6 +258,21 @@ export function Chat() {
             <p className="text-muted-foreground text-sm max-w-md mx-auto">
               Get expert guidance on product management career growth and strategy
             </p>
+            
+            {/* Subscription badge */}
+            {subscription && (
+              <div className="mt-2">
+                <span className={cn(
+                  "inline-block px-3 py-1 rounded-full text-xs font-medium",
+                  subscription.planId === 'pro' ? "bg-amber-100 text-amber-800" : 
+                  subscription.planId === 'popular' ? "bg-purple-100 text-purple-800" :
+                  subscription.planId === 'starter' ? "bg-blue-100 text-blue-800" :
+                  "bg-gray-100 text-gray-800"
+                )}>
+                  {subscription.planId.charAt(0).toUpperCase() + subscription.planId.slice(1)} Plan
+                </span>
+              </div>
+            )}
           </div>
           
           <Card className="bg-card/50 backdrop-blur-sm border rounded-xl shadow-sm mb-4 overflow-hidden flex flex-col">
@@ -273,13 +314,13 @@ export function Chat() {
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="Ask your PM coach anything..."
-                  disabled={isLoading || usedMessages >= MAX_FREE_MESSAGES}
+                  disabled={isLoading || (hasLimitedMessages && remainingMessages <= 0)}
                   className="flex-grow bg-background/50"
                 />
                 <Button 
                   type="submit" 
                   size="icon"
-                  disabled={isLoading || !input.trim() || usedMessages >= MAX_FREE_MESSAGES}
+                  disabled={isLoading || !input.trim() || (hasLimitedMessages && remainingMessages <= 0)}
                   className="bg-purple-600 hover:bg-purple-700 h-10 w-10 rounded-full flex-shrink-0"
                 >
                   <Send className="h-4 w-4" />
@@ -288,42 +329,74 @@ export function Chat() {
             </div>
           </Card>
           
-          <div className="mt-4 mb-6">
-            <div className="flex justify-between text-xs mb-1">
-              <span className="text-muted-foreground">Coaching sessions used</span>
-              <span className="font-medium">{usedMessages} / {MAX_FREE_MESSAGES}</span>
-            </div>
-            <Progress 
-              value={(usedMessages / MAX_FREE_MESSAGES) * 100} 
-              className="h-1.5" 
-              indicatorClassName="bg-purple-600"
-            />
-            {usedMessages >= MAX_FREE_MESSAGES && (
-              <div className="mt-2 flex items-center text-destructive text-xs">
-                <AlertCircle className="h-3 w-3 mr-1" />
-                <span>You've reached your free coaching limit</span>
+          {/* Message counter - only show for limited plans */}
+          {hasLimitedMessages && (
+            <div className="mt-4 mb-6">
+              <div className="flex justify-between text-xs mb-1">
+                <span className="text-muted-foreground">Coaching sessions used</span>
+                <span className="font-medium">{usedMessages} / {messageLimit}</span>
               </div>
-            )}
-            {usedMessages > 0 && usedMessages < MAX_FREE_MESSAGES && (
-              <p className="text-xs text-muted-foreground mt-1">
-                You have {MAX_FREE_MESSAGES - usedMessages} free coaching sessions remaining
-              </p>
-            )}
+              <Progress 
+                value={(usedMessages / messageLimit) * 100} 
+                className="h-1.5" 
+                indicatorClassName={cn(
+                  subscription?.planId === 'starter' ? "bg-blue-600" : "bg-purple-600"
+                )}
+              />
+              {remainingMessages <= 0 && (
+                <div className="mt-2 flex items-center text-destructive text-xs">
+                  <AlertCircle className="h-3 w-3 mr-1" />
+                  <span>You've reached your coaching limit</span>
+                </div>
+              )}
+              {remainingMessages > 0 && (
+                <p className="text-xs text-muted-foreground mt-1">
+                  You have {remainingMessages} coaching {remainingMessages === 1 ? 'session' : 'sessions'} remaining
+                </p>
+              )}
+            </div>
+          )}
+          
+          {/* Feature badge */}
+          <div className="text-center mt-4 mb-6">
+            <div className="inline-block px-3 py-1 rounded-md text-xs bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200">
+              {getPlanFeatureMessage()}
+            </div>
           </div>
           
-          <div className="text-center mt-8">
-            <h2 className="text-lg font-semibold mb-3">Upgrade to Premium Coaching</h2>
-            <p className="text-muted-foreground text-sm mb-5 max-w-xs mx-auto">
-              Get unlimited coaching sessions and exclusive PM resources
-            </p>
-            <Button 
-              size="lg" 
-              onClick={() => setShowPaywall(true)}
-              className="bg-purple-600 hover:bg-purple-700"
-            >
-              Unlock Premium Coaching
-            </Button>
-          </div>
+          {/* Only show upgrade button for free or starter plans */}
+          {(subscription?.planId === 'free' || subscription?.planId === 'starter') && (
+            <div className="text-center mt-8">
+              <h2 className="text-lg font-semibold mb-3">Upgrade to Premium Coaching</h2>
+              <p className="text-muted-foreground text-sm mb-5 max-w-xs mx-auto">
+                Get unlimited coaching sessions and exclusive PM resources
+              </p>
+              <Button 
+                size="lg" 
+                onClick={() => setShowPaywall(true)}
+                className="bg-purple-600 hover:bg-purple-700"
+              >
+                Unlock Premium Coaching
+              </Button>
+            </div>
+          )}
+          
+          {/* Show pro features for popular plan users */}
+          {subscription?.planId === 'popular' && (
+            <div className="text-center mt-8">
+              <h2 className="text-lg font-semibold mb-3">Upgrade to Pro Coaching</h2>
+              <p className="text-muted-foreground text-sm mb-5 max-w-xs mx-auto">
+                Get 1-on-1 PM coaching calls and personalized resume reviews
+              </p>
+              <Button 
+                size="lg" 
+                onClick={() => navigate('/pricing')}
+                className="bg-amber-600 hover:bg-amber-700"
+              >
+                Upgrade to Pro
+              </Button>
+            </div>
+          )}
         </div>
       </main>
       <Footer />
@@ -333,9 +406,10 @@ export function Chat() {
         onOpenChange={setShowPaywall}
         onUpgrade={handleUpgrade}
         onLogin={handleLogin}
+        requiredFeature={subscription?.planId === 'free' ? "Unlimited Messages" : undefined}
       />
     </div>
   );
-}
+};
 
 export default Chat;

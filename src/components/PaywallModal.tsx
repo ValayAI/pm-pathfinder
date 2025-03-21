@@ -17,15 +17,6 @@ import {
   CardHeader, 
   CardTitle 
 } from "@/components/ui/card";
-import { 
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { 
   Rocket, 
@@ -39,15 +30,17 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import StripeCheckout from "./StripeCheckout";
+import { updateSubscription } from "@/utils/subscriptionUtils";
 
 interface PaywallModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onUpgrade: (plan: string) => void;
   onLogin: () => void;
+  requiredFeature?: string;
 }
 
-const PaywallModal = ({ open, onOpenChange, onUpgrade, onLogin }: PaywallModalProps) => {
+const PaywallModal = ({ open, onOpenChange, onUpgrade, onLogin, requiredFeature }: PaywallModalProps) => {
   const plans = [
     {
       id: "starter",
@@ -106,6 +99,10 @@ const PaywallModal = ({ open, onOpenChange, onUpgrade, onLogin }: PaywallModalPr
   ];
 
   const handlePlanSuccess = (planId: string) => {
+    // Update the user's subscription
+    updateSubscription(planId);
+    
+    // Call the parent component's onUpgrade callback
     onUpgrade(planId);
   };
 
@@ -116,14 +113,18 @@ const PaywallModal = ({ open, onOpenChange, onUpgrade, onLogin }: PaywallModalPr
           <div className="w-full flex justify-center -mt-2 mb-2">
             <Badge variant="outline" className="bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200 border-purple-300 dark:border-purple-700 px-3 py-1">
               <Lock className="h-3.5 w-3.5 mr-1" />
-              Upgrade Required
+              {requiredFeature ? 'Feature Upgrade Required' : 'Upgrade Required'}
             </Badge>
           </div>
           <DialogTitle className="text-2xl text-center">
-            You've Reached Your Free Limit!
+            {requiredFeature 
+              ? `Upgrade to Access ${requiredFeature}` 
+              : "You've Reached Your Free Limit!"}
           </DialogTitle>
           <DialogDescription className="text-center max-w-md mx-auto pt-2">
-            You've used 10 free messages – want expert Product Management advice without limits? Choose the plan that fits your needs:
+            {requiredFeature 
+              ? `This feature requires a premium subscription. Choose a plan to unlock ${requiredFeature} and more:` 
+              : "You've used 10 free messages – want expert Product Management advice without limits? Choose the plan that fits your needs:"}
           </DialogDescription>
         </DialogHeader>
 
