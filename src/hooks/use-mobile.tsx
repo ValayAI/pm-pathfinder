@@ -1,3 +1,4 @@
+
 import * as React from "react"
 
 const MOBILE_BREAKPOINT = 768
@@ -10,9 +11,20 @@ export function useIsMobile() {
     const onChange = () => {
       setIsMobile(window.innerWidth < MOBILE_BREAKPOINT)
     }
-    mql.addEventListener("change", onChange)
+    
+    // Initial check
     setIsMobile(window.innerWidth < MOBILE_BREAKPOINT)
-    return () => mql.removeEventListener("change", onChange)
+    
+    // Add event listener for screen size changes
+    mql.addEventListener("change", onChange)
+    
+    // Also listen for resize events to handle all browsers
+    window.addEventListener("resize", onChange)
+    
+    return () => {
+      mql.removeEventListener("change", onChange)
+      window.removeEventListener("resize", onChange)
+    }
   }, [])
 
   return !!isMobile
