@@ -32,7 +32,11 @@ import {
 import { useNavigate, useLocation } from 'react-router-dom';
 import { toast } from "sonner";
 
-const Dashboard = () => {
+interface DashboardProps {
+  children?: React.ReactNode;
+}
+
+const Dashboard = ({ children }: DashboardProps) => {
   const { user, signOut } = useAuth();
   const { isFeatureEnabled } = useSubscription();
   const navigate = useNavigate();
@@ -210,58 +214,60 @@ const Dashboard = () => {
         </Sidebar>
         
         <div className="flex-1 p-6 pt-20">
-          <div className="max-w-6xl mx-auto">
-            <h1 className="text-3xl font-bold mb-6">Welcome to your Dashboard</h1>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {/* Recent Activity Card */}
-              <div className="border rounded-lg p-4 shadow-sm">
-                <h2 className="text-lg font-semibold mb-2">Recent Activity</h2>
-                <p className="text-muted-foreground text-sm">
-                  You haven't had any recent activity. Start exploring resources or use PM Coach to get started.
-                </p>
-                <Button variant="outline" className="mt-4 w-full" onClick={() => navigate('/explore')}>
-                  Explore Resources
-                </Button>
-              </div>
+          {children ? children : (
+            <div className="max-w-6xl mx-auto">
+              <h1 className="text-3xl font-bold mb-6">Welcome to your Dashboard</h1>
               
-              {/* PM Coach Card */}
-              <div className="border rounded-lg p-4 shadow-sm bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30">
-                <h2 className="text-lg font-semibold mb-2 flex items-center">
-                  <Sparkles className="h-4 w-4 mr-2 text-blue-500" />
-                  PM Coach
-                </h2>
-                <p className="text-muted-foreground text-sm">
-                  Get advice on product management challenges using our AI-powered coach.
-                </p>
-                <Button 
-                  className="mt-4 w-full" 
-                  onClick={() => navigate('/chat')}
-                  disabled={!hasPMCoachAccess}
-                >
-                  {hasPMCoachAccess ? "Start Chatting" : "Upgrade to Access"}
-                </Button>
-              </div>
-              
-              {/* Roadmap Generator Card */}
-              <div className="border rounded-lg p-4 shadow-sm bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-950/30 dark:to-emerald-950/30">
-                <h2 className="text-lg font-semibold mb-2 flex items-center">
-                  <BarChart3 className="h-4 w-4 mr-2 text-green-500" />
-                  Roadmap Generator
-                </h2>
-                <p className="text-muted-foreground text-sm">
-                  Create beautiful product roadmaps with our easy-to-use tool.
-                </p>
-                <Button 
-                  className="mt-4 w-full" 
-                  onClick={() => navigate('/roadmap')}
-                  disabled={!hasRoadmapAccess}
-                >
-                  {hasRoadmapAccess ? "Create Roadmap" : "Upgrade to Access"}
-                </Button>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {/* Recent Activity Card */}
+                <div className="border rounded-lg p-4 shadow-sm">
+                  <h2 className="text-lg font-semibold mb-2">Recent Activity</h2>
+                  <p className="text-muted-foreground text-sm">
+                    You haven't had any recent activity. Start exploring resources or use PM Coach to get started.
+                  </p>
+                  <Button variant="outline" className="mt-4 w-full" onClick={() => navigate('/explore')}>
+                    Explore Resources
+                  </Button>
+                </div>
+                
+                {/* PM Coach Card */}
+                <div className="border rounded-lg p-4 shadow-sm bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30">
+                  <h2 className="text-lg font-semibold mb-2 flex items-center">
+                    <Sparkles className="h-4 w-4 mr-2 text-blue-500" />
+                    PM Coach
+                  </h2>
+                  <p className="text-muted-foreground text-sm">
+                    Get advice on product management challenges using our AI-powered coach.
+                  </p>
+                  <Button 
+                    className="mt-4 w-full" 
+                    onClick={() => navigate('/chat')}
+                    disabled={!hasPMCoachAccess}
+                  >
+                    {hasPMCoachAccess ? "Start Chatting" : "Upgrade to Access"}
+                  </Button>
+                </div>
+                
+                {/* Roadmap Generator Card */}
+                <div className="border rounded-lg p-4 shadow-sm bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-950/30 dark:to-emerald-950/30">
+                  <h2 className="text-lg font-semibold mb-2 flex items-center">
+                    <BarChart3 className="h-4 w-4 mr-2 text-green-500" />
+                    Roadmap Generator
+                  </h2>
+                  <p className="text-muted-foreground text-sm">
+                    Create beautiful product roadmaps with our easy-to-use tool.
+                  </p>
+                  <Button 
+                    className="mt-4 w-full" 
+                    onClick={() => navigate('/roadmap')}
+                    disabled={!hasRoadmapAccess}
+                  >
+                    {hasRoadmapAccess ? "Create Roadmap" : "Upgrade to Access"}
+                  </Button>
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       </SidebarProvider>
     </div>
