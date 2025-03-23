@@ -19,7 +19,7 @@ const NotFound = () => {
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
-      <div className="flex-grow flex items-center justify-center px-4 py-24">
+      <div className="flex-grow page-container flex items-center justify-center">
         <div className="max-w-md w-full text-center">
           <div className="inline-flex items-center justify-center h-24 w-24 rounded-full bg-primary/10 text-primary mb-8 animate-float">
             <span className="text-4xl font-bold">404</span>
@@ -39,6 +39,6 @@ const NotFound = () => {
       <Footer />
     </div>
   );
-};
+}
 
 export default NotFound;

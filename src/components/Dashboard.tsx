@@ -82,12 +82,12 @@ const Dashboard = ({ children }: DashboardProps) => {
           </SidebarContent>
         </Sidebar>
         
-        <main className="flex-1 p-4 md:p-6 lg:p-10 overflow-auto pb-24 md:pb-10 pt-16">
+        <main className="flex-1 p-4 md:p-6 lg:p-10 overflow-auto pb-24 md:pb-10 pt-28">
           {children}
         </main>
       </div>
     </div>
   );
-};
+}
 
 export default Dashboard;

@@ -63,7 +63,7 @@ export function Navbar() {
       )}
     >
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-12">
+        <div className="flex items-center justify-between h-16">
           {/* Logo and brand - always visible */}
           <div className="flex items-center">
             {user && <SidebarTrigger className="md:hidden mr-2" />}

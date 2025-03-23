@@ -11,7 +11,7 @@ export function Chat() {
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
-      <main className="flex-grow container mx-auto px-4 py-24">
+      <main className="flex-grow page-container max-w-4xl">
         {user ? (
           <ChatContainer />
         ) : (
