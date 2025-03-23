@@ -1,38 +1,33 @@
 
-import { Sparkles } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Subscription } from "@/providers/SubscriptionProvider";
+import React from 'react';
+import { Card, CardHeader } from '@/components/ui/card';
+import { Sparkles } from 'lucide-react';
+import { SubscriptionData } from '@/providers/SubscriptionProvider';
 
 interface ChatHeaderProps {
-  subscription: Subscription | null;
+  subscription?: SubscriptionData | null;
 }
 
-const ChatHeader = ({ subscription }: ChatHeaderProps) => {
+const ChatHeader: React.FC<ChatHeaderProps> = ({ subscription }) => {
+  const isPremium = subscription?.planId === 'popular' || subscription?.planId === 'pro';
+  
   return (
-    <div className="mb-6 text-center">
-      <div className="inline-flex items-center rounded-full px-3 py-1 text-sm font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/40 dark:text-purple-200 mb-3">
-        <Sparkles className="mr-1.5 h-3.5 w-3.5" />
-        <span>PM Coach</span>
-      </div>
-      <h1 className="text-2xl font-bold mb-2">Chat with Your PM Coach</h1>
-      <p className="text-muted-foreground text-sm max-w-md mx-auto">
-        Get expert guidance on product management career growth and strategy
-      </p>
-
-      {subscription && (
-        <div className="mt-2">
-          <span className={cn(
-            "inline-block px-3 py-1 rounded-full text-xs font-medium",
-            subscription.planId === 'pro' ? "bg-amber-100 text-amber-800" :
-            subscription.planId === 'popular' ? "bg-purple-100 text-purple-800" :
-            subscription.planId === 'starter' ? "bg-blue-100 text-blue-800" :
-            "bg-gray-100 text-gray-800"
-          )}>
-            {subscription.planId.charAt(0).toUpperCase() + subscription.planId.slice(1)} Plan
-          </span>
+    <Card className="mb-4 border-none bg-transparent shadow-none">
+      <CardHeader className="flex flex-row items-center justify-between p-0">
+        <div>
+          <h2 className="text-2xl font-bold mb-1">PM Coach</h2>
+          <p className="text-muted-foreground">
+            Ask me anything about product management, interviews, or career advice
+          </p>
         </div>
-      )}
-    </div>
+        {isPremium && (
+          <div className="flex items-center bg-gradient-to-r from-amber-200 to-yellow-400 text-amber-900 px-3 py-1 rounded-full text-xs font-medium">
+            <Sparkles className="h-3.5 w-3.5 mr-1" />
+            Premium
+          </div>
+        )}
+      </CardHeader>
+    </Card>
   );
 };
 
