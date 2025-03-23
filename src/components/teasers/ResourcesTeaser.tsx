@@ -1,11 +1,10 @@
 
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { FileText, Download, Lock, Eye, ArrowRight } from 'lucide-react';
+import { FileText, Lock, Eye, ArrowRight, CheckCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import ContentTeaser from '../ContentTeaser';
 
 const ResourcesTeaser = () => {
   return (
@@ -18,7 +17,7 @@ const ResourcesTeaser = () => {
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 mb-12">
-        {/* Resource 1 */}
+        {/* PRD Template */}
         <Card className="overflow-hidden hover:shadow-md transition-all hover:scale-[1.01] duration-300 border">
           <CardHeader className="pb-2">
             <div className="flex justify-between items-start">
@@ -27,24 +26,38 @@ const ResourcesTeaser = () => {
               </div>
               <Badge variant="outline">Template</Badge>
             </div>
-            <CardTitle className="mt-4">PRD Template</CardTitle>
+            <CardTitle className="mt-4">How to Write a Killer PRD</CardTitle>
           </CardHeader>
           <CardContent>
+            <div className="mb-2">
+              <Badge variant="secondary" className="text-xs mb-2">Free Preview</Badge>
+            </div>
             <p className="text-sm text-muted-foreground mb-4">
-              A comprehensive Product Requirements Document template to define features and requirements.
+              A great PRD clearly defines the problem, success metrics, and required functionality. The key is to be concise yet thorough...
             </p>
-            <div className="flex gap-2">
-              <Button variant="outline" size="sm" className="flex-1">
-                <Eye className="h-3.5 w-3.5 mr-1.5" /> Preview
+            <div className="relative">
+              <div className="bg-gradient-to-b from-transparent to-background h-16 absolute bottom-0 left-0 right-0"></div>
+              <div className="opacity-20 pointer-events-none blur-[2px] text-sm text-muted-foreground">
+                <p>Start with a compelling problem statement that explains the customer pain point you're solving. Then define clear success metrics that align with business goals. Your PRD should include:</p>
+                <ul className="mt-2 space-y-1 pl-6">
+                  <li>User personas and journeys</li>
+                  <li>Feature requirements (must-haves vs nice-to-haves)</li>
+                  <li>Technical considerations</li>
+                </ul>
+              </div>
+            </div>
+            <div className="flex gap-2 mt-4">
+              <Button variant="outline" size="sm" className="flex-1 flex items-center justify-center gap-1">
+                <Eye className="h-3.5 w-3.5 mr-1" /> Preview
               </Button>
-              <Button variant="outline" size="sm" className="flex-1" disabled>
-                <Lock className="h-3.5 w-3.5 mr-1.5" /> Download
+              <Button variant="outline" size="sm" className="flex-1 flex items-center justify-center gap-1" disabled>
+                <Lock className="h-3.5 w-3.5 mr-1" /> Full Guide
               </Button>
             </div>
           </CardContent>
         </Card>
         
-        {/* Resource 2 */}
+        {/* PM Interview Questions */}
         <Card className="overflow-hidden hover:shadow-md transition-all hover:scale-[1.01] duration-300 border">
           <CardHeader className="pb-2">
             <div className="flex justify-between items-start">
@@ -53,23 +66,69 @@ const ResourcesTeaser = () => {
               </div>
               <Badge variant="outline">Guide</Badge>
             </div>
-            <CardTitle className="mt-4">PM Interview Questions</CardTitle>
+            <CardTitle className="mt-4">Top PM Interview Questions</CardTitle>
           </CardHeader>
           <CardContent>
+            <div className="mb-2">
+              <Badge variant="secondary" className="text-xs mb-2">Free Preview</Badge>
+            </div>
             <p className="text-sm text-muted-foreground mb-4">
-              Master the most common product management interview questions with expert tips.
+              For "Tell me about a time you failed" questions, use the STAR method and focus on what you learned...
             </p>
-            <div className="flex gap-2">
-              <Button variant="outline" size="sm" className="flex-1">
-                <Eye className="h-3.5 w-3.5 mr-1.5" /> Preview
+            <div className="relative">
+              <div className="bg-gradient-to-b from-transparent to-background h-16 absolute bottom-0 left-0 right-0"></div>
+              <div className="opacity-20 pointer-events-none blur-[2px] text-sm text-muted-foreground">
+                <p>Common PM interview questions include:</p>
+                <ul className="mt-2 space-y-1 pl-6">
+                  <li>How would you improve our product?</li>
+                  <li>How do you prioritize features?</li>
+                  <li>Tell me about a product you launched</li>
+                  <li>How would you design X for Y?</li>
+                </ul>
+                <p className="mt-2">For each question, we provide frameworks, examples, and tips from PMs who have successfully interviewed at FAANG companies.</p>
+              </div>
+            </div>
+            <div className="flex gap-2 mt-4">
+              <Button variant="outline" size="sm" className="flex-1 flex items-center justify-center gap-1">
+                <Eye className="h-3.5 w-3.5 mr-1" /> Preview
               </Button>
-              <Button variant="outline" size="sm" className="flex-1" disabled>
-                <Lock className="h-3.5 w-3.5 mr-1.5" /> Full Guide
+              <Button variant="outline" size="sm" className="flex-1 flex items-center justify-center gap-1" disabled>
+                <Lock className="h-3.5 w-3.5 mr-1" /> Full Guide
               </Button>
             </div>
           </CardContent>
         </Card>
       </div>
+      
+      {/* More resources banner */}
+      <Card className="mb-8 bg-gradient-to-r from-primary/5 to-primary/10 border border-primary/20">
+        <CardContent className="p-6">
+          <h3 className="text-lg font-bold mb-3">Unlock our complete resource library</h3>
+          <ul className="space-y-2 mb-4">
+            <li className="flex items-center">
+              <CheckCircle className="h-4 w-4 text-primary mr-2" />
+              <span className="text-sm">30+ frameworks and templates</span>
+            </li>
+            <li className="flex items-center">
+              <CheckCircle className="h-4 w-4 text-primary mr-2" />
+              <span className="text-sm">Resume templates and examples</span>
+            </li>
+            <li className="flex items-center">
+              <CheckCircle className="h-4 w-4 text-primary mr-2" />
+              <span className="text-sm">Product strategy playbooks</span>
+            </li>
+            <li className="flex items-center">
+              <CheckCircle className="h-4 w-4 text-primary mr-2" />
+              <span className="text-sm">Interview preparation guides</span>
+            </li>
+          </ul>
+        </CardContent>
+        <CardFooter className="bg-muted/30 p-4 border-t">
+          <p className="text-sm text-muted-foreground">
+            Create your free account to unlock all features
+          </p>
+        </CardFooter>
+      </Card>
       
       <div className="flex justify-center mt-8 border-t pt-6">
         <div className="flex gap-3">
