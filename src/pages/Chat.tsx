@@ -9,14 +9,20 @@ import { useAuth } from '@/providers/AuthProvider';
 import { handleChatRequest } from "@/api/chat";
 import { SendIcon, Bot, Sparkles } from "lucide-react";
 
+// Define the Message type to match what MessageBubble expects
+type Message = {
+  role: "user" | "assistant";
+  content: string;
+};
+
 // Intro message for first-time users
-const INTRO_MESSAGE = {
+const INTRO_MESSAGE: Message = {
   role: 'assistant',
   content: "👋 Hi, I'm your AI Product Management Coach! I can help with:\n\n• Interview prep & practice\n• Career & skill development\n• Product strategy & roadmapping\n• Prioritization frameworks\n• User research & insights\n\nAsk me anything about product management!"
 };
 
 // Demo message example
-const DEMO_EXCHANGE = [
+const DEMO_EXCHANGE: Message[] = [
   {
     role: 'user',
     content: "How do I answer 'Tell me about a product you launched'?"
@@ -29,7 +35,7 @@ const DEMO_EXCHANGE = [
 
 const Chat = () => {
   const { user, isLoading } = useAuth();
-  const [messages, setMessages] = useState([INTRO_MESSAGE]);
+  const [messages, setMessages] = useState<Message[]>([INTRO_MESSAGE]);
   const [newMessage, setNewMessage] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [freeMessagesUsed, setFreeMessagesUsed] = useState(0);

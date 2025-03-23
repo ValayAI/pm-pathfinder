@@ -51,3 +51,9 @@ export async function chatWithOpenAI(message: string): Promise<string> {
     }, 1500);
   });
 }
+
+// Add the handleChatRequest function that the Chat.tsx file is trying to import
+export async function handleChatRequest({ message }: { message: string }) {
+  const response = await chatWithOpenAI(message);
+  return { message: response };
+}
