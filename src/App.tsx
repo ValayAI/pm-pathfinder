@@ -18,6 +18,8 @@ import Roadmap from './pages/Roadmap';
 import { Toaster } from "./components/ui/sonner";
 import { AuthProvider } from './providers/AuthProvider';
 import { SubscriptionProvider } from './providers/SubscriptionProvider';
+import Dashboard from './components/Dashboard';
+import { useAuth } from './providers/AuthProvider';
 import './App.css';
 
 // Error fallback component
@@ -69,6 +71,17 @@ class AppErrorBoundary extends React.Component<
   }
 }
 
+// Wrapper component to handle authenticated routes with dashboard layout
+const AuthenticatedRoute = ({ children }: { children: React.ReactNode }) => {
+  const { user } = useAuth();
+  
+  if (!user) {
+    return <Navigate to="/signin" />;
+  }
+  
+  return <Dashboard>{children}</Dashboard>;
+};
+
 function App() {
   return (
     <AppErrorBoundary>
@@ -78,22 +91,23 @@ function App() {
             <SubscriptionProvider>
               <Suspense fallback={<Loading />}>
                 <Routes>
-                  <Route path="/" element={<Index />} />
-                  <Route path="/explore" element={<Explore />} />
-                  <Route path="/resources" element={<Resources />} />
+                  {/* Public Routes */}
                   <Route path="/signin" element={<SignIn />} />
                   <Route path="/sign-up" element={<SignUp />} />
                   <Route path="/signup" element={<Navigate to="/sign-up" replace />} />
                   <Route path="/pricing" element={<Pricing />} />
-                  
-                  {/* Pages that show teasers when not logged in */}
-                  <Route path="/chat" element={<Chat />} />
-                  <Route path="/coaching" element={<Coaching />} />
-                  
-                  {/* Strictly protected routes (redirect if not authenticated) */}
-                  <Route path="/profile" element={<ProtectedRoute><Navigate to="/settings" replace /></ProtectedRoute>} />
-                  <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
-                  <Route path="/roadmap" element={<ProtectedRoute><Navigate to="/pricing" replace /></ProtectedRoute>} />
+
+                  {/* Landing page - shows different view when authenticated */}
+                  <Route path="/" element={<Index />} />
+
+                  {/* Authenticated Routes - Wrapped with Dashboard */}
+                  <Route path="/explore" element={<AuthenticatedRoute><Explore /></AuthenticatedRoute>} />
+                  <Route path="/resources" element={<AuthenticatedRoute><Resources /></AuthenticatedRoute>} />
+                  <Route path="/chat" element={<AuthenticatedRoute><Chat /></AuthenticatedRoute>} />
+                  <Route path="/coaching" element={<AuthenticatedRoute><Coaching /></AuthenticatedRoute>} />
+                  <Route path="/settings" element={<AuthenticatedRoute><Settings /></AuthenticatedRoute>} />
+                  <Route path="/roadmap" element={<AuthenticatedRoute><Roadmap /></AuthenticatedRoute>} />
+                  <Route path="/profile" element={<AuthenticatedRoute><Navigate to="/settings" replace /></AuthenticatedRoute>} />
                   
                   <Route path="*" element={<NotFound />} />
                 </Routes>
