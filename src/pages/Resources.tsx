@@ -15,7 +15,7 @@ const Resources = () => {
     return (
       <div className="min-h-screen flex flex-col">
         <Navbar />
-        <main className="flex-grow container mx-auto px-4 py-24">
+        <main className="flex-grow container mx-auto px-4 pt-24 md:pt-28 pb-12">
           <ResourcesTeaser />
         </main>
         <Footer />
@@ -71,7 +71,7 @@ const Resources = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <main className="flex-grow container mx-auto px-4 py-24">
+      <main className="flex-grow container mx-auto px-4 pt-24 md:pt-28 pb-12">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
             <h1 className="text-4xl font-bold mb-4">Product Management Resources</h1>
@@ -115,7 +115,6 @@ const Resources = () => {
             ))}
           </div>
           
-          {/* New 30-60-90 Day Plan Section */}
           <div className="mt-16 mb-10">
             <div className="text-center mb-8">
               <h2 className="text-3xl font-bold mb-3">Design Your "30-60-90 Day" Plan</h2>
@@ -258,7 +257,6 @@ const Resources = () => {
             </Button>
           </div>
           
-          {/* Email signup moved to bottom */}
           <div className="max-w-md mx-auto mt-16">
             <EmailSignup />
           </div>

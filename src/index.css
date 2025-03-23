@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -136,7 +137,7 @@
 
 @layer components {
   .page-container {
-    @apply pt-36 px-4 md:px-6 container mx-auto;
+    @apply px-4 md:px-6 container mx-auto;
   }
   
   .page-title {
@@ -147,3 +148,4 @@
     @apply text-lg text-muted-foreground mb-12 max-w-3xl;
   }
 }
+

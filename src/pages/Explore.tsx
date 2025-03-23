@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -40,7 +39,7 @@ const Explore = () => {
     return (
       <div className="min-h-screen flex flex-col bg-background">
         <Navbar />
-        <main className="flex-grow container mx-auto px-4 py-16 mt-8">
+        <main className="flex-grow container mx-auto px-4 pt-24 md:pt-28 pb-12">
           <ExploreFeaturesTeaser />
         </main>
         <Footer />
@@ -51,7 +50,7 @@ const Explore = () => {
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
-      <main className="flex-grow container mx-auto px-4 py-16 mt-8">
+      <main className="flex-grow container mx-auto px-4 pt-24 md:pt-28 pb-12">
         <div className="max-w-4xl mx-auto">
           <div className="space-y-3 mb-12 text-center">
             <h1 className="text-3xl font-bold mb-2 bg-gradient-to-r from-primary to-strategic bg-clip-text text-transparent">
