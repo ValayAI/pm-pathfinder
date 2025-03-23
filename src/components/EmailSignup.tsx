@@ -7,11 +7,13 @@ import { Label } from './ui/label';
 
 const EmailSignup = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [subscriptionMessage, setSubscriptionMessage] = useState('');
   const formRef = useRef<HTMLFormElement>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Form submitted, handling submission");
+    setSubscriptionMessage(''); // Reset message
     
     if (!formRef.current) return;
     
@@ -39,8 +41,8 @@ const EmailSignup = () => {
       return;
     }
     
-    // Show processing toast
-    const loadingToast = toast.loading("Processing your subscription...");
+    // Set inline message instead of loading toast
+    setSubscriptionMessage("Processing your subscription...");
     setIsSubmitting(true);
     
     console.log("Submitting to ConvertKit:", email, firstName);
@@ -55,12 +57,11 @@ const EmailSignup = () => {
     })
     .then(response => {
       console.log("ConvertKit response received:", response.status);
-      toast.dismiss(loadingToast);
       
       if (response.ok) {
-        // Show success toast
-        console.log("Showing success toast");
-        toast.success("Thank you for subscribing to our newsletter!");
+        // Show success message inline
+        console.log("Setting success message");
+        setSubscriptionMessage("Thank you for subscribing to our newsletter!");
         
         // Add to local storage
         addSubscriber(email);
@@ -79,6 +80,7 @@ const EmailSignup = () => {
       toast.dismiss(loadingToast);
       console.log("Showing error toast");
       toast.error("There was an error subscribing to the newsletter. Please try again later.");
+      setSubscriptionMessage(''); // Clear message on error
     })
     .finally(() => {
       setIsSubmitting(false);
@@ -137,6 +139,18 @@ const EmailSignup = () => {
               <span>Subscribe</span>
             )}
           </button>
+          
+          {/* Display subscription message */}
+          {subscriptionMessage && (
+            <div className={`text-sm mt-3 text-center font-medium ${
+              subscriptionMessage.includes("Thank you") 
+                ? "text-green-600 dark:text-green-400" 
+                : "text-blue-600 dark:text-blue-400"
+            }`}>
+              {subscriptionMessage}
+            </div>
+          )}
+          
           <p className="text-xs text-muted-foreground mt-2 text-center">
             We respect your privacy. Unsubscribe at any time.
           </p>
