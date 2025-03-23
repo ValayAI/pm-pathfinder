@@ -6,7 +6,7 @@ import PreloadedPrompts from '../components/PreloadedPrompts';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from '@/providers/AuthProvider';
-import { handleChatRequest } from "../api/chat";
+import { handleChatRequest } from "@/api/chat";
 import { SendIcon, Bot, Sparkles } from "lucide-react";
 
 // Intro message for first-time users
@@ -157,8 +157,12 @@ const Chat = () => {
             {messages.map((message, index) => (
               <MessageBubble
                 key={index}
-                role={message.role}
-                content={message.content}
+                message={{
+                  id: `msg-${index}`,
+                  role: message.role,
+                  content: message.content,
+                  timestamp: Date.now()
+                }}
               />
             ))}
             {isProcessing && (
