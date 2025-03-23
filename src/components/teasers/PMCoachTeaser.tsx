@@ -12,7 +12,7 @@ const PMCoachTeaser = () => {
   const [messages, setMessages] = useState([
     {
       role: 'ai',
-      content: 'Hi! I'm your PM Coach. Ask me anything about product management, interviews, or career growth.'
+      content: "Hi! I'm your PM Coach. Ask me anything about product management, interviews, or career growth."
     }
   ]);
   const [hasAskedQuestion, setHasAskedQuestion] = useState(false);
@@ -28,7 +28,7 @@ const PMCoachTeaser = () => {
       if (!hasAskedQuestion) {
         setMessages(prev => [...prev, { 
           role: 'ai', 
-          content: 'Great question! Here's a quick answer:\n\nFor product management interviews, I recommend using the STAR framework (Situation, Task, Action, Result) to structure your responses. This helps you deliver concise, impactful answers that highlight your skills.\n\nSign up for free to get more detailed coaching and unlimited responses!' 
+          content: "Great question! Here's a quick answer:\n\nFor product management interviews, I recommend using the STAR framework (Situation, Task, Action, Result) to structure your responses. This helps you deliver concise, impactful answers that highlight your skills.\n\nSign up for free to get more detailed coaching and unlimited responses!" 
         }]);
         setHasAskedQuestion(true);
       }
