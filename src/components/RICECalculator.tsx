@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,7 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { CalculatorIcon, PlusCircleIcon, XCircleIcon, ArrowDownIcon, ArrowUpIcon, Lightbulb, GemIcon, ZapIcon, TrendingUpIcon } from "lucide-react";
-import { handleChatRequest } from "../api/chat";
+import { handleChatRequest } from "../api/chat.tsx";
 
 // Impact options with predefined values
 const impactOptions = [
