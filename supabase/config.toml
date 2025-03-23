@@ -16,7 +16,7 @@ major_version = 15
 [studio]
 enabled = true
 port = 54323
-api_url = "http://localhost"
+api_url = "https://localhost"
 
 [inbucket]
 enabled = true
@@ -26,7 +26,7 @@ pop3_port = 54326
 
 [auth]
 enabled = true
-site_url = "http://localhost:3000"
+site_url = "https://localhost:3000"
 additional_redirect_urls = ["https://localhost:3000"]
 jwt_expiry = 3600
 enable_refresh_token_rotation = true
