@@ -1,15 +1,17 @@
 
-import { useState, useEffect, useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useAuth } from '@/providers/AuthProvider';
-import { 
-  Sidebar, 
-  SidebarBody, 
-  SidebarProvider, 
-  SidebarLink
-} from '@/components/AppSidebar';
 import { useIsMobile } from '@/hooks/use-mobile';
-import Navbar from '@/components/Navbar';
+import { 
+  Sidebar,
+  SidebarBody,
+  SidebarProvider,
+  SidebarContent,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuButton
+} from '@/components/ui/sidebar';
 import {
   Home,
   Compass,
@@ -30,7 +32,7 @@ const Dashboard = ({ children }: DashboardProps) => {
   const [firstName, setFirstName] = useState('');
   const isMobile = useIsMobile();
   
-  // Fetch user's first name from localStorage - this is more efficient than re-fetching
+  // Fetch user's first name from localStorage
   useEffect(() => {
     const storedProfile = localStorage.getItem('userProfile');
     if (storedProfile) {
@@ -43,7 +45,7 @@ const Dashboard = ({ children }: DashboardProps) => {
     }
   }, []);
   
-  // Set sidebar to always closed on mobile, open on desktop
+  // Initialize sidebar state
   const [sidebarOpen, setSidebarOpen] = useState(!isMobile);
   
   // Update sidebar state when screen size changes
@@ -51,8 +53,7 @@ const Dashboard = ({ children }: DashboardProps) => {
     setSidebarOpen(!isMobile);
   }, [isMobile]);
   
-  // Memoize links to prevent unnecessary re-renders
-  const links = useMemo(() => [
+  const navigationItems = [
     { label: "Home", href: "/", icon: <Home className="h-5 w-5" /> },
     { label: "Explore", href: "/explore", icon: <Compass className="h-5 w-5" /> },
     { label: "Resources", href: "/resources", icon: <BookOpen className="h-5 w-5" /> },
@@ -60,38 +61,48 @@ const Dashboard = ({ children }: DashboardProps) => {
     { label: "Coaching", href: "/coaching", icon: <MessageSquare className="h-5 w-5" /> },
     { label: "Roadmap", href: "/roadmap", icon: <BarChart3 className="h-5 w-5" /> },
     { label: "Settings", href: "/settings", icon: <Settings className="h-5 w-5" /> },
-  ], []);
+  ];
   
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
-      
-      <div className="flex flex-1 pt-16">
-        <SidebarProvider open={sidebarOpen} setOpen={setSidebarOpen} animate={false}>
-          <SidebarBody>
-            {/* Greeting with user's first name if available */}
-            <div className="px-4 py-4 mb-2">
-              <h3 className="text-sm font-medium text-muted-foreground">
-                {firstName ? `Hi, ${firstName}` : 'Welcome'}
-              </h3>
-            </div>
-            
-            <div className="space-y-1 px-2">
-              {links.map((link) => (
-                <SidebarLink
-                  key={link.label}
-                  link={link}
-                  className={location.pathname === link.href ? "text-primary font-medium" : ""}
-                />
-              ))}
-            </div>
-          </SidebarBody>
+    <div className="min-h-screen flex flex-col bg-background">
+      <SidebarProvider defaultOpen={!isMobile}>
+        <div className="flex flex-1 w-full">
+          {/* Sidebar using the shadcn/ui sidebar */}
+          <Sidebar collapsible="icon" variant="inset">
+            <SidebarContent>
+              {/* User greeting */}
+              <div className="px-4 py-4 mb-2">
+                <h3 className="text-sm font-medium text-sidebar-foreground/70">
+                  {firstName ? `Hi, ${firstName}` : 'Welcome'}
+                </h3>
+              </div>
+              
+              {/* Navigation menu */}
+              <SidebarMenu>
+                {navigationItems.map((item) => (
+                  <SidebarMenuItem key={item.label}>
+                    <SidebarMenuButton 
+                      asChild
+                      isActive={location.pathname === item.href}
+                      tooltip={item.label}
+                    >
+                      <a href={item.href} className="flex items-center gap-2">
+                        {item.icon}
+                        <span>{item.label}</span>
+                      </a>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarContent>
+          </Sidebar>
           
-          <main className="flex-1 p-4 md:p-6 lg:p-10 overflow-auto pb-24 md:pb-10">
+          {/* Main content area */}
+          <main className="flex-1 p-4 md:p-6 lg:p-10 overflow-auto pb-24 md:pb-10 pt-16">
             {children}
           </main>
-        </SidebarProvider>
-      </div>
+        </div>
+      </SidebarProvider>
     </div>
   );
 };

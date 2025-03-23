@@ -13,6 +13,7 @@ import Explore from './pages/Explore';
 import Resources from './pages/Resources';
 import Coaching from './pages/Coaching';
 import Roadmap from './pages/Roadmap';
+import Navbar from './components/Navbar';
 import { Toaster } from "./components/ui/sonner";
 import { AuthProvider } from './providers/AuthProvider';
 import { SubscriptionProvider } from './providers/SubscriptionProvider';
@@ -24,6 +25,7 @@ function App() {
       <ThemeProvider defaultTheme="light" storageKey="ui-theme">
         <AuthProvider>
           <SubscriptionProvider>
+            <Navbar />
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/explore" element={<ProtectedRoute><Explore /></ProtectedRoute>} />
