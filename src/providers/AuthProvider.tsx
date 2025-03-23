@@ -223,7 +223,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       await supabase.auth.signOut();
       localStorage.removeItem('userProfile');
-      navigate('/signin');
+      // Change this line to navigate to the index page instead of signin
+      navigate('/');
     } catch (error) {
       console.error('Error signing out:', error);
     }
