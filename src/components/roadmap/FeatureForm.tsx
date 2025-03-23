@@ -69,10 +69,16 @@ const FeatureForm: React.FC<FeatureFormProps> = ({
   const availableFeatures = features.map(f => f.name);
 
   const handleAddFeature = (values: FeatureFormValues) => {
-    onAddFeature({
-      ...values,
-      dependencies,
-    });
+    // Here's the fix: explicitly creating an object with all required fields
+    const newFeature: Omit<FeatureInput, "id"> = {
+      name: values.name,
+      description: values.description,
+      effort: values.effort,
+      impact: values.impact,
+      dependencies: dependencies,
+    };
+
+    onAddFeature(newFeature);
     
     // Reset form and dependencies
     form.reset();
