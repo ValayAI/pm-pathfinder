@@ -23,9 +23,19 @@ const TeaserWrapper = ({ children, previewContent, title, description }: TeaserW
     );
   }
   
-  // If user is logged in, show full content
+  // If user is logged in, show full content wrapped in proper container layout
   if (user) {
-    return <>{children}</>;
+    return (
+      <div className="container mx-auto px-4 py-6">
+        <div className="max-w-5xl mx-auto">
+          <h1 className="text-3xl font-bold mb-4">{title}</h1>
+          <p className="text-xl text-muted-foreground max-w-2xl mb-8">
+            {description}
+          </p>
+          {children}
+        </div>
+      </div>
+    );
   }
   
   // Otherwise show teaser content
