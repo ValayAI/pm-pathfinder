@@ -63,7 +63,7 @@ const Chat = () => {
     }
   }, [user]);
   
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newMessage.trim() || isProcessing) return;
     
@@ -78,28 +78,37 @@ const Chat = () => {
       }
     }
     
-    const userMessage = { role: 'user', content: newMessage };
+    const userMessage: Message = { 
+      role: 'user' as const, 
+      content: newMessage 
+    };
+    
     setMessages(prev => [...prev, userMessage]);
     setNewMessage('');
     setIsProcessing(true);
     
     try {
       const response = await handleChatRequest({ message: newMessage });
-      const assistantMessage = { role: 'assistant', content: response.message };
+      const assistantMessage: Message = { 
+        role: 'assistant' as const, 
+        content: response.message 
+      };
+      
       setMessages(prev => [...prev, assistantMessage]);
     } catch (error) {
       console.error('Error getting AI response:', error);
-      const errorMessage = { 
-        role: 'assistant', 
+      const errorMessage: Message = { 
+        role: 'assistant' as const, 
         content: "I'm sorry, I encountered an error. Please try again later." 
       };
+      
       setMessages(prev => [...prev, errorMessage]);
     } finally {
       setIsProcessing(false);
     }
   };
   
-  const handlePromptSelect = (prompt) => {
+  const handlePromptSelect = (prompt: string) => {
     setNewMessage(prompt);
   };
   
