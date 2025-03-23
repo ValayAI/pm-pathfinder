@@ -65,6 +65,14 @@ const Settings = () => {
       });
       
       if (success) {
+        // Update local storage with the new profile data
+        const updatedProfile = {
+          ...(profile || {}),
+          first_name: firstName,
+          last_name: lastName
+        };
+        localStorage.setItem('userProfile', JSON.stringify(updatedProfile));
+        
         toast.success("Settings saved successfully");
       }
     }

@@ -1,9 +1,9 @@
-
 import { createContext, useContext, useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { Session, User } from '@supabase/supabase-js';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
+import { getUserProfile } from '@/utils/profileUtils';
 
 type AuthContextType = {
   user: User | null;
@@ -34,6 +34,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Fetch user profile and store in localStorage
+  const fetchAndStoreUserProfile = async (userId: string) => {
+    try {
+      const profile = await getUserProfile(userId);
+      if (profile) {
+        localStorage.setItem('userProfile', JSON.stringify(profile));
+      }
+    } catch (error) {
+      console.error('Error fetching user profile:', error);
+    }
+  };
+
   useEffect(() => {
     const getInitialSession = async () => {
       setIsLoading(true);
@@ -48,6 +60,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         if (data.session) {
           setSession(data.session);
           setUser(data.session.user);
+          await fetchAndStoreUserProfile(data.session.user.id);
         }
       } catch (error) {
         console.error('Error getting initial session:', error);
@@ -58,10 +71,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     getInitialSession();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
       console.log('Auth state changed:', _event, session);
       setSession(session);
       setUser(session?.user ?? null);
+      
+      if (session?.user) {
+        await fetchAndStoreUserProfile(session.user.id);
+      }
+      
       setIsLoading(false);
     });
 
@@ -147,6 +165,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       // Reset failed attempts counter on successful login
       resetAttempts(email);
 
+      // Fetch user profile data after successful login
+      if (data.user) {
+        await fetchAndStoreUserProfile(data.user.id);
+      }
+
       const from = location.state?.from?.pathname || '/';
       navigate(from, { replace: true });
       
@@ -187,6 +210,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const signOut = async () => {
     try {
       await supabase.auth.signOut();
+      localStorage.removeItem('userProfile');
       navigate('/signin');
     } catch (error) {
       console.error('Error signing out:', error);

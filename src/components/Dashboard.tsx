@@ -37,12 +37,16 @@ const Dashboard = ({ children }: DashboardProps) => {
     setInitialRender(false);
   }, []);
   
-  // Fetch user's first name from localStorage if available
+  // Fetch user's first name from localStorage
   useEffect(() => {
     const storedProfile = localStorage.getItem('userProfile');
     if (storedProfile) {
-      const profile = JSON.parse(storedProfile);
-      setFirstName(profile.first_name || '');
+      try {
+        const profile = JSON.parse(storedProfile);
+        setFirstName(profile.first_name || '');
+      } catch (error) {
+        console.error('Error parsing user profile from localStorage:', error);
+      }
     }
   }, []);
   
@@ -85,7 +89,7 @@ const Dashboard = ({ children }: DashboardProps) => {
           {/* Greeting with user's first name if available */}
           <div className="px-4 py-2 mb-4">
             <h3 className="text-sm font-medium text-muted-foreground">
-              Welcome{firstName ? `, ${firstName}` : ''}
+              {firstName ? `Hi, ${firstName}` : 'Welcome'}
             </h3>
           </div>
           
