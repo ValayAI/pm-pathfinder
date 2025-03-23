@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react';
 import { Navigate, Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
@@ -234,10 +233,10 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Navbar />
-      <main className="space-y-8">
+      <main>
         <Hero />
         <div className={cn(
-          "py-4 text-center transition-all duration-1000",
+          "py-1 text-center transition-all duration-1000",
           loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
         )}>
           <div className="container mx-auto px-4">
