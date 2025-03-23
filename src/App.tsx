@@ -19,7 +19,6 @@ import { Toaster } from "./components/ui/sonner";
 import { AuthProvider } from './providers/AuthProvider';
 import { SubscriptionProvider } from './providers/SubscriptionProvider';
 import Dashboard from './components/Dashboard';
-import { useAuth } from './providers/AuthProvider';
 import './App.css';
 
 // Error fallback component
@@ -71,17 +70,6 @@ class AppErrorBoundary extends React.Component<
   }
 }
 
-// Wrapper component to handle authenticated routes with dashboard layout
-const AuthenticatedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { user } = useAuth();
-  
-  if (!user) {
-    return <Navigate to="/signin" />;
-  }
-  
-  return <Dashboard>{children}</Dashboard>;
-};
-
 function App() {
   return (
     <AppErrorBoundary>
@@ -100,14 +88,63 @@ function App() {
                   {/* Landing page - shows different view when authenticated */}
                   <Route path="/" element={<Index />} />
 
-                  {/* Authenticated Routes - Wrapped with Dashboard */}
-                  <Route path="/explore" element={<AuthenticatedRoute><Explore /></AuthenticatedRoute>} />
-                  <Route path="/resources" element={<AuthenticatedRoute><Resources /></AuthenticatedRoute>} />
-                  <Route path="/chat" element={<AuthenticatedRoute><Chat /></AuthenticatedRoute>} />
-                  <Route path="/coaching" element={<AuthenticatedRoute><Coaching /></AuthenticatedRoute>} />
-                  <Route path="/settings" element={<AuthenticatedRoute><Settings /></AuthenticatedRoute>} />
-                  <Route path="/roadmap" element={<AuthenticatedRoute><Roadmap /></AuthenticatedRoute>} />
-                  <Route path="/profile" element={<AuthenticatedRoute><Navigate to="/settings" replace /></AuthenticatedRoute>} />
+                  {/* Authenticated Routes */}
+                  <Route 
+                    path="/explore" 
+                    element={
+                      <ProtectedRoute>
+                        <Dashboard><Explore /></Dashboard>
+                      </ProtectedRoute>
+                    } 
+                  />
+                  <Route 
+                    path="/resources" 
+                    element={
+                      <ProtectedRoute>
+                        <Dashboard><Resources /></Dashboard>
+                      </ProtectedRoute>
+                    } 
+                  />
+                  <Route 
+                    path="/chat" 
+                    element={
+                      <ProtectedRoute>
+                        <Dashboard><Chat /></Dashboard>
+                      </ProtectedRoute>
+                    } 
+                  />
+                  <Route 
+                    path="/coaching" 
+                    element={
+                      <ProtectedRoute>
+                        <Dashboard><Coaching /></Dashboard>
+                      </ProtectedRoute>
+                    } 
+                  />
+                  <Route 
+                    path="/settings" 
+                    element={
+                      <ProtectedRoute>
+                        <Dashboard><Settings /></Dashboard>
+                      </ProtectedRoute>
+                    } 
+                  />
+                  <Route 
+                    path="/roadmap" 
+                    element={
+                      <ProtectedRoute>
+                        <Dashboard><Roadmap /></Dashboard>
+                      </ProtectedRoute>
+                    } 
+                  />
+                  <Route 
+                    path="/profile" 
+                    element={
+                      <ProtectedRoute>
+                        <Dashboard><Navigate to="/settings" replace /></Dashboard>
+                      </ProtectedRoute>
+                    } 
+                  />
                   
                   <Route path="*" element={<NotFound />} />
                 </Routes>
