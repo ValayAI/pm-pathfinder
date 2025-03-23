@@ -34,13 +34,26 @@ const RoadmapPreview = () => (
 );
 
 const Roadmap = () => {
+  const fullContent = (
+    <div className="px-4 py-6">
+      <div className="max-w-5xl mx-auto">
+        <h1 className="text-3xl font-bold mb-4">Product Roadmap Generator</h1>
+        <p className="text-xl text-muted-foreground max-w-2xl mb-8">
+          Plan and visualize your product roadmap with our interactive tool
+        </p>
+        
+        <RoadmapGenerator />
+      </div>
+    </div>
+  );
+  
   return (
     <TeaserWrapper
       title="Product Roadmap Generator"
       description="Plan and visualize your product roadmap with our interactive tool"
       previewContent={<RoadmapPreview />}
     >
-      <RoadmapGenerator />
+      {fullContent}
     </TeaserWrapper>
   );
 };

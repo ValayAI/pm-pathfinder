@@ -23,22 +23,13 @@ const TeaserWrapper = ({ children, previewContent, title, description }: TeaserW
     );
   }
   
-  // If user is logged in, show full content wrapped in proper container layout
+  // If user is logged in, show full content without extra wrapper
+  // This allows Dashboard component to control the layout
   if (user) {
-    return (
-      <div className="container mx-auto px-4 py-6">
-        <div className="max-w-5xl mx-auto">
-          <h1 className="text-3xl font-bold mb-4">{title}</h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mb-8">
-            {description}
-          </p>
-          {children}
-        </div>
-      </div>
-    );
+    return <>{children}</>;
   }
   
-  // Otherwise show teaser content
+  // Otherwise show teaser content for non-authenticated users
   return (
     <div className="container mx-auto px-4 py-16">
       <div className="max-w-5xl mx-auto">

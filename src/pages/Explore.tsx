@@ -1,7 +1,5 @@
 
 import React from 'react';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
 import TeaserWrapper from '../components/TeaserWrapper';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -10,15 +8,91 @@ import { ArrowRight, Sparkles, Search, Target, MessageSquare, AlertTriangle, Che
 
 const Explore = () => {
   const fullContent = (
-    <div>
-      {/* Full content that will be shown to logged-in users */}
-      <div className="full-content">
-        {/* Your existing explore content goes here */}
-        <p>This is the full Explore page content for authenticated users.</p>
+    <div className="px-4 py-6">
+      <div className="max-w-5xl mx-auto">
+        <h1 className="text-3xl font-bold mb-4">Explore PM Tools</h1>
+        <p className="text-xl text-muted-foreground max-w-2xl mb-8">
+          Discover our collection of AI-powered tools designed specifically for product managers.
+        </p>
+        
+        {/* Full content for authenticated users */}
+        <div className="space-y-8">
+          <p>This is the full Explore page content for authenticated users.</p>
+          
+          {/* Featured AI tools */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <Card>
+              <CardHeader className="pb-2">
+                <Badge className="w-fit mb-2 bg-primary/10 text-primary border-primary/20 hover:bg-primary/20">
+                  Most Popular
+                </Badge>
+                <CardTitle className="flex items-center gap-2">
+                  <Sparkles className="h-5 w-5 text-primary" /> 
+                  Interview Answer Generator
+                </CardTitle>
+                <CardDescription>
+                  Get AI-powered suggestions for your PM interview answers
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="mb-4 text-sm text-muted-foreground">
+                  Simply describe the interview question and get a structured STAR response tailored to your experience.
+                </p>
+                <Button>
+                  <Search className="mr-2 h-4 w-4" />
+                  Try Now
+                </Button>
+              </CardContent>
+            </Card>
+            
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="flex items-center gap-2">
+                  <Target className="h-5 w-5 text-primary" /> 
+                  Prioritization Framework
+                </CardTitle>
+                <CardDescription>
+                  Analyze feature ideas with RICE, Kano, or MoSCoW methods
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="mb-4 text-sm text-muted-foreground">
+                  Input your features and criteria, and get instant calculations and visualizations to guide decision-making.
+                </p>
+                <Button>
+                  <CheckCircle className="mr-2 h-4 w-4" />
+                  Use Tool
+                </Button>
+              </CardContent>
+            </Card>
+            
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="flex items-center gap-2">
+                  <MessageSquare className="h-5 w-5 text-primary" /> 
+                  User Insight Generator
+                </CardTitle>
+                <CardDescription>
+                  Craft effective questions for user research sessions
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="mb-4 text-sm text-muted-foreground">
+                  Tell us about your product and target users, and we'll generate tailored questions for meaningful insights.
+                </p>
+                <Button>
+                  <ArrowRight className="mr-2 h-4 w-4" />
+                  Access Tool
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
       </div>
     </div>
   );
   
+  // Preview content for non-authenticated users
   const previewContent = (
     <div className="space-y-8">
       {/* Featured AI tools preview */}
@@ -80,7 +154,7 @@ const Explore = () => {
           </CardHeader>
           <CardContent>
             <p className="mb-4 text-sm text-muted-foreground">
-              Tell us about your product and target users, and we'll generate tailored questions for meaningful insights.
+              Input your features and criteria, and get instant calculations and visualizations to guide decision-making.
             </p>
             <Button variant="outline" className="w-full" disabled>
               <ArrowRight className="mr-2 h-4 w-4" />
@@ -121,45 +195,17 @@ const Explore = () => {
           </div>
         </div>
       </div>
-      
-      {/* Premium tools teaser */}
-      <div className="relative border-2 border-dashed border-primary/50 rounded-lg p-6">
-        <div className="absolute top-0 right-0 transform translate-x-1/4 -translate-y-1/4">
-          <div className="bg-primary text-primary-foreground text-xs font-bold px-3 py-1 rounded-full shadow-lg">
-            PRO
-          </div>
-        </div>
-        <h3 className="text-xl font-semibold mb-2">10+ Premium PM Tools Await</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
-          <Badge variant="secondary">PRD Generator</Badge>
-          <Badge variant="secondary">Competitor Analysis</Badge>
-          <Badge variant="secondary">User Persona Creator</Badge>
-          <Badge variant="secondary">Launch Checklist</Badge>
-          <Badge variant="secondary">Roadmap Planner</Badge>
-          <Badge variant="secondary">User Story Writer</Badge>
-          <Badge variant="secondary">Feature Spec Maker</Badge>
-          <Badge variant="secondary">Growth Metrics</Badge>
-        </div>
-        <div className="flex items-center text-sm text-primary">
-          <AlertTriangle className="h-4 w-4 mr-2" />
-          Sign up to unlock all premium tools
-        </div>
-      </div>
     </div>
   );
   
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
-      <TeaserWrapper 
-        title="Explore PM Tools" 
-        description="Discover our collection of AI-powered tools designed specifically for product managers."
-        previewContent={previewContent}
-      >
-        {fullContent}
-      </TeaserWrapper>
-      <Footer />
-    </div>
+    <TeaserWrapper 
+      title="Explore PM Tools" 
+      description="Discover our collection of AI-powered tools designed specifically for product managers."
+      previewContent={previewContent}
+    >
+      {fullContent}
+    </TeaserWrapper>
   );
 };
 
