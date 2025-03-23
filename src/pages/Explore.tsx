@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import TeaserWrapper from '../components/TeaserWrapper';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -161,9 +162,11 @@ const Explore = () => {
                         <Badge className="bg-prioritization-light text-prioritization border-0">Prioritization</Badge>
                       </div>
                       <div className="mt-4 flex gap-2">
-                        <Button size="sm" variant="outline" className="gap-1">
-                          <Calculator className="h-4 w-4" />
-                          Calculator
+                        <Button size="sm" variant="outline" className="gap-1" asChild>
+                          <Link to="/rice-calculator">
+                            <Calculator className="h-4 w-4" />
+                            Calculator
+                          </Link>
                         </Button>
                         <Button size="sm" variant="outline" className="gap-1">
                           <FileText className="h-4 w-4" />
@@ -221,9 +224,11 @@ const Explore = () => {
                         <Badge className="bg-planning-light text-planning border-0">Planning</Badge>
                       </div>
                       <div className="mt-4 flex gap-2">
-                        <Button size="sm" variant="outline" className="gap-1">
-                          <Target className="h-4 w-4" />
-                          Generator
+                        <Button size="sm" variant="outline" className="gap-1" asChild>
+                          <Link to="/roadmap">
+                            <Target className="h-4 w-4" />
+                            Generator
+                          </Link>
                         </Button>
                         <Button size="sm" variant="outline" className="gap-1">
                           <FileText className="h-4 w-4" />
