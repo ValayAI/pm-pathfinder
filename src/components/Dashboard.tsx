@@ -8,7 +8,8 @@ import {
   SidebarContent,
   SidebarMenu,
   SidebarMenuItem,
-  SidebarMenuButton
+  SidebarMenuButton,
+  SidebarHeader
 } from '@/components/ui/sidebar';
 import {
   Home,
@@ -55,14 +56,14 @@ const Dashboard = ({ children }: DashboardProps) => {
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <div className="flex flex-1 w-full">
-        <Sidebar collapsible="icon" variant="inset">
+        <Sidebar collapsible={isMobile ? "offcanvas" : "icon"} variant="inset">
+          <SidebarHeader className="px-4 py-4">
+            <h3 className="text-sm font-medium text-sidebar-foreground/70">
+              {firstName ? `Hi, ${firstName}` : 'Welcome'}
+            </h3>
+          </SidebarHeader>
+          
           <SidebarContent>
-            <div className="px-4 py-4 mb-2">
-              <h3 className="text-sm font-medium text-sidebar-foreground/70">
-                {firstName ? `Hi, ${firstName}` : 'Welcome'}
-              </h3>
-            </div>
-            
             <SidebarMenu>
               {navigationItems.map((item) => (
                 <SidebarMenuItem key={item.label}>
@@ -82,8 +83,10 @@ const Dashboard = ({ children }: DashboardProps) => {
           </SidebarContent>
         </Sidebar>
         
-        <main className="flex-1 p-4 md:p-6 lg:p-10 overflow-auto pb-24 md:pb-10 pt-36">
-          {children}
+        <main className="flex-1 overflow-auto pb-24 md:pb-10 pt-20 md:pt-24 px-4 md:px-6 lg:px-10">
+          <div className="pt-4 md:pt-6">
+            {children}
+          </div>
         </main>
       </div>
     </div>

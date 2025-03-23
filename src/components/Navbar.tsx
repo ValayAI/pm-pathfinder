@@ -4,12 +4,19 @@ import { NavLink, Link } from 'react-router-dom';
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { 
-  Moon, Sun, User, Menu
+  Moon, Sun, User, Menu, X
 } from "lucide-react";
 import { useAuth } from "@/providers/AuthProvider";
 import { 
   SidebarTrigger
 } from "@/components/ui/sidebar";
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetClose
+} from "@/components/ui/sheet";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -18,6 +25,7 @@ export function Navbar() {
   );
   
   const { user } = useAuth();
+  const isMobile = useIsMobile();
   
   // Handle scrolling effect
   useEffect(() => {
@@ -54,6 +62,14 @@ export function Navbar() {
   if (!user) {
     navigationItems.push({ label: "Pricing", href: "/pricing" });
   }
+
+  // For logged-in users, also show Roadmap and Settings links
+  const userNavigationItems = user ? [
+    { label: "Roadmap", href: "/roadmap" },
+    { label: "Settings", href: "/settings" }
+  ] : [];
+
+  const allNavigationItems = [...navigationItems, ...userNavigationItems];
   
   return (
     <nav 
@@ -92,43 +108,77 @@ export function Navbar() {
             ))}
             
             {/* For logged-in users, also show Roadmap and Settings links */}
-            {user && (
-              <>
-                <NavLink
-                  to="/roadmap"
-                  className={({ isActive }) => cn(
-                    "flex items-center text-sm font-medium transition-colors duration-200",
-                    isActive ? "text-primary" : "text-foreground/70 hover:text-primary"
-                  )}
-                >
-                  <span>Roadmap</span>
-                </NavLink>
-                <NavLink
-                  to="/settings"
-                  className={({ isActive }) => cn(
-                    "flex items-center text-sm font-medium transition-colors duration-200",
-                    isActive ? "text-primary" : "text-foreground/70 hover:text-primary"
-                  )}
-                >
-                  <span>Settings</span>
-                </NavLink>
-              </>
-            )}
+            {userNavigationItems.map((item) => (
+              <NavLink
+                key={item.label}
+                to={item.href}
+                className={({ isActive }) => cn(
+                  "flex items-center text-sm font-medium transition-colors duration-200",
+                  isActive ? "text-primary" : "text-foreground/70 hover:text-primary"
+                )}
+              >
+                <span>{item.label}</span>
+              </NavLink>
+            ))}
           </div>
           
-          {/* Mobile navigation button - for all users now */}
+          {/* Mobile navigation menu */}
           <div className="md:hidden">
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              className="h-9 w-9 rounded-md"
-              asChild
-            >
-              <Link to={user ? "/explore" : "/explore"}>
-                <Menu className="h-5 w-5" />
-                <span className="sr-only">Navigation Menu</span>
-              </Link>
-            </Button>
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="h-9 w-9 rounded-md"
+                >
+                  <Menu className="h-5 w-5" />
+                  <span className="sr-only">Navigation Menu</span>
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-[75vw] sm:w-[350px] py-8">
+                <div className="flex flex-col gap-6">
+                  <div className="flex flex-col gap-3 mt-2">
+                    {allNavigationItems.map((item) => (
+                      <SheetClose key={item.label} asChild>
+                        <NavLink
+                          to={item.href}
+                          className={({ isActive }) => cn(
+                            "flex items-center px-4 py-2.5 rounded-md text-base font-medium transition-colors duration-200",
+                            isActive 
+                              ? "bg-primary/10 text-primary" 
+                              : "text-foreground/70 hover:bg-muted hover:text-primary",
+                            item.highlight && !isActive && "text-blue-600 dark:text-blue-400"
+                          )}
+                        >
+                          <span>{item.label}</span>
+                        </NavLink>
+                      </SheetClose>
+                    ))}
+                  </div>
+                  
+                  {!user && (
+                    <div className="border-t pt-4 mt-2">
+                      <div className="flex flex-col gap-3">
+                        <SheetClose asChild>
+                          <Link to="/signin">
+                            <Button variant="outline" className="w-full">
+                              Sign In
+                            </Button>
+                          </Link>
+                        </SheetClose>
+                        <SheetClose asChild>
+                          <Link to="/signup">
+                            <Button variant="default" className="w-full">
+                              Sign Up
+                            </Button>
+                          </Link>
+                        </SheetClose>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </SheetContent>
+            </Sheet>
           </div>
           
           {/* Right side controls - always visible */}
@@ -153,12 +203,12 @@ export function Navbar() {
               </NavLink>
             ) : (
               <div className="flex items-center space-x-2">
-                <NavLink to="/signin">
+                <NavLink to="/signin" className="hidden md:block">
                   <Button variant="outline" size="sm" className="h-7">
                     Sign In
                   </Button>
                 </NavLink>
-                <NavLink to="/signup" className="hidden sm:block">
+                <NavLink to="/signup" className="hidden md:block">
                   <Button variant="default" size="sm" className="h-7">
                     Sign Up
                   </Button>

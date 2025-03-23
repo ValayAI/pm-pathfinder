@@ -4,28 +4,35 @@ import * as React from "react"
 const MOBILE_BREAKPOINT = 768
 
 export function useIsMobile() {
-  const [isMobile, setIsMobile] = React.useState<boolean | undefined>(undefined)
+  const [isMobile, setIsMobile] = React.useState<boolean>(() => {
+    // Set initial state based on window width if available
+    if (typeof window !== 'undefined') {
+      return window.innerWidth < MOBILE_BREAKPOINT;
+    }
+    // Default to false if window is not available (SSR)
+    return false;
+  });
 
   React.useEffect(() => {
-    const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`)
-    const onChange = () => {
-      setIsMobile(window.innerWidth < MOBILE_BREAKPOINT)
-    }
+    if (typeof window === 'undefined') return;
     
-    // Initial check
-    setIsMobile(window.innerWidth < MOBILE_BREAKPOINT)
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
+    };
     
-    // Add event listener for screen size changes
-    mql.addEventListener("change", onChange)
+    // Add event listeners
+    window.addEventListener('resize', checkMobile);
+    window.addEventListener('orientationchange', checkMobile);
     
-    // Also listen for resize events to handle all browsers
-    window.addEventListener("resize", onChange)
+    // Do an initial check
+    checkMobile();
     
+    // Cleanup
     return () => {
-      mql.removeEventListener("change", onChange)
-      window.removeEventListener("resize", onChange)
-    }
-  }, [])
+      window.removeEventListener('resize', checkMobile);
+      window.removeEventListener('orientationchange', checkMobile);
+    };
+  }, []);
 
-  return !!isMobile
+  return isMobile;
 }
