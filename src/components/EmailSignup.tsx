@@ -5,11 +5,18 @@ import { isSubscribed, addSubscriber } from '@/utils/subscriberUtils';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Mail, AlertCircle } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
 
 const EmailSignup = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
+  const location = useLocation();
+  
+  // Don't render the component on the sign-up page
+  if (location.pathname === '/sign-up' || location.pathname === '/signup') {
+    return null;
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
