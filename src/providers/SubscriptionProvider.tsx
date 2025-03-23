@@ -1,5 +1,4 @@
-
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState, useMemo } from 'react';
 import { useAuth } from './AuthProvider';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
@@ -57,7 +56,7 @@ export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ 
   const [messagesUsed, setMessagesUsed] = useState<number>(0);
 
   const fetchSubscription = async () => {
-    setIsLoading(true);
+    if (isLoading === false) setIsLoading(true);
     
     // If user is not authenticated, set the default subscription
     if (!user) {
@@ -67,42 +66,43 @@ export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ 
     }
 
     try {
-      // Fetch the user's subscription from Supabase
-      const { data: subscriptionData, error: subscriptionError } = await supabase
-        .from('subscriptions')
-        .select('*')
-        .eq('user_id', user.id)
-        .eq('active', true)
-        .maybeSingle();
+      // Use Promise.all to fetch both subscription and usage data in parallel
+      const [subscriptionResponse, usageResponse] = await Promise.all([
+        supabase
+          .from('subscriptions')
+          .select('*')
+          .eq('user_id', user.id)
+          .eq('active', true)
+          .maybeSingle(),
+          
+        supabase
+          .from('message_usage')
+          .select('messages_used')
+          .eq('user_id', user.id)
+          .maybeSingle()
+      ]);
       
-      if (subscriptionError) {
-        throw subscriptionError;
+      if (subscriptionResponse.error) {
+        throw subscriptionResponse.error;
       }
       
-      // Fetch message usage
-      const { data: usageData, error: usageError } = await supabase
-        .from('message_usage')
-        .select('messages_used')
-        .eq('user_id', user.id)
-        .maybeSingle();
-      
-      if (usageError) {
-        throw usageError;
+      if (usageResponse.error) {
+        throw usageResponse.error;
       }
       
-      if (usageData) {
-        setMessagesUsed(usageData.messages_used);
+      if (usageResponse.data) {
+        setMessagesUsed(usageResponse.data.messages_used);
       }
       
       // If subscription found, use it
-      if (subscriptionData) {
-        const planId = subscriptionData.plan_id as PlanType;
+      if (subscriptionResponse.data) {
+        const planId = subscriptionResponse.data.plan_id as PlanType;
         
         // Convert JSON features array to string array with fallback to plan features
         let featuresArray: string[] = [];
-        if (subscriptionData.features) {
+        if (subscriptionResponse.data.features) {
           // Safely typecast and filter to ensure only strings
-          const jsonFeatures = subscriptionData.features as any;
+          const jsonFeatures = subscriptionResponse.data.features as any;
           featuresArray = Array.isArray(jsonFeatures) 
             ? jsonFeatures.filter(item => typeof item === 'string').map(item => String(item))
             : planFeatures[planId];
@@ -113,42 +113,39 @@ export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ 
         // Create subscription data based on plan
         const subscriptionInfo: SubscriptionData = {
           planId: planId,
-          messageLimit: subscriptionData.message_limit ?? (planId === 'starter' ? 50 : planId === 'free' ? 10 : Infinity),
+          messageLimit: subscriptionResponse.data.message_limit ?? (planId === 'starter' ? 50 : planId === 'free' ? 10 : Infinity),
           features: featuresArray,
-          expiresAt: subscriptionData.expires_at ? new Date(subscriptionData.expires_at) : null
+          expiresAt: subscriptionResponse.data.expires_at ? new Date(subscriptionResponse.data.expires_at) : null
         };
         
         setSubscription(subscriptionInfo);
-        console.log(`User subscription loaded from DB: ${planId}`);
       } else {
-        // If no active subscription found, create default free subscription in DB
-        const { error: insertError } = await supabase
-          .from('subscriptions')
-          .insert({
-            user_id: user.id,
-            plan_id: 'free',
-            message_limit: 10,
-            features: planFeatures.free
-          });
-        
-        if (insertError) {
-          console.error('Error creating default subscription:', insertError);
-        }
-        
-        // Initialize message usage counter if not exists
-        const { error: msgUsageError } = await supabase
-          .from('message_usage')
-          .insert({
-            user_id: user.id,
-            messages_used: 0
-          });
-        
-        if (msgUsageError && msgUsageError.code !== '23505') { // Ignore duplicate key errors
-          console.error('Error initializing message usage:', msgUsageError);
+        // Optimize default subscription creation
+        try {
+          // If no active subscription found, create default free subscription in DB
+          await Promise.all([
+            supabase
+              .from('subscriptions')
+              .insert({
+                user_id: user.id,
+                plan_id: 'free',
+                message_limit: 10,
+                features: planFeatures.free
+              }),
+              
+            // Initialize message usage counter if not exists
+            supabase
+              .from('message_usage')
+              .insert({
+                user_id: user.id,
+                messages_used: 0
+              }).throwOnError()
+          ]);
+        } catch (error) {
+          console.error('Error creating default subscription data:', error);
         }
         
         setSubscription(defaultSubscription);
-        console.log('No subscription found, created free plan');
       }
     } catch (error) {
       console.error('Error fetching subscription:', error);
@@ -160,7 +157,12 @@ export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ 
   };
 
   useEffect(() => {
-    fetchSubscription();
+    if (user) {
+      fetchSubscription();
+    } else {
+      setSubscription(defaultSubscription);
+      setIsLoading(false);
+    }
   }, [user]);
 
   const refreshSubscription = async () => {
@@ -193,17 +195,17 @@ export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ 
     return hasFeature(feature);
   };
 
-  const value = {
+  const contextValue = useMemo(() => ({
     subscription,
     isLoading,
     hasFeature,
     getRemainingMessages,
     isFeatureEnabled,
     refreshSubscription
-  };
+  }), [subscription, isLoading, messagesUsed]);
 
   return (
-    <SubscriptionContext.Provider value={value}>
+    <SubscriptionContext.Provider value={contextValue}>
       {children}
     </SubscriptionContext.Provider>
   );

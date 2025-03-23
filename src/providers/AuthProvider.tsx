@@ -1,4 +1,5 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+
+import { createContext, useContext, useEffect, useState, useMemo } from 'react';
 import { supabase } from '@/lib/supabase';
 import { Session, User } from '@supabase/supabase-js';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -47,8 +48,25 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   useEffect(() => {
-    const getInitialSession = async () => {
-      setIsLoading(true);
+    let mounted = true;
+    
+    const setupAuth = async () => {
+      // Set up auth state listener first to catch all auth events
+      const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
+        if (!mounted) return;
+        
+        console.log('Auth state changed:', _event, session?.user?.email);
+        setSession(session);
+        setUser(session?.user ?? null);
+        
+        if (session?.user) {
+          await fetchAndStoreUserProfile(session.user.id);
+        }
+        
+        setIsLoading(false);
+      });
+
+      // Then check for existing session
       try {
         const { data, error } = await supabase.auth.getSession();
         
@@ -57,34 +75,28 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           throw error;
         }
 
-        if (data.session) {
-          setSession(data.session);
-          setUser(data.session.user);
-          await fetchAndStoreUserProfile(data.session.user.id);
+        if (mounted) {
+          if (data.session) {
+            setSession(data.session);
+            setUser(data.session.user);
+            await fetchAndStoreUserProfile(data.session.user.id);
+          }
+          setIsLoading(false);
         }
       } catch (error) {
         console.error('Error getting initial session:', error);
-      } finally {
-        setIsLoading(false);
+        if (mounted) setIsLoading(false);
       }
+
+      return () => {
+        subscription.unsubscribe();
+      };
     };
 
-    getInitialSession();
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      console.log('Auth state changed:', _event, session);
-      setSession(session);
-      setUser(session?.user ?? null);
-      
-      if (session?.user) {
-        await fetchAndStoreUserProfile(session.user.id);
-      }
-      
-      setIsLoading(false);
-    });
-
+    setupAuth();
+    
     return () => {
-      subscription.unsubscribe();
+      mounted = false;
     };
   }, []);
 
@@ -217,16 +229,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const value = {
+  // Memoize the context value to prevent unnecessary re-renders
+  const contextValue = useMemo(() => ({
     user,
     session,
     isLoading,
     signIn,
     signUp,
     signOut
-  };
+  }), [user, session, isLoading]);
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = () => {

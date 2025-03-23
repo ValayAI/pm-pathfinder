@@ -31,12 +31,6 @@ const Dashboard = ({ children }: DashboardProps) => {
   const location = useLocation();
   const [firstName, setFirstName] = useState('');
   const isMobile = useIsMobile();
-  const [initialRender, setInitialRender] = useState(true);
-  
-  // Set initial render flag to false after component mounts
-  useEffect(() => {
-    setInitialRender(false);
-  }, []);
   
   // Fetch user's first name from localStorage
   useEffect(() => {
@@ -77,7 +71,7 @@ const Dashboard = ({ children }: DashboardProps) => {
   }, [isMobile]);
   
   return (
-    <div className={`min-h-screen flex flex-col ${initialRender ? 'invisible' : 'visible'}`}>
+    <div className="min-h-screen flex flex-col">
       <Navbar />
       
       <div className="flex flex-1 pt-16">
