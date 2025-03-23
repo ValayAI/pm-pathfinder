@@ -1,12 +1,14 @@
+
 import React from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import EmailSignup from "../components/EmailSignup";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { BookOpen, FileText, Video, Download, Eye, Wand2, Calendar } from "lucide-react";
+import { BookOpen, FileText, Video, Download, Eye, Wand2, Calendar, DollarSign } from "lucide-react";
 import { useAuth } from "@/providers/AuthProvider";
 import ResourcesTeaser from "@/components/teasers/ResourcesTeaser";
+import { Badge } from "@/components/ui/badge";
 
 const Resources = () => {
   const { user } = useAuth();
@@ -74,6 +76,10 @@ const Resources = () => {
       <main className="flex-grow container mx-auto px-4 pt-24 md:pt-28 pb-12">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
+            <Badge className="mb-4 bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200 border-purple-300 dark:border-purple-700 px-3 py-1">
+              <DollarSign className="h-3.5 w-3.5 mr-1" />
+              Resources Library
+            </Badge>
             <h1 className="text-4xl font-bold mb-4">Product Management Resources</h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Access our library of templates, guides, and tools to enhance your product management skills.

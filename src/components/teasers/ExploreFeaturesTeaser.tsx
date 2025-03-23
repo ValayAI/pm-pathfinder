@@ -2,14 +2,19 @@
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Star, Lock, MessageSquare, Calendar, Target } from 'lucide-react';
+import { ArrowRight, Star, Lock, MessageSquare, Calendar, Target, DollarSign } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import ContentTeaser from '../ContentTeaser';
+import { Badge } from '@/components/ui/badge';
 
 const ExploreFeaturesTeaser = () => {
   return (
     <div className="w-full max-w-5xl mx-auto px-4">
       <div className="text-center mb-10">
+        <Badge className="mb-4 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 border-blue-300 dark:border-blue-700 px-3 py-1">
+          <DollarSign className="h-3.5 w-3.5 mr-1" />
+          Explore Features
+        </Badge>
         <h1 className="text-4xl font-bold mb-4">Explore PM Tools & Features</h1>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
           AI-powered tools and frameworks to enhance your product management skills
