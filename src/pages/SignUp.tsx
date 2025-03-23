@@ -33,8 +33,11 @@ const SignUp = () => {
     setIsLoading(true);
     
     try {
-      // Updated to match the new signUp function signature
-      const { error, success } = await signUp(email, password, { firstName, lastName });
+      console.log('Attempting to sign up with firstName:', firstName, 'lastName:', lastName);
+      const { error, success } = await signUp(email, password, { 
+        firstName: firstName.trim(), 
+        lastName: lastName.trim() 
+      });
       
       if (error) {
         toast.error('Sign up failed', {

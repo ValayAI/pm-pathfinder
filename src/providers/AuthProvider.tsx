@@ -1,10 +1,9 @@
-
 import { createContext, useContext, useEffect, useState, useMemo } from 'react';
 import { supabase } from '@/lib/supabase';
 import { Session, User } from '@supabase/supabase-js';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
-import { getUserProfile } from '@/utils/profileUtils';
+import { getUserProfile, createUserProfile } from '@/utils/profileUtils';
 
 type AuthContextType = {
   user: User | null;
@@ -21,7 +20,6 @@ type AuthContextType = {
   signOut: () => Promise<void>;
 };
 
-// Track failed login attempts
 const failedAttempts = new Map<string, { count: number, lastAttempt: number }>();
 const MAX_ATTEMPTS = 5;
 const LOCKOUT_DURATION = 15 * 60 * 1000; // 15 minutes in milliseconds
@@ -35,12 +33,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Fetch user profile and store in localStorage
   const fetchAndStoreUserProfile = async (userId: string) => {
     try {
       const profile = await getUserProfile(userId);
       if (profile) {
         localStorage.setItem('userProfile', JSON.stringify(profile));
+      } else {
+        console.log('No profile found, creating a new one for user:', userId);
+        await createUserProfile(userId, {});
+        const newProfile = await getUserProfile(userId);
+        if (newProfile) {
+          localStorage.setItem('userProfile', JSON.stringify(newProfile));
+        }
       }
     } catch (error) {
       console.error('Error fetching user profile:', error);
@@ -51,13 +55,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     let mounted = true;
     
     const setupAuth = async () => {
-      // Set up auth state listener first to catch all auth events
       const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
         if (!mounted) return;
         
         console.log('Auth state changed:', _event, session?.user?.email);
         
-        // For sign out events, make sure we clear everything
         if (_event === 'SIGNED_OUT') {
           setSession(null);
           setUser(null);
@@ -76,7 +78,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setIsLoading(false);
       });
 
-      // Then check for existing session
       try {
         const { data, error } = await supabase.auth.getSession();
         
@@ -115,17 +116,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const userAttempts = failedAttempts.get(email);
 
     if (!userAttempts) {
-      return true; // First attempt, no rate limiting
+      return true;
     }
 
-    // Check if the lockout period has passed
     if (now - userAttempts.lastAttempt > LOCKOUT_DURATION) {
-      // Reset attempts if lockout period has passed
       failedAttempts.set(email, { count: 0, lastAttempt: now });
       return true;
     }
 
-    // If user is over the attempt limit and still in lockout period
     if (userAttempts.count >= MAX_ATTEMPTS) {
       const remainingLockout = Math.ceil((LOCKOUT_DURATION - (now - userAttempts.lastAttempt)) / 60000);
       toast.error(`Account temporarily locked`, {
@@ -149,7 +147,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         lastAttempt: now 
       });
       
-      // Show warning after multiple failed attempts
       if (userAttempts.count + 1 >= MAX_ATTEMPTS - 1) {
         toast.warning(`Login attempt ${userAttempts.count + 1} of ${MAX_ATTEMPTS}`, {
           description: "Your account will be temporarily locked after too many failed attempts.",
@@ -164,14 +161,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const signIn = async (email: string, password: string) => {
     try {
-      // Check if user is rate limited
       if (!checkRateLimit(email)) {
         return { error: new Error("Too many login attempts. Please try again later."), success: false };
       }
 
       console.log('Signing in with:', email);
       
-      // Simplified sign in without any CAPTCHA options
       const { data, error } = await supabase.auth.signInWithPassword({ 
         email, 
         password
@@ -179,15 +174,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       
       if (error) {
         console.error('Error signing in:', error);
-        // Record failed attempt
         recordFailedAttempt(email);
         throw error;
       }
 
-      // Reset failed attempts counter on successful login
       resetAttempts(email);
 
-      // Fetch user profile data after successful login
       if (data.user) {
         await fetchAndStoreUserProfile(data.user.id);
       }
@@ -204,7 +196,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const signUp = async (email: string, password: string, userData?: { firstName?: string; lastName?: string }) => {
     try {
-      console.log('Signing up with:', email);
+      console.log('Signing up with:', email, 'and user data:', userData);
       const { data, error } = await supabase.auth.signUp({ 
         email, 
         password,
@@ -222,6 +214,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
       
       console.log('Sign up successful:', data);
+      
+      if (data.user) {
+        const profileCreated = await createUserProfile(data.user.id, {
+          firstName: userData?.firstName || '',
+          lastName: userData?.lastName || ''
+        });
+        
+        console.log('Profile creation result:', profileCreated);
+      }
+      
       return { error: null, success: true };
     } catch (error) {
       console.error('Error signing up:', error);
@@ -233,15 +235,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       console.log('Signing out: starting process');
       
-      // Clear local state first
       setUser(null);
       setSession(null);
       
-      // Remove profile and any auth data from localStorage
       localStorage.removeItem('userProfile');
       localStorage.removeItem('supabase.auth.token');
       
-      // Clear any custom auth storage Supabase might be using
       for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
         if (key && (key.startsWith('supabase.auth.') || key.includes('session'))) {
@@ -249,7 +248,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
       }
       
-      // Then sign out from Supabase (which should clear browser storage too)
       const { error } = await supabase.auth.signOut({ scope: 'global' });
       if (error) {
         console.error('Error signing out from Supabase:', error);
@@ -258,18 +256,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       
       console.log('Sign out successful, redirecting to home');
       
-      // Navigate to home page
       navigate('/', { replace: true });
     } catch (error) {
       console.error('Error signing out:', error);
       
-      // Even if there's an error, try to clean up and navigate to home
       localStorage.removeItem('userProfile');
       navigate('/', { replace: true });
     }
   };
 
-  // Memoize the context value to prevent unnecessary re-renders
   const contextValue = useMemo(() => ({
     user,
     session,
