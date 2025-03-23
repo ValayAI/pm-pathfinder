@@ -31,6 +31,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -42,6 +43,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         
         if (error) {
           console.error('Error getting initial session:', error);
+          setError(error);
           throw error;
         }
 
@@ -51,6 +53,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
       } catch (error) {
         console.error('Error getting initial session:', error);
+        // Don't throw here, let the app continue to load
       } finally {
         setIsLoading(false);
       }
@@ -58,16 +61,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     getInitialSession();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      console.log('Auth state changed:', _event, session);
-      setSession(session);
-      setUser(session?.user ?? null);
-      setIsLoading(false);
-    });
+    try {
+      const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+        console.log('Auth state changed:', _event, session);
+        setSession(session);
+        setUser(session?.user ?? null);
+        setIsLoading(false);
+      });
 
-    return () => {
-      subscription.unsubscribe();
-    };
+      return () => {
+        subscription.unsubscribe();
+      };
+    } catch (err) {
+      console.error('Error setting up auth subscription:', err);
+      setIsLoading(false);
+    }
   }, []);
 
   const checkRateLimit = (email: string): boolean => {
@@ -201,6 +209,22 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     signUp,
     signOut
   };
+
+  if (error && !isLoading) {
+    return (
+      <div className="p-4 text-center">
+        <h2 className="text-xl font-bold text-red-500">Authentication Error</h2>
+        <p className="mt-2">There was a problem connecting to the authentication service.</p>
+        <p className="mt-2 text-sm text-gray-500">{error.message}</p>
+        <button 
+          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
+          onClick={() => window.location.reload()}
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
