@@ -47,9 +47,9 @@ export function TestimonialsSection() {
   ];
   
   return (
-    <section id="testimonials-section" className="py-24 bg-secondary/50">
+    <section id="testimonials-section" className="py-8 bg-secondary/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
+        <div className="text-center mb-12">
           <h2 className={cn(
             "text-3xl md:text-4xl font-bold tracking-tight transition-all duration-700",
             inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
