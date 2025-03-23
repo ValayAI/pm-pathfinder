@@ -10,6 +10,7 @@ import {
   useSidebar
 } from '@/components/AppSidebar';
 import { useIsMobile } from '@/hooks/use-mobile';
+import Navbar from '@/components/Navbar';
 import {
   Home,
   Compass,
@@ -76,38 +77,35 @@ const Dashboard = ({ children }: DashboardProps) => {
   }, [isMobile]);
   
   return (
-    <div className={`min-h-screen flex flex-col md:flex-row ${initialRender ? 'invisible' : 'visible'}`}>
-      <SidebarProvider open={sidebarOpen} setOpen={setSidebarOpen} animate={false}>
-        <SidebarBody>
-          <div className="flex items-center justify-center p-4 md:p-4">
-            <div className="w-8 h-8 rounded-md bg-primary flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-lg">P</span>
+    <div className={`min-h-screen flex flex-col ${initialRender ? 'invisible' : 'visible'}`}>
+      <Navbar />
+      
+      <div className="flex flex-1 pt-16">
+        <SidebarProvider open={sidebarOpen} setOpen={setSidebarOpen} animate={false}>
+          <SidebarBody>
+            {/* Greeting with user's first name if available */}
+            <div className="px-4 py-4 mb-2">
+              <h3 className="text-sm font-medium text-muted-foreground">
+                {firstName ? `Hi, ${firstName}` : 'Welcome'}
+              </h3>
             </div>
-            <span className="ml-2 text-xl font-semibold">PM Pathfinder</span>
-          </div>
+            
+            <div className="space-y-1 px-2">
+              {links.map((link) => (
+                <SidebarLink
+                  key={link.label}
+                  link={link}
+                  className={location.pathname === link.href ? "text-primary font-medium" : ""}
+                />
+              ))}
+            </div>
+          </SidebarBody>
           
-          {/* Greeting with user's first name if available */}
-          <div className="px-4 py-2 mb-4">
-            <h3 className="text-sm font-medium text-muted-foreground">
-              {firstName ? `Hi, ${firstName}` : 'Welcome'}
-            </h3>
-          </div>
-          
-          <div className="space-y-1 px-2">
-            {links.map((link) => (
-              <SidebarLink
-                key={link.label}
-                link={link}
-                className={location.pathname === link.href ? "text-primary font-medium" : ""}
-              />
-            ))}
-          </div>
-        </SidebarBody>
-        
-        <main className="flex-1 p-4 md:p-6 lg:p-10 overflow-auto pb-24 md:pb-10 mt-16 md:mt-0">
-          {children}
-        </main>
-      </SidebarProvider>
+          <main className="flex-1 p-4 md:p-6 lg:p-10 overflow-auto pb-24 md:pb-10">
+            {children}
+          </main>
+        </SidebarProvider>
+      </div>
     </div>
   );
 };
