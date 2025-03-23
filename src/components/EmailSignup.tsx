@@ -169,7 +169,6 @@ const EmailSignup = () => {
               <span>Subscribe</span>
             )}
           </button>
-          
           {/* Display subscription message - enhanced visibility */}
           {subscriptionMessage && (
             <div className={`text-sm mt-3 text-center font-medium ${
@@ -180,7 +179,6 @@ const EmailSignup = () => {
               {subscriptionMessage}
             </div>
           )}
-          
           <p className="text-xs text-muted-foreground mt-2 text-center">
             We respect your privacy. Unsubscribe at any time.
           </p>
