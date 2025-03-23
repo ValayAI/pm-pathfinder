@@ -27,7 +27,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { CheckIcon, XIcon, Loader2, CalendarIcon, ZapIcon, ArrowRightIcon, PlusCircleIcon, TimerIcon } from "lucide-react";
-import { handleChatRequest } from "../api/chat.tsx";
+import { handleChatRequest } from "../api/chat";
 import { Label } from "./ui/label";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
 import { useForm } from "react-hook-form";
