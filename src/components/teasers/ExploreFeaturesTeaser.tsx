@@ -1,25 +1,22 @@
 
 import React from 'react';
-import { Card, CardContent, CardFooter } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Lock } from 'lucide-react';
+import { ArrowRight, Star } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import ContentTeaser from '../ContentTeaser';
 
 const ExploreFeaturesTeaser = () => {
   return (
     <div className="w-full max-w-5xl mx-auto px-4">
-      <div className="text-center mb-6">
-        <h1 className="text-3xl font-bold flex items-center justify-center gap-2 mb-2">
-          <span className="text-primary">✨</span> 
-          Explore PM Tools & Features
-        </h1>
-        <p className="text-muted-foreground max-w-2xl mx-auto">
+      <div className="text-center mb-10">
+        <h1 className="text-4xl font-bold mb-4">Explore PM Tools & Features</h1>
+        <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
           AI-powered tools and frameworks to enhance your product management skills
         </p>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-3 mb-8">
+      <div className="grid gap-6 md:grid-cols-3 mb-12">
         {/* OKR Generator */}
         <Card className="overflow-hidden hover:shadow-md transition-all hover:scale-[1.01] duration-300 border">
           <CardContent className="p-6">
@@ -38,8 +35,7 @@ const ExploreFeaturesTeaser = () => {
               Generate effective OKRs for your product with AI assistance.
             </p>
             <Button variant="outline" className="w-full mt-auto" disabled>
-              <Lock className="h-3.5 w-3.5 mr-2" />
-              Try Demo
+              Coming Soon
             </Button>
           </CardContent>
         </Card>
@@ -62,8 +58,7 @@ const ExploreFeaturesTeaser = () => {
               Prioritize features based on Reach, Impact, Confidence and Effort.
             </p>
             <Button variant="outline" className="w-full mt-auto" disabled>
-              <Lock className="h-3.5 w-3.5 mr-2" />
-              Try Demo
+              Coming Soon
             </Button>
           </CardContent>
         </Card>
@@ -86,8 +81,7 @@ const ExploreFeaturesTeaser = () => {
               Create beautiful roadmaps aligned with your product strategy.
             </p>
             <Button variant="outline" className="w-full mt-auto" disabled>
-              <Lock className="h-3.5 w-3.5 mr-2" />
-              Try Demo
+              Coming Soon
             </Button>
           </CardContent>
         </Card>
@@ -113,15 +107,14 @@ const ExploreFeaturesTeaser = () => {
         </Card>
       </div>
 
-      <div className="flex justify-between items-center mt-8 border-t pt-6">
-        <p className="text-sm text-muted-foreground">Create your free account to unlock all features</p>
+      <div className="flex justify-center mt-8 border-t pt-6">
         <div className="flex gap-3">
           <Button variant="outline" asChild>
             <Link to="/signin">Sign In</Link>
           </Button>
           <Button asChild>
             <Link to="/signup" className="flex items-center gap-1">
-              Try these tools & more <ArrowRight className="h-4 w-4 ml-1" />
+              Sign Up <ArrowRight className="h-4 w-4 ml-1" />
             </Link>
           </Button>
         </div>
