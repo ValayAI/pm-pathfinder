@@ -87,7 +87,8 @@ const Dashboard = ({ children }: DashboardProps) => {
         </main>
       </div>
     </div>
-  }
+  );
 }
 
 export default Dashboard;
+
