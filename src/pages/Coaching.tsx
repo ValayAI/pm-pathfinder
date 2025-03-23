@@ -1,12 +1,82 @@
+
 import React from 'react';
 import { useAuth } from '@/providers/AuthProvider';
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ContentTeaser from '@/components/ContentTeaser';
-import { Calendar, Lock, MessageSquare, VideoIcon } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Calendar, Lock, MessageSquare, VideoIcon, Star } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+
+// Define the coaches data array
+const coaches = [
+  {
+    name: "Sarah Johnson",
+    role: "Senior PM at Google",
+    image: "/placeholder.svg",
+    rating: 4.9,
+    reviews: 124,
+    expertise: ["B2B", "SaaS", "Product Strategy"]
+  },
+  {
+    name: "Michael Chen",
+    role: "PM Director at Amazon",
+    image: "/placeholder.svg",
+    rating: 4.8,
+    reviews: 87,
+    expertise: ["Consumer Tech", "AI Products", "Leadership"]
+  },
+  {
+    name: "Priya Patel",
+    role: "Product Lead at Stripe",
+    image: "/placeholder.svg",
+    rating: 4.7,
+    reviews: 65,
+    expertise: ["Fintech", "Growth", "User Onboarding"]
+  }
+];
+
+// Define the coaching options data array
+const coachingOptions = [
+  {
+    title: "Career Strategy Session",
+    description: "30-minute focused coaching on your PM career path",
+    price: "$89",
+    popular: true,
+    icon: <MessageSquare className="h-5 w-5 text-purple-600" />,
+    features: [
+      "Customized advice for your experience level",
+      "Career progression planning",
+      "Personalized skill development plan"
+    ]
+  },
+  {
+    title: "Interview Preparation",
+    description: "45-minute mock interview with detailed feedback",
+    price: "$129",
+    popular: false,
+    icon: <VideoIcon className="h-5 w-5 text-blue-600" />,
+    features: [
+      "Real PM interview questions",
+      "Detailed feedback on your answers",
+      "Tailored improvement suggestions"
+    ]
+  },
+  {
+    title: "Executive Coaching",
+    description: "Premium coaching for senior product leaders",
+    price: "Custom",
+    popular: false,
+    icon: <Calendar className="h-5 w-5 text-amber-600" />,
+    features: [
+      "Leadership strategy development",
+      "Executive presence coaching",
+      "Organizational design guidance"
+    ]
+  }
+];
 
 const CoachingTeaser = () => {
   return (

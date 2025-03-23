@@ -1,3 +1,4 @@
+
 import { useEffect, useState, useRef, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
@@ -12,7 +13,7 @@ import { cn } from "@/lib/utils";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import MessageBubble from "@/components/MessageBubble";
 import PaywallModal from "@/components/PaywallModal";
-import { handleChatRequest } from "@/api/chat";
+import { chatWithOpenAI as handleChatRequest } from "@/api/chat";
 import PreloadedPrompts from "@/components/PreloadedPrompts";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useAuth } from "@/providers/AuthProvider";
