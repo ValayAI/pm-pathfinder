@@ -64,7 +64,7 @@ const Dashboard = ({ children }: DashboardProps) => {
   ];
   
   // Set sidebar to always closed on mobile, open on desktop
-  const [sidebarOpen, setSidebarOpen] = useState(!isMobile);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   
   // Update sidebar state when screen size changes
   useEffect(() => {

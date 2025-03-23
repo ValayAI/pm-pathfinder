@@ -4,17 +4,14 @@ import { toast } from "sonner";
 import { isSubscribed, addSubscriber } from '@/utils/subscriberUtils';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
-import { supabase } from '@/integrations/supabase/client';
 
 const EmailSignup = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [subscriptionMessage, setSubscriptionMessage] = useState('');
   const formRef = useRef<HTMLFormElement>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Form submitted, handling submission");
-    setSubscriptionMessage(''); // Reset message
     
     if (!formRef.current) return;
     
@@ -42,8 +39,8 @@ const EmailSignup = () => {
       return;
     }
     
-    // Set inline message instead of loading toast
-    setSubscriptionMessage("Processing your subscription...");
+    // Show processing toast
+    const loadingToast = toast.loading("Processing your subscription...");
     setIsSubmitting(true);
     
     console.log("Submitting to ConvertKit:", email, firstName);
@@ -58,17 +55,15 @@ const EmailSignup = () => {
     })
     .then(response => {
       console.log("ConvertKit response received:", response.status);
+      toast.dismiss(loadingToast);
       
       if (response.ok) {
-        // Show success message inline only (no toast)
-        console.log("Setting success message");
-        setSubscriptionMessage("Thank you for subscribing to our newsletter!");
+        // Show success toast
+        console.log("Showing success toast");
+        toast.success("Thank you for subscribing to our newsletter!");
         
         // Add to local storage
         addSubscriber(email);
-        
-        // Also save to Supabase database if available
-        saveSubscriberToDatabase(email, firstName);
         
         // Reset the form
         if (formRef.current) {
@@ -81,40 +76,13 @@ const EmailSignup = () => {
     })
     .catch(error => {
       console.error("Subscription error:", error);
+      toast.dismiss(loadingToast);
       console.log("Showing error toast");
       toast.error("There was an error subscribing to the newsletter. Please try again later.");
-      setSubscriptionMessage(''); // Clear message on error
     })
     .finally(() => {
       setIsSubmitting(false);
     });
-  };
-
-  // Function to save subscriber data to Supabase
-  const saveSubscriberToDatabase = async (email: string, firstName: string) => {
-    try {
-      console.log("Saving subscriber to database:", email, firstName);
-      
-      // Use type assertion to tell TypeScript this table exists
-      // This is a workaround until the types are regenerated
-      const { error } = await supabase
-        .from('newsletter_subscribers' as any)
-        .insert({
-          email: email,
-          first_name: firstName,
-          source: 'website_signup_form'
-        });
-        
-      if (error) {
-        // Don't show error to user since ConvertKit subscription already succeeded
-        console.error("Error saving to database:", error);
-      } else {
-        console.log("Successfully saved subscriber to database");
-      }
-    } catch (err) {
-      console.error("Database error:", err);
-      // Don't show error to user since ConvertKit subscription already succeeded
-    }
   };
 
   return (
@@ -133,8 +101,8 @@ const EmailSignup = () => {
       >
         <div data-style="full">
           <div className="formkit-field mb-3">
-            <Label htmlFor="email_address" className="block text-base font-medium mb-2 text-center">Subscribe to our newsletter</Label>
-            <p className="text-sm text-muted-foreground mb-3 text-center">Get exclusive PM insights, frameworks, and AI tips directly in your inbox!</p>
+            <Label htmlFor="email_address" className="block text-base font-medium mb-2">Subscribe to our newsletter</Label>
+            <p className="text-sm text-muted-foreground mb-3">Get exclusive PM insights, frameworks, and AI tips directly in your inbox!</p>
             <Input 
               className="formkit-input w-full mb-3" 
               name="email_address" 
@@ -169,16 +137,6 @@ const EmailSignup = () => {
               <span>Subscribe</span>
             )}
           </button>
-          {/* Display subscription message - enhanced visibility */}
-          {subscriptionMessage && (
-            <div className={`text-sm mt-3 text-center font-medium ${
-              subscriptionMessage.includes("Thank you") 
-                ? "text-green-600 dark:text-green-400" 
-                : "text-blue-600 dark:text-blue-400"
-            }`}>
-              {subscriptionMessage}
-            </div>
-          )}
           <p className="text-xs text-muted-foreground mt-2 text-center">
             We respect your privacy. Unsubscribe at any time.
           </p>

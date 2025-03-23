@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
 import { MessageCircleQuestion, Bot, SendIcon } from "lucide-react";
-import { handleChatRequest } from "@/api/chat";
+import { handleChatRequest } from "../api/chat.tsx";
 
 const FrameworkChat = () => {
   const [userMessage, setUserMessage] = useState('');
