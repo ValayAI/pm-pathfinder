@@ -50,29 +50,30 @@ const SignUp = () => {
       }
       
       if (success) {
-        // If user opted in to newsletter, add them to ConvertKit via form submission
+        // If user opted in to newsletter, add them to ConvertKit via AJAX instead of form submission
         if (subscribeNewsletter) {
           // Track subscription in local storage
           addSubscriber(email);
           
-          // Create a hidden form and submit it to ConvertKit
-          const form = document.createElement('form');
-          form.method = 'post';
-          form.action = 'https://app.convertkit.com/forms/7822296/subscriptions';
-          form.style.display = 'none';
+          // Submit to ConvertKit via fetch instead of form redirect
+          const formData = new FormData();
+          formData.append('email_address', email);
+          formData.append('fields[first_name]', firstName);
           
-          const emailInput = document.createElement('input');
-          emailInput.name = 'email_address';
-          emailInput.value = email;
-          
-          const firstNameInput = document.createElement('input');
-          firstNameInput.name = 'fields[first_name]';
-          firstNameInput.value = firstName;
-          
-          form.appendChild(emailInput);
-          form.appendChild(firstNameInput);
-          document.body.appendChild(form);
-          form.submit();
+          fetch('https://app.convertkit.com/forms/7822296/subscriptions', {
+            method: 'POST',
+            body: formData,
+            headers: {
+              accept: 'application/json',
+            }
+          }).then(response => {
+            console.log('ConvertKit subscription response:', response.status);
+            if (!response.ok) {
+              console.error('Failed to subscribe to newsletter');
+            }
+          }).catch(error => {
+            console.error('Newsletter subscription error:', error);
+          });
         }
         
         setSignupComplete(true);
