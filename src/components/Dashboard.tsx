@@ -1,13 +1,12 @@
 
-import { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useState, useEffect, useMemo } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useAuth } from '@/providers/AuthProvider';
 import { 
   Sidebar, 
   SidebarBody, 
   SidebarProvider, 
-  SidebarLink,
-  useSidebar
+  SidebarLink
 } from '@/components/AppSidebar';
 import { useIsMobile } from '@/hooks/use-mobile';
 import Navbar from '@/components/Navbar';
@@ -27,12 +26,11 @@ interface DashboardProps {
 
 const Dashboard = ({ children }: DashboardProps) => {
   const { user } = useAuth();
-  const navigate = useNavigate();
   const location = useLocation();
   const [firstName, setFirstName] = useState('');
   const isMobile = useIsMobile();
   
-  // Fetch user's first name from localStorage
+  // Fetch user's first name from localStorage - this is more efficient than re-fetching
   useEffect(() => {
     const storedProfile = localStorage.getItem('userProfile');
     if (storedProfile) {
@@ -45,14 +43,16 @@ const Dashboard = ({ children }: DashboardProps) => {
     }
   }, []);
   
-  // Check if user is authenticated
-  useEffect(() => {
-    if (!user) {
-      navigate('/signin');
-    }
-  }, [user, navigate]);
+  // Set sidebar to always closed on mobile, open on desktop
+  const [sidebarOpen, setSidebarOpen] = useState(!isMobile);
   
-  const links = [
+  // Update sidebar state when screen size changes
+  useEffect(() => {
+    setSidebarOpen(!isMobile);
+  }, [isMobile]);
+  
+  // Memoize links to prevent unnecessary re-renders
+  const links = useMemo(() => [
     { label: "Home", href: "/", icon: <Home className="h-5 w-5" /> },
     { label: "Explore", href: "/explore", icon: <Compass className="h-5 w-5" /> },
     { label: "Resources", href: "/resources", icon: <BookOpen className="h-5 w-5" /> },
@@ -60,15 +60,7 @@ const Dashboard = ({ children }: DashboardProps) => {
     { label: "Coaching", href: "/coaching", icon: <MessageSquare className="h-5 w-5" /> },
     { label: "Roadmap", href: "/roadmap", icon: <BarChart3 className="h-5 w-5" /> },
     { label: "Settings", href: "/settings", icon: <Settings className="h-5 w-5" /> },
-  ];
-  
-  // Set sidebar to always closed on mobile, open on desktop
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  
-  // Update sidebar state when screen size changes
-  useEffect(() => {
-    setSidebarOpen(!isMobile);
-  }, [isMobile]);
+  ], []);
   
   return (
     <div className="min-h-screen flex flex-col">

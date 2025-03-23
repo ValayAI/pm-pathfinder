@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useAuth } from "@/providers/AuthProvider";
 import { useSubscription } from "@/providers/SubscriptionProvider";
 import { useTheme } from "@/components/ui/theme-provider";
@@ -32,16 +32,50 @@ const Settings = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isPageLoading, setIsPageLoading] = useState(true);
   
   // Fetch user profile
   useEffect(() => {
     const fetchProfile = async () => {
       if (user) {
-        const profileData = await getUserProfile(user.id);
-        setProfile(profileData);
-        if (profileData) {
-          setFirstName(profileData.first_name || '');
-          setLastName(profileData.last_name || '');
+        try {
+          setIsPageLoading(true);
+          // First check localStorage for existing profile data
+          const storedProfile = localStorage.getItem('userProfile');
+          let profileData = null;
+          
+          if (storedProfile) {
+            try {
+              profileData = JSON.parse(storedProfile);
+              // Use stored data immediately while fetching fresh data
+              setProfile(profileData);
+              setFirstName(profileData.first_name || '');
+              setLastName(profileData.last_name || '');
+            } catch (error) {
+              console.error('Error parsing user profile from localStorage:', error);
+            }
+          }
+          
+          // Fetch fresh data from Supabase
+          const freshProfileData = await getUserProfile(user.id);
+          if (freshProfileData) {
+            setProfile(freshProfileData);
+            setFirstName(freshProfileData.first_name || '');
+            setLastName(freshProfileData.last_name || '');
+            
+            // Update localStorage with fresh data
+            localStorage.setItem('userProfile', JSON.stringify(freshProfileData));
+          } else if (!profileData) {
+            // If no profile data exists anywhere, initialize empty
+            setProfile(null);
+            setFirstName('');
+            setLastName('');
+          }
+        } catch (error) {
+          console.error('Error fetching profile:', error);
+          toast.error('Failed to load profile data');
+        } finally {
+          setIsPageLoading(false);
         }
       }
     };
@@ -84,6 +118,20 @@ const Settings = () => {
     await signOut();
     toast.success('Signed out successfully');
   };
+  
+  // Loading state for the entire settings page
+  if (isPageLoading) {
+    return (
+      <Dashboard>
+        <div className="max-w-4xl mx-auto flex justify-center items-center py-16">
+          <div className="flex flex-col items-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary mb-4"></div>
+            <p className="text-muted-foreground">Loading your settings...</p>
+          </div>
+        </div>
+      </Dashboard>
+    );
+  }
   
   return (
     <Dashboard>

@@ -13,16 +13,20 @@ const ProtectedRoute = ({ children, requireFeature }: ProtectedRouteProps) => {
   const { isLoading: isSubscriptionLoading, isFeatureEnabled } = useSubscription();
   const location = useLocation();
   
-  // Show a more subtle loading indicator instead of a full-screen one
+  // If still loading auth or subscription data, show a minimal loading indicator
+  // This prevents the jarring redirect experience during loading
   if (isAuthLoading || isSubscriptionLoading) {
     return (
-      <div className="flex justify-center items-center p-4">
-        <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-primary"></div>
+      <div className="flex justify-center items-center h-screen">
+        <div className="flex flex-col items-center space-y-2">
+          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary"></div>
+          <p className="text-sm text-muted-foreground">Loading your settings...</p>
+        </div>
       </div>
     );
   }
   
-  // If not authenticated, allow access but the page will show teaser content
+  // If not authenticated, redirect to signin
   if (!user) {
     return <Navigate to="/signin" state={{ from: location }} replace />;
   }
