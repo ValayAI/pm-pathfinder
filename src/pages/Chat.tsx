@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import MessageBubble from "@/components/MessageBubble";
 import PaywallModal from "@/components/PaywallModal";
-import { chatWithOpenAI as handleChatRequest } from "@/api/chat";
+import { chatWithOpenAI } from "@/api/chat";
 import PreloadedPrompts from "@/components/PreloadedPrompts";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useAuth } from "@/providers/AuthProvider";
@@ -176,11 +176,12 @@ export function Chat() {
     setInput("");
     
     try {
-      const data = await handleChatRequest({ message: input });
+      // Call chatWithOpenAI with just the input string, not an object
+      const response = await chatWithOpenAI(input);
       
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
-        content: data.message,
+        content: response, // Use the direct response which is a string
         role: "assistant",
         timestamp: Date.now(),
       };
@@ -192,7 +193,7 @@ export function Chat() {
         setUsedMessages(prev => prev + 1);
       }
       
-      updateCache(input, data.message);
+      updateCache(input, response); // Update cache with the string response
       
       if (hasLimitedMessages && remainingMessages <= 1) {
         toast.error("Message limit reached", {
