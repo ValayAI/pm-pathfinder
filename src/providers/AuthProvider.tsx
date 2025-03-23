@@ -221,12 +221,26 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const signOut = async () => {
     try {
-      await supabase.auth.signOut();
+      // Clear the local state first
+      setUser(null);
+      setSession(null);
+      
+      // Remove profile from localStorage
       localStorage.removeItem('userProfile');
-      // Change this line to navigate to the index page instead of signin
-      navigate('/');
+      
+      // Then sign out from Supabase
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        console.error('Error signing out from Supabase:', error);
+        throw error;
+      }
+      
+      // Navigate to home page
+      navigate('/', { replace: true });
     } catch (error) {
       console.error('Error signing out:', error);
+      // Even if there's an error, try to navigate to home
+      navigate('/', { replace: true });
     }
   };
 
