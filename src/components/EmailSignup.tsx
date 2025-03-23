@@ -64,6 +64,9 @@ const EmailSignup = () => {
         console.log("Setting success message");
         setSubscriptionMessage("Thank you for subscribing to our newsletter!");
         
+        // Add a success toast notification
+        toast.success("Successfully subscribed to the newsletter!");
+        
         // Add to local storage
         addSubscriber(email);
         
@@ -170,7 +173,7 @@ const EmailSignup = () => {
             )}
           </button>
           
-          {/* Display subscription message - fixed alignment */}
+          {/* Display subscription message - enhanced visibility */}
           {subscriptionMessage && (
             <div className={`text-sm mt-3 text-center font-medium ${
               subscriptionMessage.includes("Thank you") 
