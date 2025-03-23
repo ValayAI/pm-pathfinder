@@ -42,6 +42,19 @@ export function Navbar() {
     setIsDark(!isDark);
   };
   
+  const navigationItems = [
+    { label: "Home", href: "/" },
+    { label: "Explore", href: "/explore" },
+    { label: "Resources", href: "/resources" },
+    { label: "PM Coach", href: "/chat", highlight: true },
+    { label: "Coaching", href: "/coaching" },
+  ];
+  
+  // Add pricing for non-authenticated users
+  if (!user) {
+    navigationItems.push({ label: "Pricing", href: "/pricing" });
+  }
+  
   return (
     <nav 
       className={cn(
@@ -62,88 +75,61 @@ export function Navbar() {
             </NavLink>
           </div>
           
-          {/* Only show navigation in Navbar when user is not logged in */}
-          {!user && (
-            <div className="hidden md:flex items-center space-x-4">
+          {/* Navigation links - now visible for all users on desktop */}
+          <div className="hidden md:flex items-center space-x-4">
+            {navigationItems.map((item) => (
               <NavLink
-                to="/"
-                className={({ isActive }) => cn(
-                  "flex items-center text-sm font-medium transition-colors duration-200",
-                  isActive ? "text-primary" : "text-foreground/70 hover:text-primary"
-                )}
-              >
-                <span>Home</span>
-              </NavLink>
-              
-              <NavLink
-                to="/explore"
-                className={({ isActive }) => cn(
-                  "flex items-center text-sm font-medium transition-colors duration-200",
-                  isActive ? "text-primary" : "text-foreground/70 hover:text-primary"
-                )}
-              >
-                <span>Explore</span>
-              </NavLink>
-              
-              <NavLink
-                to="/resources"
-                className={({ isActive }) => cn(
-                  "flex items-center text-sm font-medium transition-colors duration-200",
-                  isActive ? "text-primary" : "text-foreground/70 hover:text-primary"
-                )}
-              >
-                <span>Resources</span>
-              </NavLink>
-              
-              <NavLink
-                to="/chat"
+                key={item.label}
+                to={item.href}
                 className={({ isActive }) => cn(
                   "flex items-center text-sm font-medium transition-colors duration-200",
                   isActive ? "text-primary" : "text-foreground/70 hover:text-primary",
-                  !isActive && "text-blue-600 dark:text-blue-400"
+                  item.highlight && !isActive && "text-blue-600 dark:text-blue-400"
                 )}
               >
-                <span>PM Coach</span>
+                <span>{item.label}</span>
               </NavLink>
-              
-              <NavLink
-                to="/coaching"
-                className={({ isActive }) => cn(
-                  "flex items-center text-sm font-medium transition-colors duration-200",
-                  isActive ? "text-primary" : "text-foreground/70 hover:text-primary"
-                )}
-              >
-                <span>Coaching</span>
-              </NavLink>
-              
-              <NavLink
-                to="/pricing"
-                className={({ isActive }) => cn(
-                  "flex items-center text-sm font-medium transition-colors duration-200",
-                  isActive ? "text-primary" : "text-foreground/70 hover:text-primary"
-                )}
-              >
-                <span>Pricing</span>
-              </NavLink>
-            </div>
-          )}
+            ))}
+            
+            {/* For logged-in users, also show Roadmap and Settings links */}
+            {user && (
+              <>
+                <NavLink
+                  to="/roadmap"
+                  className={({ isActive }) => cn(
+                    "flex items-center text-sm font-medium transition-colors duration-200",
+                    isActive ? "text-primary" : "text-foreground/70 hover:text-primary"
+                  )}
+                >
+                  <span>Roadmap</span>
+                </NavLink>
+                <NavLink
+                  to="/settings"
+                  className={({ isActive }) => cn(
+                    "flex items-center text-sm font-medium transition-colors duration-200",
+                    isActive ? "text-primary" : "text-foreground/70 hover:text-primary"
+                  )}
+                >
+                  <span>Settings</span>
+                </NavLink>
+              </>
+            )}
+          </div>
           
-          {/* Mobile navigation button for logged-out users */}
-          {!user && (
-            <div className="md:hidden">
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                className="h-9 w-9 rounded-md"
-                asChild
-              >
-                <Link to="/explore">
-                  <Menu className="h-5 w-5" />
-                  <span className="sr-only">Navigation Menu</span>
-                </Link>
-              </Button>
-            </div>
-          )}
+          {/* Mobile navigation button - for all users now */}
+          <div className="md:hidden">
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="h-9 w-9 rounded-md"
+              asChild
+            >
+              <Link to={user ? "/explore" : "/explore"}>
+                <Menu className="h-5 w-5" />
+                <span className="sr-only">Navigation Menu</span>
+              </Link>
+            </Button>
+          </div>
           
           {/* Right side controls - always visible */}
           <div className="flex items-center space-x-2">
