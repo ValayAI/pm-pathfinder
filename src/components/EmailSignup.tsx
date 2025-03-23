@@ -4,9 +4,11 @@ import { toast } from "sonner";
 import { isSubscribed, addSubscriber } from '@/utils/subscriberUtils';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
+import { Mail, AlertCircle } from 'lucide-react';
 
 const EmailSignup = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -65,6 +67,9 @@ const EmailSignup = () => {
         // Add to local storage
         addSubscriber(email);
         
+        // Show confirmation message
+        setIsSubmitted(true);
+        
         // Reset the form
         if (formRef.current) {
           formRef.current.reset();
@@ -84,6 +89,32 @@ const EmailSignup = () => {
       setIsSubmitting(false);
     });
   };
+
+  if (isSubmitted) {
+    return (
+      <div className="bg-muted/30 border border-border rounded-md shadow-sm p-4">
+        <div className="text-center space-y-3">
+          <div className="flex justify-center">
+            <div className="rounded-full bg-green-100 p-2">
+              <Mail className="h-6 w-6 text-green-600" />
+            </div>
+          </div>
+          <h4 className="font-medium text-lg">Check your inbox!</h4>
+          <p className="text-sm text-muted-foreground">
+            Please check your email and click the confirmation link to complete your subscription.
+          </p>
+          <div className="bg-amber-50 border border-amber-200 rounded p-3 mt-3">
+            <div className="flex items-start">
+              <AlertCircle className="h-5 w-5 text-amber-500 mr-2 mt-0.5" />
+              <p className="text-sm text-amber-800">
+                If you don't see the confirmation email, please check your spam folder.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-muted/30 border border-border rounded-md shadow-sm">
