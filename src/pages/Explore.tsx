@@ -4,7 +4,18 @@ import TeaserWrapper from '../components/TeaserWrapper';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Sparkles, Search, Target, MessageSquare, AlertTriangle, CheckCircle } from "lucide-react";
+import { 
+  ArrowRight, 
+  Sparkles, 
+  Search, 
+  Target, 
+  MessageSquare, 
+  CheckCircle,
+  BookOpen,
+  List,
+  FileText,
+  Calculator
+} from "lucide-react";
 
 const Explore = () => {
   const fullContent = (
@@ -17,8 +28,6 @@ const Explore = () => {
         
         {/* Full content for authenticated users */}
         <div className="space-y-8">
-          <p>This is the full Explore page content for authenticated users.</p>
-          
           {/* Featured AI tools */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <Card>
@@ -86,6 +95,145 @@ const Explore = () => {
                 </Button>
               </CardContent>
             </Card>
+          </div>
+
+          {/* Product Management Resources Section */}
+          <div className="mt-16">
+            <h2 className="text-3xl font-bold text-center text-primary mb-2">Product Management Resources</h2>
+            <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
+              Discover tools, frameworks, and methodologies to enhance your product management skills.
+            </p>
+
+            {/* Popular Frameworks Section */}
+            <div className="mb-8">
+              <div className="flex items-center gap-2 mb-4">
+                <Sparkles className="h-5 w-5 text-amber-500" />
+                <h3 className="text-xl font-bold">Popular Frameworks</h3>
+              </div>
+
+              {/* Framework Cards */}
+              <div className="space-y-4">
+                {/* OKRs Framework */}
+                <div className="border border-border rounded-lg overflow-hidden">
+                  <div className="flex">
+                    <div className="bg-purple-50 dark:bg-purple-950/20 p-6 flex items-center justify-center min-w-[100px]">
+                      <div className="text-purple-600 dark:text-purple-400">
+                        <Target className="h-8 w-8" />
+                      </div>
+                    </div>
+                    <div className="p-4 flex-1">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <h4 className="text-lg font-semibold">OKRs: Set & Achieve Goals</h4>
+                          <p className="text-muted-foreground">Define objectives with key results to track progress.</p>
+                        </div>
+                        <Badge className="bg-strategic-light text-strategic border-0">Strategic</Badge>
+                      </div>
+                      <div className="mt-4 flex gap-2">
+                        <Button size="sm" variant="outline" className="gap-1">
+                          <FileText className="h-4 w-4" />
+                          Example
+                        </Button>
+                        <Button size="sm" variant="outline" className="gap-1">
+                          <BookOpen className="h-4 w-4" />
+                          Guide
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* RICE Scoring */}
+                <div className="border border-border rounded-lg overflow-hidden">
+                  <div className="flex">
+                    <div className="bg-blue-50 dark:bg-blue-950/20 p-6 flex items-center justify-center min-w-[100px]">
+                      <div className="text-blue-600 dark:text-blue-400">
+                        <Calculator className="h-8 w-8" />
+                      </div>
+                    </div>
+                    <div className="p-4 flex-1">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <h4 className="text-lg font-semibold">RICE Scoring</h4>
+                          <p className="text-muted-foreground">Evaluate based on Reach, Impact, Confidence, and Effort.</p>
+                        </div>
+                        <Badge className="bg-prioritization-light text-prioritization border-0">Prioritization</Badge>
+                      </div>
+                      <div className="mt-4 flex gap-2">
+                        <Button size="sm" variant="outline" className="gap-1">
+                          <Calculator className="h-4 w-4" />
+                          Calculator
+                        </Button>
+                        <Button size="sm" variant="outline" className="gap-1">
+                          <FileText className="h-4 w-4" />
+                          Template
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* MoSCoW Method */}
+                <div className="border border-border rounded-lg overflow-hidden">
+                  <div className="flex">
+                    <div className="bg-orange-50 dark:bg-orange-950/20 p-6 flex items-center justify-center min-w-[100px]">
+                      <div className="text-orange-600 dark:text-orange-400">
+                        <List className="h-8 w-8" />
+                      </div>
+                    </div>
+                    <div className="p-4 flex-1">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <h4 className="text-lg font-semibold">MoSCoW Method</h4>
+                          <p className="text-muted-foreground">Categorize tasks into Must, Should, Could, and Won't.</p>
+                        </div>
+                        <Badge className="bg-requirements-light text-requirements border-0">Requirements</Badge>
+                      </div>
+                      <div className="mt-4 flex gap-2">
+                        <Button size="sm" variant="outline" className="gap-1">
+                          <FileText className="h-4 w-4" />
+                          Workshop
+                        </Button>
+                        <Button size="sm" variant="outline" className="gap-1">
+                          <CheckCircle className="h-4 w-4" />
+                          Checklist
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Strategic Roadmapping */}
+                <div className="border border-border rounded-lg overflow-hidden">
+                  <div className="flex">
+                    <div className="bg-green-50 dark:bg-green-950/20 p-6 flex items-center justify-center min-w-[100px]">
+                      <div className="text-green-600 dark:text-green-400">
+                        <BarChart3 className="h-8 w-8" />
+                      </div>
+                    </div>
+                    <div className="p-4 flex-1">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <h4 className="text-lg font-semibold">Strategic Roadmapping</h4>
+                          <p className="text-muted-foreground">Organize features into a structured timeline.</p>
+                        </div>
+                        <Badge className="bg-planning-light text-planning border-0">Planning</Badge>
+                      </div>
+                      <div className="mt-4 flex gap-2">
+                        <Button size="sm" variant="outline" className="gap-1">
+                          <Target className="h-4 w-4" />
+                          Generator
+                        </Button>
+                        <Button size="sm" variant="outline" className="gap-1">
+                          <FileText className="h-4 w-4" />
+                          Template
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
