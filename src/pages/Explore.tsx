@@ -1,3 +1,4 @@
+
 import React from 'react';
 import TeaserWrapper from '../components/TeaserWrapper';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -232,6 +233,182 @@ const Explore = () => {
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
+
+            {/* Documentation Templates Section */}
+            <div className="mb-8">
+              <div className="flex items-center gap-2 mb-4">
+                <FileText className="h-5 w-5 text-blue-500" />
+                <h3 className="text-xl font-bold">Documentation Templates</h3>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Card>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-xl flex items-center gap-2">
+                      <FileText className="h-5 w-5 text-primary" />
+                      PRD Template
+                    </CardTitle>
+                    <CardDescription>
+                      Comprehensive product requirements document
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="mb-4 text-sm text-muted-foreground">
+                      A structured template for defining product requirements, user stories, and technical specifications.
+                    </p>
+                    <Button variant="outline" className="w-full">
+                      Download Template
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-xl flex items-center gap-2">
+                      <MessageSquare className="h-5 w-5 text-primary" />
+                      User Persona Canvas
+                    </CardTitle>
+                    <CardDescription>
+                      Create detailed user personas for your product
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="mb-4 text-sm text-muted-foreground">
+                      A template to help you define user demographics, goals, pain points, and motivations.
+                    </p>
+                    <Button variant="outline" className="w-full">
+                      Access Template
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-xl flex items-center gap-2">
+                      <Target className="h-5 w-5 text-primary" />
+                      Go-to-Market Strategy
+                    </CardTitle>
+                    <CardDescription>
+                      Plan your product launch effectively
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="mb-4 text-sm text-muted-foreground">
+                      A comprehensive template for planning marketing, sales, and customer support for your product launch.
+                    </p>
+                    <Button variant="outline" className="w-full">
+                      Get Template
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-xl flex items-center gap-2">
+                      <CheckCircle className="h-5 w-5 text-primary" />
+                      Feature Specification
+                    </CardTitle>
+                    <CardDescription>
+                      Detailed feature documentation
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="mb-4 text-sm text-muted-foreground">
+                      A template for documenting feature requirements, user flows, edge cases, and acceptance criteria.
+                    </p>
+                    <Button variant="outline" className="w-full">
+                      Download Template
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+
+            {/* PM Books Section */}
+            <div className="mb-8">
+              <div className="flex items-center gap-2 mb-4">
+                <BookOpen className="h-5 w-5 text-green-500" />
+                <h3 className="text-xl font-bold">Essential PM Books</h3>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <Card className="flex flex-col">
+                  <div className="h-48 bg-slate-100 dark:bg-slate-800 rounded-t-lg flex items-center justify-center">
+                    <BookOpen className="h-16 w-16 text-slate-400" />
+                  </div>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-lg">Inspired</CardTitle>
+                    <CardDescription>By Marty Cagan</CardDescription>
+                  </CardHeader>
+                  <CardContent className="flex-grow">
+                    <p className="text-sm text-muted-foreground">
+                      How to create tech products customers love.
+                    </p>
+                  </CardContent>
+                  <div className="p-4 pt-0 mt-auto">
+                    <Badge variant="outline" className="mb-2">Recommended</Badge>
+                    <Button variant="outline" size="sm" className="w-full">Learn More</Button>
+                  </div>
+                </Card>
+
+                <Card className="flex flex-col">
+                  <div className="h-48 bg-slate-100 dark:bg-slate-800 rounded-t-lg flex items-center justify-center">
+                    <BookOpen className="h-16 w-16 text-slate-400" />
+                  </div>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-lg">Hooked</CardTitle>
+                    <CardDescription>By Nir Eyal</CardDescription>
+                  </CardHeader>
+                  <CardContent className="flex-grow">
+                    <p className="text-sm text-muted-foreground">
+                      Building habit-forming products.
+                    </p>
+                  </CardContent>
+                  <div className="p-4 pt-0 mt-auto">
+                    <Badge variant="outline" className="mb-2">Psychology</Badge>
+                    <Button variant="outline" size="sm" className="w-full">Learn More</Button>
+                  </div>
+                </Card>
+
+                <Card className="flex flex-col">
+                  <div className="h-48 bg-slate-100 dark:bg-slate-800 rounded-t-lg flex items-center justify-center">
+                    <BookOpen className="h-16 w-16 text-slate-400" />
+                  </div>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-lg">Lean Product Playbook</CardTitle>
+                    <CardDescription>By Dan Olsen</CardDescription>
+                  </CardHeader>
+                  <CardContent className="flex-grow">
+                    <p className="text-sm text-muted-foreground">
+                      Creating products people want.
+                    </p>
+                  </CardContent>
+                  <div className="p-4 pt-0 mt-auto">
+                    <Badge variant="outline" className="mb-2">Strategy</Badge>
+                    <Button variant="outline" size="sm" className="w-full">Learn More</Button>
+                  </div>
+                </Card>
+
+                <Card className="flex flex-col">
+                  <div className="h-48 bg-slate-100 dark:bg-slate-800 rounded-t-lg flex items-center justify-center">
+                    <BookOpen className="h-16 w-16 text-slate-400" />
+                  </div>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-lg">Escaping the Build Trap</CardTitle>
+                    <CardDescription>By Melissa Perri</CardDescription>
+                  </CardHeader>
+                  <CardContent className="flex-grow">
+                    <p className="text-sm text-muted-foreground">
+                      Creating value through product management.
+                    </p>
+                  </CardContent>
+                  <div className="p-4 pt-0 mt-auto">
+                    <Badge variant="outline" className="mb-2">Value-Based</Badge>
+                    <Button variant="outline" size="sm" className="w-full">Learn More</Button>
+                  </div>
+                </Card>
               </div>
             </div>
           </div>
