@@ -103,8 +103,8 @@ const EmailSignup = () => {
       >
         <div data-style="full">
           <div className="formkit-field mb-3">
-            <Label htmlFor="email_address" className="block text-base font-medium mb-2">Subscribe to our newsletter</Label>
-            <p className="text-sm text-muted-foreground mb-3">Get exclusive PM insights, frameworks, and AI tips directly in your inbox!</p>
+            <Label htmlFor="email_address" className="block text-base font-medium mb-2 text-center">Subscribe to our newsletter</Label>
+            <p className="text-sm text-muted-foreground mb-3 text-center">Get exclusive PM insights, frameworks, and AI tips directly in your inbox!</p>
             <Input 
               className="formkit-input w-full mb-3" 
               name="email_address" 
@@ -140,7 +140,7 @@ const EmailSignup = () => {
             )}
           </button>
           
-          {/* Display subscription message */}
+          {/* Display subscription message - fixed alignment */}
           {subscriptionMessage && (
             <div className={`text-sm mt-3 text-center font-medium ${
               subscriptionMessage.includes("Thank you") 
