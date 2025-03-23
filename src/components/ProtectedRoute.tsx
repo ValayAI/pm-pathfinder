@@ -22,9 +22,9 @@ const ProtectedRoute = ({ children, requireFeature }: ProtectedRouteProps) => {
     );
   }
   
-  // If not authenticated, redirect to signin page
+  // If not authenticated, allow access but the page will show teaser content
   if (!user) {
-    return <Navigate to="/signin" state={{ from: location }} replace />;
+    return <>{children}</>;
   }
   
   // If a specific feature is required and the user doesn't have access to it

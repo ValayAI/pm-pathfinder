@@ -1,4 +1,3 @@
-
 import { useEffect, useState, useRef, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
@@ -13,10 +12,12 @@ import { cn } from "@/lib/utils";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import MessageBubble from "@/components/MessageBubble";
 import PaywallModal from "@/components/PaywallModal";
-import { handleChatRequest } from "@/api/chat.tsx";
+import { handleChatRequest } from "@/api/chat";
 import PreloadedPrompts from "@/components/PreloadedPrompts";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useAuth } from "@/providers/AuthProvider";
 import { useSubscription, PlanType } from "@/providers/SubscriptionProvider";
+import PMCoachTeaser from "@/components/teasers/PMCoachTeaser";
 
 type Message = {
   id: string;
@@ -45,7 +46,20 @@ export function Chat() {
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   
-  // Get subscription details
+  const { user } = useAuth();
+  
+  if (!user) {
+    return (
+      <div className="min-h-screen flex flex-col bg-background">
+        <Navbar />
+        <main className="flex-grow container mx-auto px-4 py-8 max-w-3xl">
+          <PMCoachTeaser />
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+  
   const { subscription, getRemainingMessages } = useSubscription();
   const remainingMessages = getRemainingMessages();
   const messageLimit = subscription?.messageLimit || 10;
@@ -69,9 +83,6 @@ export function Chat() {
   };
 
   useEffect(() => {
-    // Show paywall if:
-    // 1. User is on free plan and has used 10+ messages
-    // 2. User is on starter plan and has used 50+ messages
     if (hasLimitedMessages && remainingMessages <= 0) {
       setShowPaywall(true);
     }
@@ -122,7 +133,6 @@ export function Chat() {
     
     if (!input.trim()) return;
     
-    // Check if user has remaining messages
     if (hasLimitedMessages && remainingMessages <= 0) {
       setShowPaywall(true);
       return;
@@ -177,14 +187,12 @@ export function Chat() {
       setMessages(prev => [...prev, assistantMessage]);
       scrollToBottom();
       
-      // Only increment the used messages counter for limited plans
       if (hasLimitedMessages) {
         setUsedMessages(prev => prev + 1);
       }
       
       updateCache(input, data.message);
       
-      // Show limit warning for limited plans
       if (hasLimitedMessages && remainingMessages <= 1) {
         toast.error("Message limit reached", {
           description: "You've used all your free messages. Please upgrade to continue.",
@@ -259,7 +267,6 @@ export function Chat() {
               Get expert guidance on product management career growth and strategy
             </p>
             
-            {/* Subscription badge */}
             {subscription && (
               <div className="mt-2">
                 <span className={cn(
@@ -329,7 +336,6 @@ export function Chat() {
             </div>
           </Card>
           
-          {/* Message counter - only show for limited plans */}
           {hasLimitedMessages && (
             <div className="mt-4 mb-6">
               <div className="flex justify-between text-xs mb-1">
@@ -357,14 +363,12 @@ export function Chat() {
             </div>
           )}
           
-          {/* Feature badge */}
           <div className="text-center mt-4 mb-6">
             <div className="inline-block px-3 py-1 rounded-md text-xs bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200">
               {getPlanFeatureMessage()}
             </div>
           </div>
           
-          {/* Only show upgrade button for free or starter plans */}
           {(subscription?.planId === 'free' || subscription?.planId === 'starter') && (
             <div className="text-center mt-8">
               <h2 className="text-lg font-semibold mb-3">Upgrade to Premium Coaching</h2>
@@ -381,7 +385,6 @@ export function Chat() {
             </div>
           )}
           
-          {/* Show pro features for popular plan users */}
           {subscription?.planId === 'popular' && (
             <div className="text-center mt-8">
               <h2 className="text-lg font-semibold mb-3">Upgrade to Pro Coaching</h2>

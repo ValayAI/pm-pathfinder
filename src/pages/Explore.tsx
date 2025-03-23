@@ -10,6 +10,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useAuth } from "@/providers/AuthProvider";
+import ExploreFeaturesTeaser from "@/components/teasers/ExploreFeaturesTeaser";
 import { 
   TargetIcon, 
   GridIcon, 
@@ -32,6 +34,19 @@ import {
 
 const Explore = () => {
   const isMobile = useIsMobile();
+  const { user } = useAuth();
+  
+  if (!user) {
+    return (
+      <div className="min-h-screen flex flex-col bg-background">
+        <Navbar />
+        <main className="flex-grow container mx-auto px-4 py-16 mt-8">
+          <ExploreFeaturesTeaser />
+        </main>
+        <Footer />
+      </div>
+    );
+  }
   
   return (
     <div className="min-h-screen flex flex-col bg-background">

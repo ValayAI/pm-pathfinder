@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -6,8 +5,24 @@ import EmailSignup from "../components/EmailSignup";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { BookOpen, FileText, Video, Download, Eye, Wand2, Calendar } from "lucide-react";
+import { useAuth } from "@/providers/AuthProvider";
+import ResourcesTeaser from "@/components/teasers/ResourcesTeaser";
 
 const Resources = () => {
+  const { user } = useAuth();
+  
+  if (!user) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Navbar />
+        <main className="flex-grow container mx-auto px-4 py-24">
+          <ResourcesTeaser />
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+  
   const resources = [
     {
       title: "Product Requirement Document Template",
