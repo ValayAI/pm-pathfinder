@@ -1,3 +1,4 @@
+
 import { createContext, useContext, useEffect, useState, useMemo } from 'react';
 import { supabase } from '@/lib/supabase';
 import { Session, User } from '@supabase/supabase-js';
@@ -55,11 +56,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         if (!mounted) return;
         
         console.log('Auth state changed:', _event, session?.user?.email);
-        setSession(session);
-        setUser(session?.user ?? null);
         
-        if (session?.user) {
-          await fetchAndStoreUserProfile(session.user.id);
+        // For sign out events, make sure we clear everything
+        if (_event === 'SIGNED_OUT') {
+          setSession(null);
+          setUser(null);
+          localStorage.removeItem('userProfile');
+          localStorage.removeItem('supabase.auth.token');
+          console.log('Cleared auth state after sign out');
+        } else {
+          setSession(session);
+          setUser(session?.user ?? null);
+          
+          if (session?.user) {
+            await fetchAndStoreUserProfile(session.user.id);
+          }
         }
         
         setIsLoading(false);
@@ -220,25 +231,40 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const signOut = async () => {
     try {
-      // Clear the local state first
+      console.log('Signing out: starting process');
+      
+      // Clear local state first
       setUser(null);
       setSession(null);
       
-      // Remove profile from localStorage
+      // Remove profile and any auth data from localStorage
       localStorage.removeItem('userProfile');
+      localStorage.removeItem('supabase.auth.token');
       
-      // Then sign out from Supabase
-      const { error } = await supabase.auth.signOut();
+      // Clear any custom auth storage Supabase might be using
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && (key.startsWith('supabase.auth.') || key.includes('session'))) {
+          localStorage.removeItem(key);
+        }
+      }
+      
+      // Then sign out from Supabase (which should clear browser storage too)
+      const { error } = await supabase.auth.signOut({ scope: 'global' });
       if (error) {
         console.error('Error signing out from Supabase:', error);
         throw error;
       }
       
+      console.log('Sign out successful, redirecting to home');
+      
       // Navigate to home page
       navigate('/', { replace: true });
     } catch (error) {
       console.error('Error signing out:', error);
-      // Even if there's an error, try to navigate to home
+      
+      // Even if there's an error, try to clean up and navigate to home
+      localStorage.removeItem('userProfile');
       navigate('/', { replace: true });
     }
   };
