@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { User, KeyRound, ArrowRight, Mail, CheckCircle } from 'lucide-react';
+import { User, KeyRound, ArrowRight, Mail, CheckCircle, Sparkles } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import { addSubscriber } from '@/utils/subscriberUtils';
 
@@ -96,43 +96,46 @@ const SignUp = () => {
     return (
       <div className="min-h-screen bg-background">
         <Navbar />
-        <div className="page-container flex items-center justify-center">
-          <Card className="w-full max-w-md">
-            <CardHeader className="space-y-1">
+        <div className="page-container flex items-center justify-center pt-24 md:pt-28 pb-12">
+          <Card className="w-full max-w-md shadow-md border-primary/20 rounded-xl overflow-hidden">
+            <div className="absolute right-12 top-6 hidden md:block">
+              <Sparkles className="text-green-500/60 h-10 w-10 animate-pulse" />
+            </div>
+            <CardHeader className="space-y-2 bg-muted/30 border-b pb-6">
               <CardTitle className="text-2xl font-bold flex items-center">
-                <CheckCircle className="mr-2 h-6 w-6 text-green-500" />
+                <CheckCircle className="mr-3 h-6 w-6 text-green-500" />
                 Sign Up Successful
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="text-base">
                 Please check your email inbox to complete registration
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="p-4 bg-muted rounded-md space-y-3">
-                <h3 className="font-medium flex items-center">
-                  <Mail className="mr-2 h-4 w-4" />
+            <CardContent className="space-y-4 pt-6">
+              <div className="p-5 bg-gradient-to-r from-muted/50 to-transparent rounded-lg space-y-3 border shadow-sm">
+                <h3 className="font-medium flex items-center text-lg">
+                  <Mail className="mr-2 h-5 w-5 text-primary" />
                   Two confirmation emails have been sent:
                 </h3>
-                <ol className="list-decimal ml-5 space-y-2">
-                  <li>
+                <ol className="list-decimal ml-6 space-y-3">
+                  <li className="text-base">
                     <strong>Account verification email</strong> - Click the link to verify your account
                   </li>
                   {subscribeNewsletter && (
-                    <li>
+                    <li className="text-base">
                       <strong>Newsletter confirmation email</strong> - Please confirm your subscription
                     </li>
                   )}
                 </ol>
-                <p className="text-sm text-muted-foreground mt-3">
+                <p className="text-sm text-muted-foreground mt-4 bg-muted/30 p-3 rounded-md border border-dashed">
                   Please check your spam folder if you don't see these emails in your inbox.
                 </p>
               </div>
             </CardContent>
-            <CardFooter className="flex justify-between">
-              <Button variant="outline" onClick={() => navigate('/signin')}>
+            <CardFooter className="flex justify-between pt-4 bg-muted/20 border-t">
+              <Button variant="outline" onClick={() => navigate('/signin')} className="min-w-32">
                 Go to Sign In
               </Button>
-              <Button onClick={() => navigate('/')}>
+              <Button onClick={() => navigate('/')} className="min-w-32 bg-primary/90 hover:bg-primary">
                 Return to Home
               </Button>
             </CardFooter>
@@ -145,120 +148,131 @@ const SignUp = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <div className="page-container flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-bold">Create an account</CardTitle>
-            <CardDescription>
-              Enter your details to get started
-            </CardDescription>
-          </CardHeader>
-          <form onSubmit={handleSubmit}>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="first-name">First Name</Label>
-                  <Input
-                    id="first-name"
-                    placeholder="John"
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="last-name">Last Name</Label>
-                  <Input
-                    id="last-name"
-                    placeholder="Doe"
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                    required
-                  />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="name@example.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="pl-10"
-                    required
-                  />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
-                <div className="relative">
-                  <KeyRound className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    id="password"
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="pl-10"
-                    required
-                    minLength={6}
-                  />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="confirm-password">Confirm Password</Label>
-                <div className="relative">
-                  <KeyRound className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    id="confirm-password"
-                    type="password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="pl-10"
-                    required
-                    minLength={6}
-                  />
-                </div>
-              </div>
-              <div className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  id="subscribe-newsletter"
-                  className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
-                  checked={subscribeNewsletter}
-                  onChange={(e) => setSubscribeNewsletter(e.target.checked)}
-                />
-                <Label htmlFor="subscribe-newsletter" className="text-sm font-normal">
-                  Subscribe to our newsletter for PM insights, frameworks, and AI tips
-                </Label>
-              </div>
-            </CardContent>
-            <CardFooter className="flex flex-col space-y-4">
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? (
-                  <div className="flex items-center justify-center">
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                    <span className="ml-2">Creating account...</span>
+      <div className="page-container flex items-center justify-center pt-24 md:pt-28 pb-12">
+        <div className="relative w-full max-w-md">
+          <div className="absolute -top-6 right-0 hidden md:block">
+            <Sparkles className="text-primary/60 h-10 w-10 animate-pulse" />
+          </div>
+          <Card className="w-full shadow-md border-primary/20 rounded-xl overflow-hidden">
+            <CardHeader className="space-y-2 bg-muted/30 border-b">
+              <CardTitle className="text-2xl font-bold">Create an account</CardTitle>
+              <CardDescription className="text-base">
+                Enter your details to get started
+              </CardDescription>
+            </CardHeader>
+            <form onSubmit={handleSubmit}>
+              <CardContent className="space-y-5 pt-6">
+                <div className="grid grid-cols-2 gap-5">
+                  <div className="space-y-2">
+                    <Label htmlFor="first-name" className="text-sm font-medium">First Name</Label>
+                    <Input
+                      id="first-name"
+                      placeholder="John"
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
+                      className="border-input/60 focus:border-primary/40 shadow-sm"
+                      required
+                    />
                   </div>
-                ) : (
-                  <div className="flex items-center justify-center">
-                    <User className="mr-2 h-4 w-4" />
-                    <span>Create account</span>
+                  <div className="space-y-2">
+                    <Label htmlFor="last-name" className="text-sm font-medium">Last Name</Label>
+                    <Input
+                      id="last-name"
+                      placeholder="Doe"
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
+                      className="border-input/60 focus:border-primary/40 shadow-sm"
+                      required
+                    />
                   </div>
-                )}
-              </Button>
-              <div className="text-center text-sm">
-                Already have an account?{" "}
-                <Link to="/signin" className="text-primary hover:underline">
-                  Sign in
-                  <ArrowRight className="ml-1 inline-block h-3 w-3" />
-                </Link>
-              </div>
-            </CardFooter>
-          </form>
-        </Card>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="email" className="text-sm font-medium">Email</Label>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="name@example.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="pl-10 border-input/60 focus:border-primary/40 shadow-sm"
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="password" className="text-sm font-medium">Password</Label>
+                  <div className="relative">
+                    <KeyRound className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      id="password"
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="pl-10 border-input/60 focus:border-primary/40 shadow-sm"
+                      required
+                      minLength={6}
+                    />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="confirm-password" className="text-sm font-medium">Confirm Password</Label>
+                  <div className="relative">
+                    <KeyRound className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      id="confirm-password"
+                      type="password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      className="pl-10 border-input/60 focus:border-primary/40 shadow-sm"
+                      required
+                      minLength={6}
+                    />
+                  </div>
+                </div>
+                <div className="flex items-center space-x-3 bg-muted/30 p-3 rounded-lg border border-dashed">
+                  <input
+                    type="checkbox"
+                    id="subscribe-newsletter"
+                    className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                    checked={subscribeNewsletter}
+                    onChange={(e) => setSubscribeNewsletter(e.target.checked)}
+                  />
+                  <Label htmlFor="subscribe-newsletter" className="text-sm font-normal">
+                    Subscribe to our newsletter for PM insights, frameworks, and AI tips
+                  </Label>
+                </div>
+              </CardContent>
+              <CardFooter className="flex flex-col space-y-4 border-t bg-muted/20 pt-6">
+                <Button 
+                  type="submit" 
+                  className="w-full bg-gradient-to-r from-blue-600 to-primary hover:from-blue-700 hover:to-primary/90 shadow-sm" 
+                  disabled={isLoading}
+                >
+                  {isLoading ? (
+                    <div className="flex items-center justify-center">
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                      <span className="ml-2">Creating account...</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center justify-center">
+                      <User className="mr-2 h-4 w-4" />
+                      <span>Create account</span>
+                    </div>
+                  )}
+                </Button>
+                <div className="text-center text-sm">
+                  Already have an account?{" "}
+                  <Link to="/signin" className="text-primary hover:underline font-medium">
+                    Sign in
+                    <ArrowRight className="ml-1 inline-block h-3 w-3" />
+                  </Link>
+                </div>
+              </CardFooter>
+            </form>
+          </Card>
+        </div>
       </div>
     </div>
   );

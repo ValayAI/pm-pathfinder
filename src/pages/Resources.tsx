@@ -5,7 +5,7 @@ import Footer from '../components/Footer';
 import EmailSignup from "../components/EmailSignup";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { BookOpen, FileText, Video, Download, Eye, Wand2, Calendar, DollarSign } from "lucide-react";
+import { BookOpen, FileText, Video, Download, Eye, Wand2, Calendar, DollarSign, Sparkles } from "lucide-react";
 import { useAuth } from "@/providers/AuthProvider";
 import ResourcesTeaser from "@/components/teasers/ResourcesTeaser";
 import { Badge } from "@/components/ui/badge";
@@ -76,38 +76,50 @@ const Resources = () => {
       <main className="flex-grow container mx-auto px-4 pt-24 md:pt-28 pb-12">
         <div className="max-w-5xl mx-auto">
           
-          <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold tracking-tight mb-4 bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
-              Product Management Resources
-            </h1>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Access our library of templates, guides, and tools to enhance your product management skills.
-            </p>
-            <div className="w-20 h-1 bg-gradient-to-r from-purple-600 to-indigo-600 mx-auto mt-6 rounded-full"></div>
+          <div className="relative mb-16">
+            <div className="absolute -left-4 top-1/2 -translate-y-1/2 hidden md:block">
+              <div className="w-1.5 h-20 bg-gradient-to-b from-purple-500 to-indigo-600 rounded-full"></div>
+            </div>
+            <div className="absolute -top-6 left-1/2 -translate-x-1/2 hidden md:block">
+              <Sparkles className="text-indigo-600/60 h-12 w-12 animate-pulse" />
+            </div>
+            <div className="text-center">
+              <span className="inline-block px-4 py-1 rounded-full text-xs font-medium bg-indigo-600/10 text-indigo-600 mb-4">Curated Content</span>
+              <h2 className="text-3xl md:text-4xl font-semibold leading-tight md:leading-snug tracking-tight mb-4">
+                <span className="bg-gradient-to-br from-purple-600 to-indigo-600 bg-clip-text text-transparent">
+                  Level up your PM knowledge
+                </span>
+              </h2>
+              <p className="text-muted-foreground max-w-xl mx-auto">
+                Access our library of templates, guides, and tools to enhance your product management skills
+              </p>
+            </div>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
             {resources.map((resource, index) => (
-              <Card key={index} className="h-full flex flex-col">
-                <CardHeader className="pb-2">
-                  <div className="flex justify-between items-start">
-                    {resource.icon}
-                    <span className="text-sm bg-muted text-muted-foreground px-2 py-1 rounded-md">
+              <Card key={index} className="h-full flex flex-col group transition-all hover:shadow-md duration-300 border border-muted">
+                <CardHeader className="pb-3 pt-6 px-6">
+                  <div className="flex justify-between items-start mb-2">
+                    <div className="bg-indigo-50 dark:bg-indigo-900/20 p-3 rounded-lg group-hover:bg-indigo-100 dark:group-hover:bg-indigo-900/30 transition-colors">
+                      {resource.icon}
+                    </div>
+                    <Badge variant="outline" className="bg-indigo-50/50 dark:bg-indigo-900/10 hover:bg-indigo-50 text-indigo-700 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800">
                       {resource.type}
-                    </span>
+                    </Badge>
                   </div>
-                  <CardTitle className="mt-4">{resource.title}</CardTitle>
-                  <CardDescription>{resource.description}</CardDescription>
+                  <CardTitle className="mt-4 text-xl">{resource.title}</CardTitle>
+                  <CardDescription className="text-base">{resource.description}</CardDescription>
                 </CardHeader>
-                <CardContent className="pt-2 mt-auto">
+                <CardContent className="pt-2 mt-auto pb-6 px-6">
                   {resource.showSampleGenerate ? (
-                    <div className="flex flex-col space-y-2">
-                      <Button variant="outline" className="w-full flex items-center justify-center">
-                        <Eye className="mr-2 h-4 w-4" />
+                    <div className="flex flex-col space-y-3">
+                      <Button variant="outline" className="w-full flex items-center justify-center gap-1.5 hover:bg-muted/50">
+                        <Eye className="h-4 w-4" />
                         Sample
                       </Button>
-                      <Button variant="default" className="w-full flex items-center justify-center">
-                        <Wand2 className="mr-2 h-4 w-4" />
+                      <Button variant="default" className="w-full flex items-center justify-center gap-1.5 bg-indigo-600 hover:bg-indigo-700">
+                        <Wand2 className="h-4 w-4" />
                         Generate
                       </Button>
                     </div>
@@ -122,148 +134,154 @@ const Resources = () => {
           </div>
           
           <div className="mt-16 mb-10">
-            <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold mb-3">Design Your "30-60-90 Day" Plan</h2>
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <div className="text-center mb-10">
+              <h2 className="text-3xl font-semibold mb-3 text-foreground">Design Your "30-60-90 Day" Plan</h2>
+              <p className="text-muted-foreground max-w-2xl mx-auto">
                 Create a structured onboarding plan for your new product management role
               </p>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <Card className="glass-effect hover-lift">
-                <CardHeader className="pb-2">
+              <Card className="hover-lift group backdrop-blur-sm rounded-xl border-t-4 border-t-blue-500 border-blue-100 dark:border-blue-900/20">
+                <CardHeader className="pb-3">
                   <div className="flex justify-between items-start">
-                    <Calendar className="h-8 w-8 text-blue-500" />
-                    <span className="text-sm bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 px-2 py-1 rounded-md">
+                    <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg group-hover:bg-blue-100 dark:group-hover:bg-blue-900/30 transition-colors">
+                      <Calendar className="h-6 w-6 text-blue-500" />
+                    </div>
+                    <Badge variant="outline" className="bg-blue-50/50 dark:bg-blue-900/10 hover:bg-blue-50 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800">
                       First 30 Days
-                    </span>
+                    </Badge>
                   </div>
-                  <CardTitle className="mt-4">Learning & Discovery</CardTitle>
-                  <CardDescription>Understand the product, team dynamics, and company goals</CardDescription>
+                  <CardTitle className="mt-4 text-xl">Learning & Discovery</CardTitle>
+                  <CardDescription className="text-base">Understand the product, team dynamics, and company goals</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <ul className="space-y-2 mt-2">
+                  <ul className="space-y-3 mt-3 mb-5">
                     <li className="flex items-start">
-                      <div className="bg-blue-100 dark:bg-blue-900/20 p-1 rounded-full mr-2 mt-1">
-                        <div className="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
+                      <div className="bg-blue-100 dark:bg-blue-900/20 p-1.5 rounded-full mr-2 mt-0.5">
+                        <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                       </div>
                       <span className="text-sm">Meet key stakeholders</span>
                     </li>
                     <li className="flex items-start">
-                      <div className="bg-blue-100 dark:bg-blue-900/20 p-1 rounded-full mr-2 mt-1">
-                        <div className="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
+                      <div className="bg-blue-100 dark:bg-blue-900/20 p-1.5 rounded-full mr-2 mt-0.5">
+                        <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                       </div>
                       <span className="text-sm">Review product documentation</span>
                     </li>
                     <li className="flex items-start">
-                      <div className="bg-blue-100 dark:bg-blue-900/20 p-1 rounded-full mr-2 mt-1">
-                        <div className="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
+                      <div className="bg-blue-100 dark:bg-blue-900/20 p-1.5 rounded-full mr-2 mt-0.5">
+                        <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                       </div>
                       <span className="text-sm">Understand current metrics</span>
                     </li>
                   </ul>
-                  <Button variant="outline" className="w-full mt-4">
+                  <Button variant="outline" className="w-full border-blue-200 hover:border-blue-300 hover:bg-blue-50/50 text-blue-700">
                     Get 30-Day Template
                   </Button>
                 </CardContent>
               </Card>
               
-              <Card className="glass-effect hover-lift">
-                <CardHeader className="pb-2">
+              <Card className="hover-lift group backdrop-blur-sm rounded-xl border-t-4 border-t-indigo-500 border-indigo-100 dark:border-indigo-900/20">
+                <CardHeader className="pb-3">
                   <div className="flex justify-between items-start">
-                    <Calendar className="h-8 w-8 text-indigo-500" />
-                    <span className="text-sm bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300 px-2 py-1 rounded-md">
+                    <div className="bg-indigo-50 dark:bg-indigo-900/20 p-3 rounded-lg group-hover:bg-indigo-100 dark:group-hover:bg-indigo-900/30 transition-colors">
+                      <Calendar className="h-6 w-6 text-indigo-500" />
+                    </div>
+                    <Badge variant="outline" className="bg-indigo-50/50 dark:bg-indigo-900/10 hover:bg-indigo-50 text-indigo-700 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800">
                       Days 31-60
-                    </span>
+                    </Badge>
                   </div>
-                  <CardTitle className="mt-4">Strategic Planning</CardTitle>
-                  <CardDescription>Develop initial strategies and begin to contribute</CardDescription>
+                  <CardTitle className="mt-4 text-xl">Strategic Planning</CardTitle>
+                  <CardDescription className="text-base">Develop initial strategies and begin to contribute</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <ul className="space-y-2 mt-2">
+                  <ul className="space-y-3 mt-3 mb-5">
                     <li className="flex items-start">
-                      <div className="bg-indigo-100 dark:bg-indigo-900/20 p-1 rounded-full mr-2 mt-1">
-                        <div className="w-1.5 h-1.5 bg-indigo-500 rounded-full"></div>
+                      <div className="bg-indigo-100 dark:bg-indigo-900/20 p-1.5 rounded-full mr-2 mt-0.5">
+                        <div className="w-2 h-2 bg-indigo-500 rounded-full"></div>
                       </div>
                       <span className="text-sm">Identify opportunity areas</span>
                     </li>
                     <li className="flex items-start">
-                      <div className="bg-indigo-100 dark:bg-indigo-900/20 p-1 rounded-full mr-2 mt-1">
-                        <div className="w-1.5 h-1.5 bg-indigo-500 rounded-full"></div>
+                      <div className="bg-indigo-100 dark:bg-indigo-900/20 p-1.5 rounded-full mr-2 mt-0.5">
+                        <div className="w-2 h-2 bg-indigo-500 rounded-full"></div>
                       </div>
                       <span className="text-sm">Collaborate on roadmap planning</span>
                     </li>
                     <li className="flex items-start">
-                      <div className="bg-indigo-100 dark:bg-indigo-900/20 p-1 rounded-full mr-2 mt-1">
-                        <div className="w-1.5 h-1.5 bg-indigo-500 rounded-full"></div>
+                      <div className="bg-indigo-100 dark:bg-indigo-900/20 p-1.5 rounded-full mr-2 mt-0.5">
+                        <div className="w-2 h-2 bg-indigo-500 rounded-full"></div>
                       </div>
                       <span className="text-sm">Propose initial improvements</span>
                     </li>
                   </ul>
-                  <Button variant="outline" className="w-full mt-4">
+                  <Button variant="outline" className="w-full border-indigo-200 hover:border-indigo-300 hover:bg-indigo-50/50 text-indigo-700">
                     Get 60-Day Template
                   </Button>
                 </CardContent>
               </Card>
               
-              <Card className="glass-effect hover-lift">
-                <CardHeader className="pb-2">
+              <Card className="hover-lift group backdrop-blur-sm rounded-xl border-t-4 border-t-purple-500 border-purple-100 dark:border-purple-900/20">
+                <CardHeader className="pb-3">
                   <div className="flex justify-between items-start">
-                    <Calendar className="h-8 w-8 text-purple-500" />
-                    <span className="text-sm bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300 px-2 py-1 rounded-md">
+                    <div className="bg-purple-50 dark:bg-purple-900/20 p-3 rounded-lg group-hover:bg-purple-100 dark:group-hover:bg-purple-900/30 transition-colors">
+                      <Calendar className="h-6 w-6 text-purple-500" />
+                    </div>
+                    <Badge variant="outline" className="bg-purple-50/50 dark:bg-purple-900/10 hover:bg-purple-50 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800">
                       Days 61-90
-                    </span>
+                    </Badge>
                   </div>
-                  <CardTitle className="mt-4">Execution & Impact</CardTitle>
-                  <CardDescription>Deliver measurable results and lead initiatives</CardDescription>
+                  <CardTitle className="mt-4 text-xl">Execution & Impact</CardTitle>
+                  <CardDescription className="text-base">Deliver measurable results and lead initiatives</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <ul className="space-y-2 mt-2">
+                  <ul className="space-y-3 mt-3 mb-5">
                     <li className="flex items-start">
-                      <div className="bg-purple-100 dark:bg-purple-900/20 p-1 rounded-full mr-2 mt-1">
-                        <div className="w-1.5 h-1.5 bg-purple-500 rounded-full"></div>
+                      <div className="bg-purple-100 dark:bg-purple-900/20 p-1.5 rounded-full mr-2 mt-0.5">
+                        <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
                       </div>
                       <span className="text-sm">Lead feature development</span>
                     </li>
                     <li className="flex items-start">
-                      <div className="bg-purple-100 dark:bg-purple-900/20 p-1 rounded-full mr-2 mt-1">
-                        <div className="w-1.5 h-1.5 bg-purple-500 rounded-full"></div>
+                      <div className="bg-purple-100 dark:bg-purple-900/20 p-1.5 rounded-full mr-2 mt-0.5">
+                        <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
                       </div>
                       <span className="text-sm">Analyze & share initial results</span>
                     </li>
                     <li className="flex items-start">
-                      <div className="bg-purple-100 dark:bg-purple-900/20 p-1 rounded-full mr-2 mt-1">
-                        <div className="w-1.5 h-1.5 bg-purple-500 rounded-full"></div>
+                      <div className="bg-purple-100 dark:bg-purple-900/20 p-1.5 rounded-full mr-2 mt-0.5">
+                        <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
                       </div>
                       <span className="text-sm">Establish long-term vision</span>
                     </li>
                   </ul>
-                  <Button variant="outline" className="w-full mt-4">
+                  <Button variant="outline" className="w-full border-purple-200 hover:border-purple-300 hover:bg-purple-50/50 text-purple-700">
                     Get 90-Day Template
                   </Button>
                 </CardContent>
               </Card>
             </div>
             
-            <div className="text-center mt-6">
-              <Button variant="default" size="lg" className="button-hover">
-                <Wand2 className="mr-2 h-4 w-4" />
+            <div className="text-center mt-8">
+              <Button variant="default" size="lg" className="button-hover px-6 py-6 h-auto bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700">
+                <Wand2 className="mr-2 h-5 w-5" />
                 Generate Custom 30-60-90 Plan
               </Button>
             </div>
           </div>
           
-          <div className="mt-16 bg-muted/50 rounded-lg p-8 text-center">
-            <h2 className="text-2xl font-bold mb-4">Need Custom Resources?</h2>
+          <div className="mt-16 bg-gradient-to-r from-muted/70 to-muted/40 backdrop-blur-sm rounded-xl p-8 text-center shadow-sm border">
+            <h2 className="text-2xl font-semibold mb-4">Need Custom Resources?</h2>
             <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
               Our team can create tailored resources for your specific product management challenges.
             </p>
-            <Button size="lg">
+            <Button size="lg" className="px-8 py-6 h-auto">
               Request Custom Resources
             </Button>
           </div>
           
-          <div className="max-w-md mx-auto mt-16">
+          <div className="max-w-md mx-auto mt-16 bg-gradient-to-r from-muted/50 to-background rounded-xl p-6 shadow-sm border">
             <EmailSignup />
           </div>
         </div>

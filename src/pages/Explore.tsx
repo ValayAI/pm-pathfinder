@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import EmailSignup from "../components/EmailSignup";
@@ -21,7 +21,8 @@ import {
   DownloadIcon,
   ClockIcon,
   BookOpenIcon,
-  CalendarIcon
+  CalendarIcon,
+  Sparkles
 } from "lucide-react";
 import {
   Dialog,
@@ -54,14 +55,24 @@ const Explore = () => {
       <main className="flex-grow container mx-auto px-4 pt-24 md:pt-28 pb-12">
         <div className="max-w-4xl mx-auto">
           
-          <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold tracking-tight mb-4 bg-gradient-to-r from-strategic to-primary/80 bg-clip-text text-transparent">
-              Explore PM Tools & Features
-            </h1>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Discover tools, frameworks, and methodologies to enhance your product management skills.
-            </p>
-            <div className="w-20 h-1 bg-gradient-to-r from-strategic to-primary/70 mx-auto mt-6 rounded-full"></div>
+          <div className="relative mb-16">
+            <div className="absolute -left-4 top-1/2 -translate-y-1/2 hidden md:block">
+              <div className="w-1.5 h-20 bg-gradient-to-b from-blue-500 to-primary rounded-full"></div>
+            </div>
+            <div className="absolute -top-6 left-1/2 -translate-x-1/2 hidden md:block">
+              <Sparkles className="text-primary/60 h-12 w-12 animate-pulse" />
+            </div>
+            <div className="text-center relative">
+              <span className="inline-block px-4 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary mb-4">Product Manager Tools</span>
+              <h2 className="text-3xl md:text-4xl font-semibold leading-tight md:leading-snug tracking-tight mb-4">
+                <span className="bg-gradient-to-br from-blue-600 to-primary bg-clip-text text-transparent">
+                  Enhance your PM workflow
+                </span>
+              </h2>
+              <p className="text-muted-foreground max-w-xl mx-auto">
+                Discover tools, frameworks, and methodologies to advance your product management skills
+              </p>
+            </div>
           </div>
           
           <div className="mb-12">
@@ -69,27 +80,27 @@ const Explore = () => {
               <span className="mr-2 text-strategic">✨</span>
               Popular Frameworks
             </h2>
-            <div className="grid gap-4">
+            <div className="grid gap-6">
               {/* OKRs Card */}
-              <Card className="hover:shadow-md transition-shadow hover:scale-[1.01] duration-300 border-l-4 border-l-strategic">
-                <CardContent className="p-4 sm:p-6">
-                  <div className="flex flex-col sm:flex-row gap-4">
-                    <div className="flex-shrink-0 bg-strategic-light rounded-lg p-3 flex items-center justify-center">
-                      <TargetIcon className="h-6 w-6 text-strategic" />
+              <Card className="overflow-hidden transition-all hover:shadow-md duration-300 border border-strategic/20 group">
+                <CardContent className="p-6">
+                  <div className="flex flex-col sm:flex-row gap-5">
+                    <div className="flex-shrink-0 bg-strategic-light/20 rounded-xl p-4 flex items-center justify-center group-hover:bg-strategic-light/40 transition-colors">
+                      <TargetIcon className="h-7 w-7 text-strategic" />
                     </div>
                     <div className="flex-grow">
-                      <div className="flex flex-wrap justify-between items-start gap-2 mb-2">
-                        <h3 className="text-lg font-medium">OKRs: Set & Achieve Goals</h3>
-                        <span className="text-xs bg-strategic-light px-2 py-1 rounded text-strategic font-medium">Strategic</span>
+                      <div className="flex flex-wrap justify-between items-start gap-2 mb-3">
+                        <h3 className="text-xl font-semibold">OKRs: Set & Achieve Goals</h3>
+                        <span className="text-xs bg-strategic-light/30 px-3 py-1 rounded-full text-strategic font-medium">Strategic</span>
                       </div>
-                      <p className="text-sm text-muted-foreground mb-4">Define objectives with key results to track progress.</p>
-                      <div className="flex flex-wrap gap-2">
-                        <Button variant="outline" size="sm" className="flex items-center gap-1 border-strategic/30 text-strategic hover:bg-strategic-light hover:text-strategic text-xs">
-                          <ExternalLinkIcon className="h-3 w-3" />
+                      <p className="text-muted-foreground mb-5">Define objectives with key results to track progress.</p>
+                      <div className="flex flex-wrap gap-3">
+                        <Button variant="outline" size="sm" className="flex items-center gap-1.5 border-strategic/30 text-strategic hover:bg-strategic-light/20 hover:text-strategic">
+                          <ExternalLinkIcon className="h-3.5 w-3.5" />
                           Example
                         </Button>
-                        <Button variant="outline" size="sm" className="flex items-center gap-1 border-strategic/30 text-strategic hover:bg-strategic-light hover:text-strategic text-xs">
-                          <DownloadIcon className="h-3 w-3" />
+                        <Button variant="outline" size="sm" className="flex items-center gap-1.5 border-strategic/30 text-strategic hover:bg-strategic-light/20 hover:text-strategic">
+                          <DownloadIcon className="h-3.5 w-3.5" />
                           Guide
                         </Button>
                       </div>
@@ -99,23 +110,23 @@ const Explore = () => {
               </Card>
               
               {/* RICE Scoring Card */}
-              <Card className="hover:shadow-md transition-shadow hover:scale-[1.01] duration-300 border-l-4 border-l-prioritization">
-                <CardContent className="p-4 sm:p-6">
-                  <div className="flex flex-col sm:flex-row gap-4">
-                    <div className="flex-shrink-0 bg-prioritization-light rounded-lg p-3 flex items-center justify-center">
-                      <GridIcon className="h-6 w-6 text-prioritization" />
+              <Card className="overflow-hidden transition-all hover:shadow-md duration-300 border border-prioritization/20 group">
+                <CardContent className="p-6">
+                  <div className="flex flex-col sm:flex-row gap-5">
+                    <div className="flex-shrink-0 bg-prioritization-light/20 rounded-xl p-4 flex items-center justify-center group-hover:bg-prioritization-light/40 transition-colors">
+                      <GridIcon className="h-7 w-7 text-prioritization" />
                     </div>
                     <div className="flex-grow">
-                      <div className="flex flex-wrap justify-between items-start gap-2 mb-2">
-                        <h3 className="text-lg font-medium">RICE Scoring</h3>
-                        <span className="text-xs bg-prioritization-light px-2 py-1 rounded text-prioritization font-medium">Prioritization</span>
+                      <div className="flex flex-wrap justify-between items-start gap-2 mb-3">
+                        <h3 className="text-xl font-semibold">RICE Scoring</h3>
+                        <span className="text-xs bg-prioritization-light/30 px-3 py-1 rounded-full text-prioritization font-medium">Prioritization</span>
                       </div>
-                      <p className="text-sm text-muted-foreground mb-4">Evaluate based on Reach, Impact, Confidence, and Effort.</p>
-                      <div className="flex flex-wrap gap-2">
+                      <p className="text-muted-foreground mb-5">Evaluate based on Reach, Impact, Confidence, and Effort.</p>
+                      <div className="flex flex-wrap gap-3">
                         <Dialog>
                           <DialogTrigger asChild>
-                            <Button variant="outline" size="sm" className="flex items-center gap-1 border-prioritization/30 text-prioritization hover:bg-prioritization-light hover:text-prioritization text-xs">
-                              <ExternalLinkIcon className="h-3 w-3" />
+                            <Button variant="outline" size="sm" className="flex items-center gap-1.5 border-prioritization/30 text-prioritization hover:bg-prioritization-light/20 hover:text-prioritization">
+                              <ExternalLinkIcon className="h-3.5 w-3.5" />
                               Calculator
                             </Button>
                           </DialogTrigger>
@@ -129,8 +140,8 @@ const Explore = () => {
                             <RICECalculator />
                           </DialogContent>
                         </Dialog>
-                        <Button variant="outline" size="sm" className="flex items-center gap-1 border-prioritization/30 text-prioritization hover:bg-prioritization-light hover:text-prioritization text-xs">
-                          <DownloadIcon className="h-3 w-3" />
+                        <Button variant="outline" size="sm" className="flex items-center gap-1.5 border-prioritization/30 text-prioritization hover:bg-prioritization-light/20 hover:text-prioritization">
+                          <DownloadIcon className="h-3.5 w-3.5" />
                           Template
                         </Button>
                       </div>
@@ -140,25 +151,25 @@ const Explore = () => {
               </Card>
               
               {/* MoSCoW Method Card */}
-              <Card className="hover:shadow-md transition-shadow hover:scale-[1.01] duration-300 border-l-4 border-l-requirements">
-                <CardContent className="p-4 sm:p-6">
-                  <div className="flex flex-col sm:flex-row gap-4">
-                    <div className="flex-shrink-0 bg-requirements-light rounded-lg p-3 flex items-center justify-center">
-                      <ClipboardListIcon className="h-6 w-6 text-requirements" />
+              <Card className="overflow-hidden transition-all hover:shadow-md duration-300 border border-requirements/20 group">
+                <CardContent className="p-6">
+                  <div className="flex flex-col sm:flex-row gap-5">
+                    <div className="flex-shrink-0 bg-requirements-light/20 rounded-xl p-4 flex items-center justify-center group-hover:bg-requirements-light/40 transition-colors">
+                      <ClipboardListIcon className="h-7 w-7 text-requirements" />
                     </div>
                     <div className="flex-grow">
-                      <div className="flex flex-wrap justify-between items-start gap-2 mb-2">
-                        <h3 className="text-lg font-medium">MoSCoW Method</h3>
-                        <span className="text-xs bg-requirements-light px-2 py-1 rounded text-requirements font-medium">Requirements</span>
+                      <div className="flex flex-wrap justify-between items-start gap-2 mb-3">
+                        <h3 className="text-xl font-semibold">MoSCoW Method</h3>
+                        <span className="text-xs bg-requirements-light/30 px-3 py-1 rounded-full text-requirements font-medium">Requirements</span>
                       </div>
-                      <p className="text-sm text-muted-foreground mb-4">Categorize tasks into Must, Should, Could, and Won't.</p>
-                      <div className="flex flex-wrap gap-2">
-                        <Button variant="outline" size="sm" className="flex items-center gap-1 border-requirements/30 text-requirements hover:bg-requirements-light hover:text-requirements text-xs">
-                          <ExternalLinkIcon className="h-3 w-3" />
+                      <p className="text-muted-foreground mb-5">Categorize tasks into Must, Should, Could, and Won't.</p>
+                      <div className="flex flex-wrap gap-3">
+                        <Button variant="outline" size="sm" className="flex items-center gap-1.5 border-requirements/30 text-requirements hover:bg-requirements-light/20 hover:text-requirements">
+                          <ExternalLinkIcon className="h-3.5 w-3.5" />
                           Workshop
                         </Button>
-                        <Button variant="outline" size="sm" className="flex items-center gap-1 border-requirements/30 text-requirements hover:bg-requirements-light hover:text-requirements text-xs">
-                          <DownloadIcon className="h-3 w-3" />
+                        <Button variant="outline" size="sm" className="flex items-center gap-1.5 border-requirements/30 text-requirements hover:bg-requirements-light/20 hover:text-requirements">
+                          <DownloadIcon className="h-3.5 w-3.5" />
                           Checklist
                         </Button>
                       </div>
@@ -168,23 +179,23 @@ const Explore = () => {
               </Card>
               
               {/* Strategic Roadmapping Card */}
-              <Card className="hover:shadow-md transition-shadow hover:scale-[1.01] duration-300 border-l-4 border-l-planning">
-                <CardContent className="p-4 sm:p-6">
-                  <div className="flex flex-col sm:flex-row gap-4">
-                    <div className="flex-shrink-0 bg-planning-light rounded-lg p-3 flex items-center justify-center">
-                      <CalendarIcon className="h-6 w-6 text-planning" />
+              <Card className="overflow-hidden transition-all hover:shadow-md duration-300 border border-planning/20 group">
+                <CardContent className="p-6">
+                  <div className="flex flex-col sm:flex-row gap-5">
+                    <div className="flex-shrink-0 bg-planning-light/20 rounded-xl p-4 flex items-center justify-center group-hover:bg-planning-light/40 transition-colors">
+                      <CalendarIcon className="h-7 w-7 text-planning" />
                     </div>
                     <div className="flex-grow">
-                      <div className="flex flex-wrap justify-between items-start gap-2 mb-2">
-                        <h3 className="text-lg font-medium">Strategic Roadmapping</h3>
-                        <span className="text-xs bg-planning-light px-2 py-1 rounded text-planning font-medium">Planning</span>
+                      <div className="flex flex-wrap justify-between items-start gap-2 mb-3">
+                        <h3 className="text-xl font-semibold">Strategic Roadmapping</h3>
+                        <span className="text-xs bg-planning-light/30 px-3 py-1 rounded-full text-planning font-medium">Planning</span>
                       </div>
-                      <p className="text-sm text-muted-foreground mb-4">Organize features into a structured timeline.</p>
-                      <div className="flex flex-wrap gap-2">
+                      <p className="text-muted-foreground mb-5">Organize features into a structured timeline.</p>
+                      <div className="flex flex-wrap gap-3">
                         <Dialog>
                           <DialogTrigger asChild>
-                            <Button variant="outline" size="sm" className="flex items-center gap-1 border-planning/30 text-planning hover:bg-planning-light hover:text-planning text-xs">
-                              <ExternalLinkIcon className="h-3 w-3" />
+                            <Button variant="outline" size="sm" className="flex items-center gap-1.5 border-planning/30 text-planning hover:bg-planning-light/20 hover:text-planning">
+                              <ExternalLinkIcon className="h-3.5 w-3.5" />
                               Generator
                             </Button>
                           </DialogTrigger>
@@ -198,8 +209,8 @@ const Explore = () => {
                             <RoadmapGenerator />
                           </DialogContent>
                         </Dialog>
-                        <Button variant="outline" size="sm" className="flex items-center gap-1 border-planning/30 text-planning hover:bg-planning-light hover:text-planning text-xs">
-                          <DownloadIcon className="h-3 w-3" />
+                        <Button variant="outline" size="sm" className="flex items-center gap-1.5 border-planning/30 text-planning hover:bg-planning-light/20 hover:text-planning">
+                          <DownloadIcon className="h-3.5 w-3.5" />
                           Template
                         </Button>
                       </div>
@@ -210,45 +221,45 @@ const Explore = () => {
             </div>
           </div>
           
-          <div className="mb-12 bg-gradient-to-r from-background to-muted p-4 sm:p-6 rounded-lg border">
+          <div className="mb-16 bg-gradient-to-r from-muted/50 to-muted/30 p-6 rounded-xl border shadow-sm">
             <FrameworkChat />
           </div>
           
-          <div className="grid md:grid-cols-1 gap-4 mb-12">
-            <div className="bg-card rounded-lg p-4 sm:p-6 shadow-sm border">
-              <h2 className="text-xl font-semibold mb-4 flex items-center">
+          <div className="grid md:grid-cols-1 gap-6 mb-16">
+            <div className="bg-card rounded-xl p-6 shadow-sm border">
+              <h2 className="text-xl font-semibold mb-6 flex items-center">
                 <span className="mr-2 text-discovery">🎯</span>
                 Master Product Management
               </h2>
-              <div className="space-y-4">
-                <div className="border border-border rounded-lg p-3 sm:p-4 hover:border-discovery/40 transition-colors hover:shadow-sm">
-                  <div className="flex flex-wrap items-start gap-3">
-                    <div className="flex-shrink-0 bg-discovery-light p-2 rounded-full">
-                      <BookOpenIcon className="h-4 w-4 text-discovery" />
+              <div className="space-y-5">
+                <div className="border border-border rounded-xl p-5 hover:border-discovery/40 transition-colors hover:shadow-sm">
+                  <div className="flex flex-wrap items-start gap-4">
+                    <div className="flex-shrink-0 bg-discovery-light/30 p-3 rounded-lg">
+                      <BookOpenIcon className="h-5 w-5 text-discovery" />
                     </div>
                     <div className="flex-grow">
-                      <div className="flex flex-wrap justify-between items-center gap-2 mb-1">
-                        <h3 className="text-base font-medium">1️⃣ Customer Research & Discovery</h3>
-                        <div className="flex items-center text-xs text-muted-foreground">
+                      <div className="flex flex-wrap justify-between items-center gap-2 mb-2">
+                        <h3 className="text-lg font-medium">1️⃣ Customer Research & Discovery</h3>
+                        <div className="flex items-center text-xs text-muted-foreground bg-muted/50 px-2 py-1 rounded-full">
                           <ClockIcon className="h-3 w-3 mr-1" /> 
                           <span>3 hours</span>
                         </div>
                       </div>
-                      <p className="text-xs text-muted-foreground mb-3">Master techniques for user interviews and market research.</p>
-                      <div className="mb-3">
-                        <div className="flex justify-between text-xs mb-1">
+                      <p className="text-sm text-muted-foreground mb-4">Master techniques for user interviews and market research.</p>
+                      <div className="mb-4">
+                        <div className="flex justify-between text-xs mb-1.5">
                           <span>Progress</span>
                           <span>70%</span>
                         </div>
                         <Progress value={70} className="h-2" indicatorColor="bg-discovery" />
                       </div>
-                      <div className="flex flex-wrap gap-2">
-                        <Button variant="outline" size="sm" className="flex items-center gap-1 border-discovery/30 text-discovery hover:bg-discovery-light hover:text-discovery text-xs">
-                          <FileTextIcon className="h-3 w-3" />
+                      <div className="flex flex-wrap gap-3">
+                        <Button variant="outline" size="sm" className="flex items-center gap-1.5 border-discovery/30 text-discovery hover:bg-discovery-light/20 hover:text-discovery">
+                          <FileTextIcon className="h-3.5 w-3.5" />
                           Case Study
                         </Button>
-                        <Button variant="outline" size="sm" className="flex items-center gap-1 border-discovery/30 text-discovery hover:bg-discovery-light hover:text-discovery text-xs">
-                          <DownloadIcon className="h-3 w-3" />
+                        <Button variant="outline" size="sm" className="flex items-center gap-1.5 border-discovery/30 text-discovery hover:bg-discovery-light/20 hover:text-discovery">
+                          <DownloadIcon className="h-3.5 w-3.5" />
                           Templates
                         </Button>
                       </div>
@@ -256,34 +267,34 @@ const Explore = () => {
                   </div>
                 </div>
 
-                <div className="border border-border rounded-lg p-3 sm:p-4 hover:border-analytics/40 transition-colors hover:shadow-sm">
-                  <div className="flex flex-wrap items-start gap-3">
-                    <div className="flex-shrink-0 bg-analytics-light p-2 rounded-full">
-                      <GridIcon className="h-4 w-4 text-analytics" />
+                <div className="border border-border rounded-xl p-5 hover:border-analytics/40 transition-colors hover:shadow-sm">
+                  <div className="flex flex-wrap items-start gap-4">
+                    <div className="flex-shrink-0 bg-analytics-light/30 p-3 rounded-lg">
+                      <GridIcon className="h-5 w-5 text-analytics" />
                     </div>
                     <div className="flex-grow">
-                      <div className="flex flex-wrap justify-between items-center gap-2 mb-1">
-                        <h3 className="text-base font-medium">2️⃣ Data-Driven Decisions</h3>
-                        <div className="flex items-center text-xs text-muted-foreground">
+                      <div className="flex flex-wrap justify-between items-center gap-2 mb-2">
+                        <h3 className="text-lg font-medium">2️⃣ Data-Driven Decisions</h3>
+                        <div className="flex items-center text-xs text-muted-foreground bg-muted/50 px-2 py-1 rounded-full">
                           <ClockIcon className="h-3 w-3 mr-1" /> 
                           <span>4 hours</span>
                         </div>
                       </div>
-                      <p className="text-xs text-muted-foreground mb-3">Identify key metrics (DAU, NPS, Retention).</p>
-                      <div className="mb-3">
-                        <div className="flex justify-between text-xs mb-1">
+                      <p className="text-sm text-muted-foreground mb-4">Identify key metrics (DAU, NPS, Retention).</p>
+                      <div className="mb-4">
+                        <div className="flex justify-between text-xs mb-1.5">
                           <span>Progress</span>
                           <span>50%</span>
                         </div>
                         <Progress value={50} className="h-2" indicatorColor="bg-analytics" />
                       </div>
-                      <div className="flex flex-wrap gap-2">
-                        <Button variant="outline" size="sm" className="flex items-center gap-1 border-analytics/30 text-analytics hover:bg-analytics-light hover:text-analytics text-xs">
-                          <FileTextIcon className="h-3 w-3" />
+                      <div className="flex flex-wrap gap-3">
+                        <Button variant="outline" size="sm" className="flex items-center gap-1.5 border-analytics/30 text-analytics hover:bg-analytics-light/20 hover:text-analytics">
+                          <FileTextIcon className="h-3.5 w-3.5" />
                           Case Study
                         </Button>
-                        <Button variant="outline" size="sm" className="flex items-center gap-1 border-analytics/30 text-analytics hover:bg-analytics-light hover:text-analytics text-xs">
-                          <DownloadIcon className="h-3 w-3" />
+                        <Button variant="outline" size="sm" className="flex items-center gap-1.5 border-analytics/30 text-analytics hover:bg-analytics-light/20 hover:text-analytics">
+                          <DownloadIcon className="h-3.5 w-3.5" />
                           Templates
                         </Button>
                       </div>
@@ -291,34 +302,34 @@ const Explore = () => {
                   </div>
                 </div>
 
-                <div className="border border-border rounded-lg p-3 sm:p-4 hover:border-planning/40 transition-colors hover:shadow-sm">
-                  <div className="flex flex-wrap items-start gap-3">
-                    <div className="flex-shrink-0 bg-planning-light p-2 rounded-full">
-                      <TargetIcon className="h-4 w-4 text-planning" />
+                <div className="border border-border rounded-xl p-5 hover:border-planning/40 transition-colors hover:shadow-sm">
+                  <div className="flex flex-wrap items-start gap-4">
+                    <div className="flex-shrink-0 bg-planning-light/30 p-3 rounded-lg">
+                      <TargetIcon className="h-5 w-5 text-planning" />
                     </div>
                     <div className="flex-grow">
-                      <div className="flex flex-wrap justify-between items-center gap-2 mb-1">
-                        <h3 className="text-base font-medium">3️⃣ Strategic Roadmapping</h3>
-                        <div className="flex items-center text-xs text-muted-foreground">
+                      <div className="flex flex-wrap justify-between items-center gap-2 mb-2">
+                        <h3 className="text-lg font-medium">3️⃣ Strategic Roadmapping</h3>
+                        <div className="flex items-center text-xs text-muted-foreground bg-muted/50 px-2 py-1 rounded-full">
                           <ClockIcon className="h-3 w-3 mr-1" /> 
                           <span>5 hours</span>
                         </div>
                       </div>
-                      <p className="text-xs text-muted-foreground mb-3">Build flexible roadmaps that align with business goals.</p>
-                      <div className="mb-3">
-                        <div className="flex justify-between text-xs mb-1">
+                      <p className="text-sm text-muted-foreground mb-4">Build flexible roadmaps that align with business goals.</p>
+                      <div className="mb-4">
+                        <div className="flex justify-between text-xs mb-1.5">
                           <span>Progress</span>
                           <span>30%</span>
                         </div>
                         <Progress value={30} className="h-2" indicatorColor="bg-planning" />
                       </div>
-                      <div className="flex flex-wrap gap-2">
-                        <Button variant="outline" size="sm" className="flex items-center gap-1 border-planning/30 text-planning hover:bg-planning-light hover:text-planning text-xs">
-                          <FileTextIcon className="h-3 w-3" />
+                      <div className="flex flex-wrap gap-3">
+                        <Button variant="outline" size="sm" className="flex items-center gap-1.5 border-planning/30 text-planning hover:bg-planning-light/20 hover:text-planning">
+                          <FileTextIcon className="h-3.5 w-3.5" />
                           Case Study
                         </Button>
-                        <Button variant="outline" size="sm" className="flex items-center gap-1 border-planning/30 text-planning hover:bg-planning-light hover:text-planning text-xs">
-                          <DownloadIcon className="h-3 w-3" />
+                        <Button variant="outline" size="sm" className="flex items-center gap-1.5 border-planning/30 text-planning hover:bg-planning-light/20 hover:text-planning">
+                          <DownloadIcon className="h-3.5 w-3.5" />
                           Templates
                         </Button>
                       </div>
@@ -328,48 +339,44 @@ const Explore = () => {
               </div>
             </div>
             
-            <div className="bg-card rounded-lg p-4 sm:p-6 shadow-sm border">
-              <h2 className="text-xl font-semibold mb-4 flex items-center">
+            <div className="bg-card rounded-xl p-6 shadow-sm border">
+              <h2 className="text-xl font-semibold mb-6 flex items-center">
                 <span className="mr-2 text-prioritization">📚</span>
                 Recent Resources
               </h2>
-              <ul className="space-y-2">
-                <li className="flex items-start p-2 hover:bg-muted/30 rounded-md transition-colors">
-                  <div className="bg-strategic-light p-2 rounded-md mr-2">
-                    <FileTextIcon className="h-3 w-3 text-strategic" />
+              <ul className="space-y-3">
+                <li className="flex items-start p-3 hover:bg-muted/30 rounded-lg transition-colors">
+                  <div className="bg-strategic-light/30 p-2.5 rounded-lg mr-3">
+                    <FileTextIcon className="h-4 w-4 text-strategic" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-medium">Product Vision Canvas</h3>
-                    <p className="text-xs text-muted-foreground">Create a compelling product vision</p>
+                    <h3 className="text-base font-medium">Product Vision Canvas</h3>
+                    <p className="text-sm text-muted-foreground">Create a compelling product vision</p>
                   </div>
                 </li>
-                <li className="flex items-start p-2 hover:bg-muted/30 rounded-md transition-colors">
-                  <div className="bg-requirements-light p-2 rounded-md mr-2">
-                    <FileTextIcon className="h-3 w-3 text-requirements" />
+                <li className="flex items-start p-3 hover:bg-muted/30 rounded-lg transition-colors">
+                  <div className="bg-requirements-light/30 p-2.5 rounded-lg mr-3">
+                    <FileTextIcon className="h-4 w-4 text-requirements" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-medium">User Story Workshop Guide</h3>
-                    <p className="text-xs text-muted-foreground">Craft effective user stories</p>
+                    <h3 className="text-base font-medium">User Story Workshop Guide</h3>
+                    <p className="text-sm text-muted-foreground">Craft effective user stories</p>
                   </div>
                 </li>
-                <li className="flex items-start p-2 hover:bg-muted/30 rounded-md transition-colors">
-                  <div className="bg-analytics-light p-2 rounded-md mr-2">
-                    <FileTextIcon className="h-3 w-3 text-analytics" />
+                <li className="flex items-start p-3 hover:bg-muted/30 rounded-lg transition-colors">
+                  <div className="bg-analytics-light/30 p-2.5 rounded-lg mr-3">
+                    <FileTextIcon className="h-4 w-4 text-analytics" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-medium">Product Analytics Playbook</h3>
-                    <p className="text-xs text-muted-foreground">Measure what matters for your product</p>
+                    <h3 className="text-base font-medium">Product Analytics Playbook</h3>
+                    <p className="text-sm text-muted-foreground">Measure what matters for your product</p>
                   </div>
                 </li>
               </ul>
             </div>
           </div>
           
-          <div className="mt-8 text-center">
-            <p className="text-sm text-muted-foreground mb-4">More resources coming soon. Subscribe to our newsletter for updates.</p>
-          </div>
-          
-          <div className="max-w-md mx-auto mt-12 bg-card rounded-lg p-4 sm:p-6 shadow-sm border">
+          <div className="max-w-md mx-auto mt-12 bg-gradient-to-r from-muted/50 to-background rounded-xl p-6 shadow-sm border">
             <EmailSignup />
           </div>
         </div>
