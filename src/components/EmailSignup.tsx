@@ -60,12 +60,9 @@ const EmailSignup = () => {
       console.log("ConvertKit response received:", response.status);
       
       if (response.ok) {
-        // Show success message inline
+        // Show success message inline only (no toast)
         console.log("Setting success message");
         setSubscriptionMessage("Thank you for subscribing to our newsletter!");
-        
-        // Add a success toast notification
-        toast.success("Successfully subscribed to the newsletter!");
         
         // Add to local storage
         addSubscriber(email);
