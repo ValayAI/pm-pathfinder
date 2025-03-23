@@ -1,3 +1,4 @@
+
 import React from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -76,14 +77,13 @@ const Resources = () => {
         <div className="max-w-5xl mx-auto">
           
           <div className="text-center mb-12">
-            <Badge className="mb-4 bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200 border-purple-300 dark:border-purple-700 px-3 py-1">
-              <DollarSign className="h-3.5 w-3.5 mr-1" />
-              Resources Library
-            </Badge>
-            <h1 className="text-4xl font-bold mb-4">Product Management Resources</h1>
+            <h1 className="text-4xl font-bold tracking-tight mb-4 bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
+              Product Management Resources
+            </h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Access our library of templates, guides, and tools to enhance your product management skills.
             </p>
+            <div className="w-20 h-1 bg-gradient-to-r from-purple-600 to-indigo-600 mx-auto mt-6 rounded-full"></div>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

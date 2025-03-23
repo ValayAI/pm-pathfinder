@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -11,14 +10,13 @@ const ExploreFeaturesTeaser = () => {
   return (
     <div className="w-full max-w-5xl mx-auto px-4">
       <div className="text-center mb-10">
-        <Badge className="mb-4 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 border-blue-300 dark:border-blue-700 px-3 py-1">
-          <DollarSign className="h-3.5 w-3.5 mr-1" />
-          Explore Features
-        </Badge>
-        <h1 className="text-4xl font-bold mb-4">Explore PM Tools & Features</h1>
+        <h1 className="text-4xl font-bold tracking-tight mb-4 bg-gradient-to-r from-blue-600 to-primary bg-clip-text text-transparent">
+          Explore PM Tools & Features
+        </h1>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
           AI-powered tools and frameworks to enhance your product management skills
         </p>
+        <div className="w-20 h-1 bg-gradient-to-r from-blue-600 to-primary mx-auto mt-6 rounded-full"></div>
       </div>
 
       <div className="grid gap-6 md:grid-cols-3 mb-12">

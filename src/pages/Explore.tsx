@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -53,12 +54,14 @@ const Explore = () => {
       <main className="flex-grow container mx-auto px-4 pt-24 md:pt-28 pb-12">
         <div className="max-w-4xl mx-auto">
           
-
-          <div className="space-y-3 mb-12 text-center">
-            
+          <div className="text-center mb-12">
+            <h1 className="text-4xl font-bold tracking-tight mb-4 bg-gradient-to-r from-strategic to-primary/80 bg-clip-text text-transparent">
+              Explore PM Tools & Features
+            </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Discover tools, frameworks, and methodologies to enhance your product management skills.
             </p>
+            <div className="w-20 h-1 bg-gradient-to-r from-strategic to-primary/70 mx-auto mt-6 rounded-full"></div>
           </div>
           
           <div className="mb-12">

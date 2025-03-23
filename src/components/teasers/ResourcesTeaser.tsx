@@ -10,10 +10,13 @@ const ResourcesTeaser = () => {
   return (
     <div className="w-full max-w-5xl mx-auto px-4">
       <div className="text-center mb-10">
-        <h1 className="text-4xl font-bold mb-4">Product Management Resources</h1>
+        <h1 className="text-4xl font-bold tracking-tight mb-4 bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
+          Product Management Resources
+        </h1>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
           Access templates, frameworks, guides and more to excel as a Product Manager
         </p>
+        <div className="w-20 h-1 bg-gradient-to-r from-purple-600 to-indigo-600 mx-auto mt-6 rounded-full"></div>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 mb-12">
