@@ -1,11 +1,9 @@
-
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useAuth } from '@/providers/AuthProvider';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { 
   Sidebar,
-  SidebarBody,
   SidebarProvider,
   SidebarContent,
   SidebarMenu,
@@ -32,7 +30,6 @@ const Dashboard = ({ children }: DashboardProps) => {
   const [firstName, setFirstName] = useState('');
   const isMobile = useIsMobile();
   
-  // Fetch user's first name from localStorage
   useEffect(() => {
     const storedProfile = localStorage.getItem('userProfile');
     if (storedProfile) {
@@ -45,10 +42,8 @@ const Dashboard = ({ children }: DashboardProps) => {
     }
   }, []);
   
-  // Initialize sidebar state
   const [sidebarOpen, setSidebarOpen] = useState(!isMobile);
   
-  // Update sidebar state when screen size changes
   useEffect(() => {
     setSidebarOpen(!isMobile);
   }, [isMobile]);
@@ -67,17 +62,14 @@ const Dashboard = ({ children }: DashboardProps) => {
     <div className="min-h-screen flex flex-col bg-background">
       <SidebarProvider defaultOpen={!isMobile}>
         <div className="flex flex-1 w-full">
-          {/* Sidebar using the shadcn/ui sidebar */}
           <Sidebar collapsible="icon" variant="inset">
             <SidebarContent>
-              {/* User greeting */}
               <div className="px-4 py-4 mb-2">
                 <h3 className="text-sm font-medium text-sidebar-foreground/70">
                   {firstName ? `Hi, ${firstName}` : 'Welcome'}
                 </h3>
               </div>
               
-              {/* Navigation menu */}
               <SidebarMenu>
                 {navigationItems.map((item) => (
                   <SidebarMenuItem key={item.label}>
@@ -97,7 +89,6 @@ const Dashboard = ({ children }: DashboardProps) => {
             </SidebarContent>
           </Sidebar>
           
-          {/* Main content area */}
           <main className="flex-1 p-4 md:p-6 lg:p-10 overflow-auto pb-24 md:pb-10 pt-16">
             {children}
           </main>
