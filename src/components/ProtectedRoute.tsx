@@ -2,6 +2,9 @@
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/providers/AuthProvider';
 import { useSubscription } from '@/providers/SubscriptionProvider';
+import PMCoachTeaser from '@/components/teasers/PMCoachTeaser';
+import ExploreFeaturesTeaser from '@/components/teasers/ExploreFeaturesTeaser';
+import ResourcesTeaser from '@/components/teasers/ResourcesTeaser';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -14,7 +17,6 @@ const ProtectedRoute = ({ children, requireFeature }: ProtectedRouteProps) => {
   const location = useLocation();
   
   // If still loading auth or subscription data, show a minimal loading indicator
-  // This prevents the jarring redirect experience during loading
   if (isAuthLoading || isSubscriptionLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -26,8 +28,22 @@ const ProtectedRoute = ({ children, requireFeature }: ProtectedRouteProps) => {
     );
   }
   
-  // If not authenticated, redirect to signin
+  // If not authenticated, show the appropriate teaser based on the current path
   if (!user) {
+    // Display teasers instead of redirecting to signin
+    if (location.pathname === '/chat') {
+      return <PMCoachTeaser />;
+    }
+    
+    if (location.pathname === '/explore') {
+      return <ExploreFeaturesTeaser />;
+    }
+    
+    if (location.pathname === '/resources') {
+      return <ResourcesTeaser />;
+    }
+    
+    // For other protected routes without teasers, redirect to signin
     return <Navigate to="/signin" state={{ from: location }} replace />;
   }
   

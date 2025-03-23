@@ -2,8 +2,11 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ChatContainer from "@/components/chat/ChatContainer";
+import { useAuth } from "@/providers/AuthProvider";
 
 export function Chat() {
+  const { user } = useAuth();
+
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
