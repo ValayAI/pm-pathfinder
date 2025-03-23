@@ -1,7 +1,8 @@
 
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from './components/ui/theme-provider';
-import { Suspense, ErrorBoundary } from 'react';
+import { Suspense } from 'react';
 import Index from './pages/Index';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
@@ -42,7 +43,11 @@ const Loading = () => (
   </div>
 );
 
-class AppErrorBoundary extends React.Component<{children: React.ReactNode}, {hasError: boolean, error: Error | null}> {
+// Custom Error Boundary class component
+class AppErrorBoundary extends React.Component<
+  {children: React.ReactNode}, 
+  {hasError: boolean, error: Error | null}
+> {
   constructor(props: {children: React.ReactNode}) {
     super(props);
     this.state = { hasError: false, error: null };
