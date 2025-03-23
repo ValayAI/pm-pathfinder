@@ -77,7 +77,7 @@ const EmailSignup = () => {
     })
     .catch(error => {
       console.error("Subscription error:", error);
-      toast.dismiss(loadingToast);
+      // Remove the toast.dismiss call since loadingToast no longer exists
       console.log("Showing error toast");
       toast.error("There was an error subscribing to the newsletter. Please try again later.");
       setSubscriptionMessage(''); // Clear message on error
