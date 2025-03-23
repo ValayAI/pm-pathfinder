@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { isSubscribed, addSubscriber } from '@/utils/subscriberUtils';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
+import { supabase } from '@/integrations/supabase/client';
 
 const EmailSignup = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -66,6 +67,9 @@ const EmailSignup = () => {
         // Add to local storage
         addSubscriber(email);
         
+        // Also save to Supabase database if available
+        saveSubscriberToDatabase(email, firstName);
+        
         // Reset the form
         if (formRef.current) {
           formRef.current.reset();
@@ -77,7 +81,6 @@ const EmailSignup = () => {
     })
     .catch(error => {
       console.error("Subscription error:", error);
-      // Remove the toast.dismiss call since loadingToast no longer exists
       console.log("Showing error toast");
       toast.error("There was an error subscribing to the newsletter. Please try again later.");
       setSubscriptionMessage(''); // Clear message on error
@@ -85,6 +88,34 @@ const EmailSignup = () => {
     .finally(() => {
       setIsSubmitting(false);
     });
+  };
+
+  // Function to save subscriber data to Supabase
+  const saveSubscriberToDatabase = async (email: string, firstName: string) => {
+    try {
+      console.log("Saving subscriber to database:", email, firstName);
+      
+      const { error } = await supabase
+        .from('newsletter_subscribers')
+        .insert([
+          { 
+            email: email,
+            first_name: firstName,
+            source: 'website_signup_form'
+          }
+        ])
+        .select();
+        
+      if (error) {
+        // Don't show error to user since ConvertKit subscription already succeeded
+        console.error("Error saving to database:", error);
+      } else {
+        console.log("Successfully saved subscriber to database");
+      }
+    } catch (err) {
+      console.error("Database error:", err);
+      // Don't show error to user since ConvertKit subscription already succeeded
+    }
   };
 
   return (
