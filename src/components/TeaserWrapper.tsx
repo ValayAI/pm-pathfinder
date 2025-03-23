@@ -24,7 +24,6 @@ const TeaserWrapper = ({ children, previewContent, title, description }: TeaserW
   }
   
   // If user is logged in, show full content without extra wrapper
-  // This allows Dashboard component to control the layout
   if (user) {
     return <>{children}</>;
   }
