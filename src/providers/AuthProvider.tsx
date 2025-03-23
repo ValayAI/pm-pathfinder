@@ -36,24 +36,31 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
 
   useEffect(() => {
+    // Add a timeout to prevent infinite loading state
+    const loadingTimeout = setTimeout(() => {
+      if (isLoading) {
+        console.warn('Auth loading state timed out, forcing completion');
+        setIsLoading(false);
+      }
+    }, 5000); // 5 second timeout
+
     const getInitialSession = async () => {
-      setIsLoading(true);
       try {
         const { data, error } = await supabase.auth.getSession();
         
         if (error) {
-          console.error('Error getting initial session:', error);
+          console.warn('Non-critical error getting initial session:', error.message);
+          // Don't throw, just set error state and continue
           setError(error);
-          throw error;
         }
 
-        if (data.session) {
+        if (data?.session) {
           setSession(data.session);
           setUser(data.session.user);
         }
-      } catch (error) {
-        console.error('Error getting initial session:', error);
-        // Don't throw here, let the app continue to load
+      } catch (err) {
+        console.warn('Could not get initial session, but continuing:', err);
+        setError(err instanceof Error ? err : new Error('Unknown auth error'));
       } finally {
         setIsLoading(false);
       }
@@ -63,18 +70,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     try {
       const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-        console.log('Auth state changed:', _event, session);
+        console.log('Auth state changed:', _event);
         setSession(session);
         setUser(session?.user ?? null);
         setIsLoading(false);
       });
 
       return () => {
+        clearTimeout(loadingTimeout);
         subscription.unsubscribe();
       };
     } catch (err) {
-      console.error('Error setting up auth subscription:', err);
+      console.warn('Error setting up auth subscription, but continuing:', err);
       setIsLoading(false);
+      return () => clearTimeout(loadingTimeout);
     }
   }, []);
 
@@ -139,7 +148,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       console.log('Signing in with:', email);
       
-      // Simplified sign in without any CAPTCHA options
       const { data, error } = await supabase.auth.signInWithPassword({ 
         email, 
         password
@@ -210,22 +218,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     signOut
   };
 
+  // Simplified error display that doesn't block the app from loading
   if (error && !isLoading) {
-    return (
-      <div className="p-4 text-center">
-        <h2 className="text-xl font-bold text-red-500">Authentication Error</h2>
-        <p className="mt-2">There was a problem connecting to the authentication service.</p>
-        <p className="mt-2 text-sm text-gray-500">{error.message}</p>
-        <button 
-          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
-          onClick={() => window.location.reload()}
-        >
-          Retry
-        </button>
-      </div>
-    );
+    console.warn('Auth provider encountered an error, but rendering children anyway:', error);
+    // Toast the error instead of blocking render
+    toast.error('Authentication service issue', {
+      description: 'Some features may be limited. Please try refreshing.',
+    });
   }
 
+  // Always render children, even if there's an error
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
