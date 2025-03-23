@@ -1,10 +1,10 @@
+
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useAuth } from '@/providers/AuthProvider';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { 
   Sidebar,
-  SidebarProvider,
   SidebarContent,
   SidebarMenu,
   SidebarMenuItem,
@@ -42,12 +42,6 @@ const Dashboard = ({ children }: DashboardProps) => {
     }
   }, []);
   
-  const [sidebarOpen, setSidebarOpen] = useState(!isMobile);
-  
-  useEffect(() => {
-    setSidebarOpen(!isMobile);
-  }, [isMobile]);
-  
   const navigationItems = [
     { label: "Home", href: "/", icon: <Home className="h-5 w-5" /> },
     { label: "Explore", href: "/explore", icon: <Compass className="h-5 w-5" /> },
@@ -60,40 +54,38 @@ const Dashboard = ({ children }: DashboardProps) => {
   
   return (
     <div className="min-h-screen flex flex-col bg-background">
-      <SidebarProvider defaultOpen={!isMobile}>
-        <div className="flex flex-1 w-full">
-          <Sidebar collapsible="icon" variant="inset">
-            <SidebarContent>
-              <div className="px-4 py-4 mb-2">
-                <h3 className="text-sm font-medium text-sidebar-foreground/70">
-                  {firstName ? `Hi, ${firstName}` : 'Welcome'}
-                </h3>
-              </div>
-              
-              <SidebarMenu>
-                {navigationItems.map((item) => (
-                  <SidebarMenuItem key={item.label}>
-                    <SidebarMenuButton 
-                      asChild
-                      isActive={location.pathname === item.href}
-                      tooltip={item.label}
-                    >
-                      <a href={item.href} className="flex items-center gap-2">
-                        {item.icon}
-                        <span>{item.label}</span>
-                      </a>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            </SidebarContent>
-          </Sidebar>
-          
-          <main className="flex-1 p-4 md:p-6 lg:p-10 overflow-auto pb-24 md:pb-10 pt-16">
-            {children}
-          </main>
-        </div>
-      </SidebarProvider>
+      <div className="flex flex-1 w-full">
+        <Sidebar collapsible="icon" variant="inset">
+          <SidebarContent>
+            <div className="px-4 py-4 mb-2">
+              <h3 className="text-sm font-medium text-sidebar-foreground/70">
+                {firstName ? `Hi, ${firstName}` : 'Welcome'}
+              </h3>
+            </div>
+            
+            <SidebarMenu>
+              {navigationItems.map((item) => (
+                <SidebarMenuItem key={item.label}>
+                  <SidebarMenuButton 
+                    asChild
+                    isActive={location.pathname === item.href}
+                    tooltip={item.label}
+                  >
+                    <a href={item.href} className="flex items-center gap-2">
+                      {item.icon}
+                      <span>{item.label}</span>
+                    </a>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarContent>
+        </Sidebar>
+        
+        <main className="flex-1 p-4 md:p-6 lg:p-10 overflow-auto pb-24 md:pb-10 pt-16">
+          {children}
+        </main>
+      </div>
     </div>
   );
 };

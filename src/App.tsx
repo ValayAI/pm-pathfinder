@@ -17,6 +17,7 @@ import Navbar from './components/Navbar';
 import { Toaster } from "./components/ui/sonner";
 import { AuthProvider } from './providers/AuthProvider';
 import { SubscriptionProvider } from './providers/SubscriptionProvider';
+import { SidebarProvider } from './components/ui/sidebar';
 import './App.css';
 
 function App() {
@@ -25,26 +26,28 @@ function App() {
       <ThemeProvider defaultTheme="light" storageKey="ui-theme">
         <AuthProvider>
           <SubscriptionProvider>
-            <Navbar />
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/explore" element={<ProtectedRoute><Explore /></ProtectedRoute>} />
-              <Route path="/resources" element={<ProtectedRoute><Resources /></ProtectedRoute>} />
-              <Route path="/signin" element={<SignIn />} />
-              <Route path="/sign-up" element={<SignUp />} />
-              <Route path="/signup" element={<Navigate to="/sign-up" replace />} />
-              <Route path="/pricing" element={<Pricing />} />
-              
-              {/* Protected Routes */}
-              <Route path="/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
-              <Route path="/coaching" element={<ProtectedRoute><Coaching /></ProtectedRoute>} />
-              <Route path="/profile" element={<ProtectedRoute><Navigate to="/settings" replace /></ProtectedRoute>} />
-              <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
-              <Route path="/roadmap" element={<ProtectedRoute><Roadmap /></ProtectedRoute>} />
-              
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-            <Toaster />
+            <SidebarProvider>
+              <Navbar />
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/explore" element={<ProtectedRoute><Explore /></ProtectedRoute>} />
+                <Route path="/resources" element={<ProtectedRoute><Resources /></ProtectedRoute>} />
+                <Route path="/signin" element={<SignIn />} />
+                <Route path="/sign-up" element={<SignUp />} />
+                <Route path="/signup" element={<Navigate to="/sign-up" replace />} />
+                <Route path="/pricing" element={<Pricing />} />
+                
+                {/* Protected Routes */}
+                <Route path="/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
+                <Route path="/coaching" element={<ProtectedRoute><Coaching /></ProtectedRoute>} />
+                <Route path="/profile" element={<ProtectedRoute><Navigate to="/settings" replace /></ProtectedRoute>} />
+                <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+                <Route path="/roadmap" element={<ProtectedRoute><Roadmap /></ProtectedRoute>} />
+                
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+              <Toaster />
+            </SidebarProvider>
           </SubscriptionProvider>
         </AuthProvider>
       </ThemeProvider>
