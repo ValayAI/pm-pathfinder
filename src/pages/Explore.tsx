@@ -1,4 +1,3 @@
-
 import React from 'react';
 import TeaserWrapper from '../components/TeaserWrapper';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,7 +13,8 @@ import {
   BookOpen,
   List,
   FileText,
-  Calculator
+  Calculator,
+  BarChart
 } from "lucide-react";
 
 const Explore = () => {
@@ -208,7 +208,7 @@ const Explore = () => {
                   <div className="flex">
                     <div className="bg-green-50 dark:bg-green-950/20 p-6 flex items-center justify-center min-w-[100px]">
                       <div className="text-green-600 dark:text-green-400">
-                        <BarChart3 className="h-8 w-8" />
+                        <BarChart className="h-8 w-8" />
                       </div>
                     </div>
                     <div className="p-4 flex-1">
