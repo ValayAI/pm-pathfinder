@@ -95,16 +95,15 @@ const EmailSignup = () => {
     try {
       console.log("Saving subscriber to database:", email, firstName);
       
+      // Use type assertion to tell TypeScript this table exists
+      // This is a workaround until the types are regenerated
       const { error } = await supabase
-        .from('newsletter_subscribers')
-        .insert([
-          { 
-            email: email,
-            first_name: firstName,
-            source: 'website_signup_form'
-          }
-        ])
-        .select();
+        .from('newsletter_subscribers' as any)
+        .insert({
+          email: email,
+          first_name: firstName,
+          source: 'website_signup_form'
+        });
         
       if (error) {
         // Don't show error to user since ConvertKit subscription already succeeded
