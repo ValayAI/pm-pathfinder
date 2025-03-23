@@ -1,7 +1,7 @@
 
-import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/providers/AuthProvider';
 import { useSubscription } from '@/providers/SubscriptionProvider';
+import { useLocation } from 'react-router-dom';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -22,17 +22,8 @@ const ProtectedRoute = ({ children, requireFeature }: ProtectedRouteProps) => {
     );
   }
   
-  // If not authenticated, redirect to signin page
-  if (!user) {
-    return <Navigate to="/signin" state={{ from: location }} replace />;
-  }
-  
-  // If a specific feature is required and the user doesn't have access to it
-  if (requireFeature && !isFeatureEnabled(requireFeature)) {
-    return <Navigate to="/pricing" state={{ requiredFeature: requireFeature, from: location }} replace />;
-  }
-  
-  // If authenticated and has the required feature access, render the protected content
+  // Show the children - each protected page has its own teaser component
+  // for non-authenticated users
   return <>{children}</>;
 };
 

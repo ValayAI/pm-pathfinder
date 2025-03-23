@@ -79,19 +79,21 @@ function App() {
               <Suspense fallback={<Loading />}>
                 <Routes>
                   <Route path="/" element={<Index />} />
-                  <Route path="/explore" element={<ProtectedRoute><Explore /></ProtectedRoute>} />
-                  <Route path="/resources" element={<ProtectedRoute><Resources /></ProtectedRoute>} />
+                  <Route path="/explore" element={<Explore />} />
+                  <Route path="/resources" element={<Resources />} />
                   <Route path="/signin" element={<SignIn />} />
                   <Route path="/sign-up" element={<SignUp />} />
                   <Route path="/signup" element={<Navigate to="/sign-up" replace />} />
                   <Route path="/pricing" element={<Pricing />} />
                   
-                  {/* Protected Routes */}
-                  <Route path="/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
-                  <Route path="/coaching" element={<ProtectedRoute><Coaching /></ProtectedRoute>} />
+                  {/* Pages that show teasers when not logged in */}
+                  <Route path="/chat" element={<Chat />} />
+                  <Route path="/coaching" element={<Coaching />} />
+                  
+                  {/* Strictly protected routes (redirect if not authenticated) */}
                   <Route path="/profile" element={<ProtectedRoute><Navigate to="/settings" replace /></ProtectedRoute>} />
                   <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
-                  <Route path="/roadmap" element={<ProtectedRoute><Roadmap /></ProtectedRoute>} />
+                  <Route path="/roadmap" element={<ProtectedRoute><Navigate to="/pricing" replace /></ProtectedRoute>} />
                   
                   <Route path="*" element={<NotFound />} />
                 </Routes>
