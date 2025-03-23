@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/providers/AuthProvider';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { 
@@ -71,10 +71,10 @@ const Dashboard = ({ children }: DashboardProps) => {
                     isActive={location.pathname === item.href}
                     tooltip={item.label}
                   >
-                    <a href={item.href} className="flex items-center gap-2">
+                    <Link to={item.href} className="flex items-center gap-2">
                       {item.icon}
                       <span>{item.label}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}

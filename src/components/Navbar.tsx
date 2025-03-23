@@ -1,10 +1,10 @@
 
 import { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { 
-  Moon, Sun, User
+  Moon, Sun, User, Menu
 } from "lucide-react";
 import { useAuth } from "@/providers/AuthProvider";
 import { 
@@ -125,6 +125,23 @@ export function Navbar() {
               >
                 <span>Pricing</span>
               </NavLink>
+            </div>
+          )}
+          
+          {/* Mobile navigation button for logged-out users */}
+          {!user && (
+            <div className="md:hidden">
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="h-9 w-9 rounded-md"
+                asChild
+              >
+                <Link to="/explore">
+                  <Menu className="h-5 w-5" />
+                  <span className="sr-only">Navigation Menu</span>
+                </Link>
+              </Button>
             </div>
           )}
           
