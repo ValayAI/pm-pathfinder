@@ -2,14 +2,12 @@
 import React from 'react';
 import RoadmapGenerator from '../components/RoadmapGenerator';
 import Dashboard from '../components/Dashboard';
-import { Badge } from '@/components/ui/badge';
-import { Sparkles, Map, Calendar } from 'lucide-react';
+import { Calendar } from 'lucide-react';
 
 const Roadmap = () => {
   return (
     <Dashboard>
       <div className="max-w-6xl mx-auto space-y-6">
-        {/* Updated title section to match Pricing page */}
         <div className="text-center mb-12">
           <div className="inline-flex items-center justify-center px-4 py-1.5 mb-6 rounded-full bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary-foreground">
             <Calendar className="h-3.5 w-3.5 mr-2" />
