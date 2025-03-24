@@ -1,9 +1,8 @@
 
-import React from 'react';
 import RoadmapGenerator from '../components/RoadmapGenerator';
 import Dashboard from '../components/Dashboard';
 import { Badge } from '@/components/ui/badge';
-import { Sparkles, Map } from 'lucide-react';
+import { Map } from 'lucide-react';
 
 const Roadmap = () => {
   return (
