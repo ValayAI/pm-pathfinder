@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -57,13 +56,13 @@ const Explore = () => {
       <main className="flex-grow container mx-auto px-4 pt-24 md:pt-28 pb-12">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
-            <Badge className="mb-4 bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200 border-purple-300 dark:border-purple-700 px-3 py-1">
-              <Sparkles className="h-3.5 w-3.5 mr-1" />
-              PM Tools
-            </Badge>
-            <h1 className="text-3xl font-bold mb-4">Enhance Your PM Workflow</h1>
-            <p className="text-muted-foreground max-w-xl mx-auto">
-              Discover tools, frameworks, and methodologies to advance your product management skills
+            <div className="inline-flex items-center justify-center px-4 py-1.5 mb-6 rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300">
+              <Sparkles className="h-3.5 w-3.5 mr-2" />
+              <span className="text-sm font-medium">PM Tools</span>
+            </div>
+            <h1 className="text-4xl font-bold mb-4">Enhance your PM workflow</h1>
+            <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
+              AI-powered tools and frameworks to advance your product management skills
             </p>
           </div>
           
@@ -73,7 +72,6 @@ const Explore = () => {
           </h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-            {/* OKRs Card */}
             <Card className="overflow-hidden transition-all hover:shadow-md duration-300 border border-strategic/20 group">
               <CardContent className="p-6">
                 <div className="flex flex-col sm:flex-row gap-5">
@@ -101,7 +99,6 @@ const Explore = () => {
               </CardContent>
             </Card>
             
-            {/* RICE Scoring Card */}
             <Card className="overflow-hidden transition-all hover:shadow-md duration-300 border border-prioritization/20 group">
               <CardContent className="p-6">
                 <div className="flex flex-col sm:flex-row gap-5">
@@ -142,7 +139,6 @@ const Explore = () => {
               </CardContent>
             </Card>
             
-            {/* MoSCoW Method Card */}
             <Card className="overflow-hidden transition-all hover:shadow-md duration-300 border border-requirements/20 group">
               <CardContent className="p-6">
                 <div className="flex flex-col sm:flex-row gap-5">
@@ -170,7 +166,6 @@ const Explore = () => {
               </CardContent>
             </Card>
             
-            {/* Strategic Roadmapping Card */}
             <Card className="overflow-hidden transition-all hover:shadow-md duration-300 border border-planning/20 group">
               <CardContent className="p-6">
                 <div className="flex flex-col sm:flex-row gap-5">

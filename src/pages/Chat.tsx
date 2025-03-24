@@ -5,7 +5,7 @@ import ChatContainer from "@/components/chat/ChatContainer";
 import { useAuth } from "@/providers/AuthProvider";
 import PMCoachTeaser from "@/components/teasers/PMCoachTeaser";
 import { Badge } from "@/components/ui/badge";
-import { Sparkles } from "lucide-react";
+import { Sparkles, MessageSquare } from "lucide-react";
 
 export function Chat() {
   const { user } = useAuth();
@@ -17,16 +17,18 @@ export function Chat() {
       <main className="flex-grow container mx-auto pt-24 md:pt-28 pb-12 px-4">
         {user ? (
           <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-8">
-              <Badge className="mb-4 bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200 border-purple-300 dark:border-purple-700 px-3 py-1">
-                <Sparkles className="h-3.5 w-3.5 mr-1" />
-                AI Coaching
-              </Badge>
-              <h1 className="text-3xl font-bold mb-4">PM Coach Assistant</h1>
-              <p className="text-muted-foreground max-w-xl mx-auto">
-                Get instant answers to your product management questions
+            {/* Updated title section to match Pricing page */}
+            <div className="text-center mb-12">
+              <div className="inline-flex items-center justify-center px-4 py-1.5 mb-6 rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300">
+                <MessageSquare className="h-3.5 w-3.5 mr-2" />
+                <span className="text-sm font-medium">AI Coaching</span>
+              </div>
+              <h1 className="text-4xl font-bold mb-4">Accelerate your PM career</h1>
+              <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
+                Get expert product management advice and career guidance whenever you need it
               </p>
             </div>
+            
             <div className="bg-card/80 backdrop-blur-sm rounded-xl border shadow-sm overflow-hidden">
               <ChatContainer />
             </div>

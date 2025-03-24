@@ -1,11 +1,10 @@
-
 import React from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import EmailSignup from "../components/EmailSignup";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { BookOpen, FileText, Video, Download, Eye, Wand2, Calendar, DollarSign, Sparkles } from "lucide-react";
+import { BookOpen, FileText, Video, Download, Eye, Wand2, Calendar, DollarSign, Sparkles, BookMarked } from "lucide-react";
 import { useAuth } from "@/providers/AuthProvider";
 import ResourcesTeaser from "@/components/teasers/ResourcesTeaser";
 import { Badge } from "@/components/ui/badge";
@@ -77,13 +76,13 @@ const Resources = () => {
       <main className="flex-grow container mx-auto px-4 pt-24 md:pt-28 pb-12">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
-            <Badge className="mb-4 bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200 border-indigo-300 dark:border-indigo-700 px-3 py-1">
-              <Sparkles className="h-3.5 w-3.5 mr-1" />
-              Curated Content
-            </Badge>
-            <h1 className="text-3xl font-bold mb-4">Level up your PM knowledge</h1>
-            <p className="text-muted-foreground max-w-xl mx-auto">
-              Access our library of templates, guides, and tools to enhance your product management skills
+            <div className="inline-flex items-center justify-center px-4 py-1.5 mb-6 rounded-full bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-300">
+              <BookMarked className="h-3.5 w-3.5 mr-2" />
+              <span className="text-sm font-medium">Curated Content</span>
+            </div>
+            <h1 className="text-4xl font-bold mb-4">Product Management Resources</h1>
+            <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
+              Access templates, frameworks, guides and more to excel as a Product Manager
             </p>
           </div>
           
