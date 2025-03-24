@@ -94,14 +94,15 @@ const SignUp = () => {
 
   if (signupComplete) {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-background relative overflow-hidden">
         <Navbar />
+        <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/10 via-background to-background"></div>
         <div className="page-container flex items-center justify-center pt-24 md:pt-28 pb-12">
-          <Card className="w-full max-w-md shadow-md border-primary/20 rounded-xl overflow-hidden">
+          <Card className="w-full max-w-md shadow-xl border-primary/20 rounded-xl overflow-hidden bg-card/95 backdrop-blur-sm">
             <div className="absolute right-12 top-6 hidden md:block">
               <Sparkles className="text-green-500/60 h-10 w-10 animate-pulse" />
             </div>
-            <CardHeader className="space-y-2 bg-muted/30 border-b pb-6">
+            <CardHeader className="space-y-2 bg-muted/50 border-b pb-6">
               <CardTitle className="text-2xl font-bold flex items-center">
                 <CheckCircle className="mr-3 h-6 w-6 text-green-500" />
                 Sign Up Successful
@@ -131,7 +132,7 @@ const SignUp = () => {
                 </p>
               </div>
             </CardContent>
-            <CardFooter className="flex justify-between pt-4 bg-muted/20 border-t">
+            <CardFooter className="flex justify-between pt-4 bg-muted/30 border-t">
               <Button variant="outline" onClick={() => navigate('/signin')} className="min-w-32">
                 Go to Sign In
               </Button>
@@ -146,15 +147,16 @@ const SignUp = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background relative overflow-hidden">
       <Navbar />
+      <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/10 via-background to-background"></div>
       <div className="page-container flex items-center justify-center pt-24 md:pt-28 pb-12">
         <div className="relative w-full max-w-md">
           <div className="absolute -top-6 right-0 hidden md:block">
             <Sparkles className="text-primary/60 h-10 w-10 animate-pulse" />
           </div>
-          <Card className="w-full shadow-md border-primary/20 rounded-xl overflow-hidden">
-            <CardHeader className="space-y-2 bg-muted/30 border-b">
+          <Card className="w-full shadow-xl border-primary/20 rounded-xl overflow-hidden bg-card/95 backdrop-blur-sm">
+            <CardHeader className="space-y-2 bg-muted/50 border-b">
               <CardTitle className="text-2xl font-bold">Create an account</CardTitle>
               <CardDescription className="text-base">
                 Enter your details to get started
@@ -244,7 +246,7 @@ const SignUp = () => {
                   </Label>
                 </div>
               </CardContent>
-              <CardFooter className="flex flex-col space-y-4 border-t bg-muted/20 pt-6">
+              <CardFooter className="flex flex-col space-y-4 border-t bg-muted/30 pt-6">
                 <Button 
                   type="submit" 
                   className="w-full bg-gradient-to-r from-blue-600 to-primary hover:from-blue-700 hover:to-primary/90 shadow-sm" 

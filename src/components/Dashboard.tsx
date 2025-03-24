@@ -54,9 +54,10 @@ const Dashboard = ({ children }: DashboardProps) => {
   ];
   
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-screen flex flex-col bg-background relative">
+      <div className="absolute inset-0 -z-10 pointer-events-none bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/5 via-background to-background"></div>
       <div className="flex flex-1 w-full">
-        <Sidebar collapsible={isMobile ? "offcanvas" : "icon"} variant="inset">
+        <Sidebar collapsible={isMobile ? "offcanvas" : "icon"} variant="inset" className="border-r border-muted/60">
           <SidebarHeader className="px-4 py-4">
             <h3 className="text-sm font-medium text-sidebar-foreground/70">
               {firstName ? `Hi, ${firstName}` : 'Welcome'}
@@ -71,6 +72,7 @@ const Dashboard = ({ children }: DashboardProps) => {
                     asChild
                     isActive={location.pathname === item.href}
                     tooltip={item.label}
+                    className="hover:bg-primary/5"
                   >
                     <Link to={item.href} className="flex items-center gap-2">
                       {item.icon}
