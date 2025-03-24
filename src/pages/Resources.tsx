@@ -73,27 +73,18 @@ const Resources = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
+      <div className="absolute inset-0 -z-10 pointer-events-none bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/5 via-background to-background"></div>
       <main className="flex-grow container mx-auto px-4 pt-24 md:pt-28 pb-12">
         <div className="max-w-5xl mx-auto">
-          
-          <div className="relative mb-16">
-            <div className="absolute -left-4 top-1/2 -translate-y-1/2 hidden md:block">
-              <div className="w-1.5 h-20 bg-gradient-to-b from-purple-500 to-indigo-600 rounded-full"></div>
-            </div>
-            <div className="absolute -top-6 left-1/2 -translate-x-1/2 hidden md:block">
-              <Sparkles className="text-indigo-600/60 h-12 w-12 animate-pulse" />
-            </div>
-            <div className="text-center">
-              <span className="inline-block px-4 py-1 rounded-full text-xs font-medium bg-indigo-600/10 text-indigo-600 mb-4">Curated Content</span>
-              <h2 className="text-3xl md:text-4xl font-semibold leading-tight md:leading-snug tracking-tight mb-4">
-                <span className="bg-gradient-to-br from-purple-600 to-indigo-600 bg-clip-text text-transparent">
-                  Level up your PM knowledge
-                </span>
-              </h2>
-              <p className="text-muted-foreground max-w-xl mx-auto">
-                Access our library of templates, guides, and tools to enhance your product management skills
-              </p>
-            </div>
+          <div className="text-center mb-12">
+            <Badge className="mb-4 bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200 border-indigo-300 dark:border-indigo-700 px-3 py-1">
+              <Sparkles className="h-3.5 w-3.5 mr-1" />
+              Curated Content
+            </Badge>
+            <h1 className="text-3xl font-bold mb-4">Level up your PM knowledge</h1>
+            <p className="text-muted-foreground max-w-xl mx-auto">
+              Access our library of templates, guides, and tools to enhance your product management skills
+            </p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
@@ -142,10 +133,10 @@ const Resources = () => {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <Card className="hover-lift group backdrop-blur-sm rounded-xl border-t-4 border-t-blue-500 border-blue-100 dark:border-blue-900/20">
+              <Card className="backdrop-blur-sm rounded-xl border-t-4 border-t-blue-500 border-blue-100 dark:border-blue-900/20 transition-all hover:shadow-md">
                 <CardHeader className="pb-3">
                   <div className="flex justify-between items-start">
-                    <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg group-hover:bg-blue-100 dark:group-hover:bg-blue-900/30 transition-colors">
+                    <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg transition-colors">
                       <Calendar className="h-6 w-6 text-blue-500" />
                     </div>
                     <Badge variant="outline" className="bg-blue-50/50 dark:bg-blue-900/10 hover:bg-blue-50 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800">
@@ -182,10 +173,10 @@ const Resources = () => {
                 </CardContent>
               </Card>
               
-              <Card className="hover-lift group backdrop-blur-sm rounded-xl border-t-4 border-t-indigo-500 border-indigo-100 dark:border-indigo-900/20">
+              <Card className="backdrop-blur-sm rounded-xl border-t-4 border-t-indigo-500 border-indigo-100 dark:border-indigo-900/20 transition-all hover:shadow-md">
                 <CardHeader className="pb-3">
                   <div className="flex justify-between items-start">
-                    <div className="bg-indigo-50 dark:bg-indigo-900/20 p-3 rounded-lg group-hover:bg-indigo-100 dark:group-hover:bg-indigo-900/30 transition-colors">
+                    <div className="bg-indigo-50 dark:bg-indigo-900/20 p-3 rounded-lg transition-colors">
                       <Calendar className="h-6 w-6 text-indigo-500" />
                     </div>
                     <Badge variant="outline" className="bg-indigo-50/50 dark:bg-indigo-900/10 hover:bg-indigo-50 text-indigo-700 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800">
@@ -222,10 +213,10 @@ const Resources = () => {
                 </CardContent>
               </Card>
               
-              <Card className="hover-lift group backdrop-blur-sm rounded-xl border-t-4 border-t-purple-500 border-purple-100 dark:border-purple-900/20">
+              <Card className="backdrop-blur-sm rounded-xl border-t-4 border-t-purple-500 border-purple-100 dark:border-purple-900/20 transition-all hover:shadow-md">
                 <CardHeader className="pb-3">
                   <div className="flex justify-between items-start">
-                    <div className="bg-purple-50 dark:bg-purple-900/20 p-3 rounded-lg group-hover:bg-purple-100 dark:group-hover:bg-purple-900/30 transition-colors">
+                    <div className="bg-purple-50 dark:bg-purple-900/20 p-3 rounded-lg transition-colors">
                       <Calendar className="h-6 w-6 text-purple-500" />
                     </div>
                     <Badge variant="outline" className="bg-purple-50/50 dark:bg-purple-900/10 hover:bg-purple-50 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800">
@@ -264,14 +255,14 @@ const Resources = () => {
             </div>
             
             <div className="text-center mt-8">
-              <Button variant="default" size="lg" className="button-hover px-6 py-6 h-auto bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700">
+              <Button variant="default" size="lg" className="px-6 py-6 h-auto bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700">
                 <Wand2 className="mr-2 h-5 w-5" />
                 Generate Custom 30-60-90 Plan
               </Button>
             </div>
           </div>
           
-          <div className="mt-16 bg-gradient-to-r from-muted/70 to-muted/40 backdrop-blur-sm rounded-xl p-8 text-center shadow-sm border">
+          <div className="mt-16 bg-card/80 backdrop-blur-sm rounded-xl p-8 text-center shadow-sm border">
             <h2 className="text-2xl font-semibold mb-4">Need Custom Resources?</h2>
             <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
               Our team can create tailored resources for your specific product management challenges.
@@ -281,7 +272,7 @@ const Resources = () => {
             </Button>
           </div>
           
-          <div className="max-w-md mx-auto mt-16 bg-gradient-to-r from-muted/50 to-background rounded-xl p-6 shadow-sm border">
+          <div className="max-w-md mx-auto mt-16 bg-card/80 backdrop-blur-sm rounded-xl p-6 shadow-sm border">
             <EmailSignup />
           </div>
         </div>

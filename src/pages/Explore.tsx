@@ -12,6 +12,7 @@ import { Progress } from "@/components/ui/progress";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useAuth } from "@/providers/AuthProvider";
 import ExploreFeaturesTeaser from "@/components/teasers/ExploreFeaturesTeaser";
+import { Badge } from "@/components/ui/badge";
 import { 
   TargetIcon, 
   GridIcon, 
@@ -52,180 +53,170 @@ const Explore = () => {
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
+      <div className="absolute inset-0 -z-10 pointer-events-none bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/5 via-background to-background"></div>
       <main className="flex-grow container mx-auto px-4 pt-24 md:pt-28 pb-12">
-        <div className="max-w-4xl mx-auto">
-          
-          <div className="relative mb-16">
-            <div className="absolute -left-4 top-1/2 -translate-y-1/2 hidden md:block">
-              <div className="w-1.5 h-20 bg-gradient-to-b from-blue-500 to-primary rounded-full"></div>
-            </div>
-            <div className="absolute -top-6 left-1/2 -translate-x-1/2 hidden md:block">
-              <Sparkles className="text-primary/60 h-12 w-12 animate-pulse" />
-            </div>
-            <div className="text-center relative">
-              <span className="inline-block px-4 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary mb-4">Product Manager Tools</span>
-              <h2 className="text-3xl md:text-4xl font-semibold leading-tight md:leading-snug tracking-tight mb-4">
-                <span className="bg-gradient-to-br from-blue-600 to-primary bg-clip-text text-transparent">
-                  Enhance your PM workflow
-                </span>
-              </h2>
-              <p className="text-muted-foreground max-w-xl mx-auto">
-                Discover tools, frameworks, and methodologies to advance your product management skills
-              </p>
-            </div>
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-12">
+            <Badge className="mb-4 bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200 border-purple-300 dark:border-purple-700 px-3 py-1">
+              <Sparkles className="h-3.5 w-3.5 mr-1" />
+              PM Tools
+            </Badge>
+            <h1 className="text-3xl font-bold mb-4">Enhance Your PM Workflow</h1>
+            <p className="text-muted-foreground max-w-xl mx-auto">
+              Discover tools, frameworks, and methodologies to advance your product management skills
+            </p>
           </div>
           
-          <div className="mb-12">
-            <h2 className="text-xl font-semibold mb-6 flex items-center">
-              <span className="mr-2 text-strategic">✨</span>
-              Popular Frameworks
-            </h2>
-            <div className="grid gap-6">
-              {/* OKRs Card */}
-              <Card className="overflow-hidden transition-all hover:shadow-md duration-300 border border-strategic/20 group">
-                <CardContent className="p-6">
-                  <div className="flex flex-col sm:flex-row gap-5">
-                    <div className="flex-shrink-0 bg-strategic-light/20 rounded-xl p-4 flex items-center justify-center group-hover:bg-strategic-light/40 transition-colors">
-                      <TargetIcon className="h-7 w-7 text-strategic" />
+          <h2 className="text-xl font-semibold mb-6 flex items-center">
+            <span className="mr-2 text-strategic">✨</span>
+            Popular Frameworks
+          </h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+            {/* OKRs Card */}
+            <Card className="overflow-hidden transition-all hover:shadow-md duration-300 border border-strategic/20 group">
+              <CardContent className="p-6">
+                <div className="flex flex-col sm:flex-row gap-5">
+                  <div className="flex-shrink-0 bg-strategic-light/20 rounded-xl p-4 flex items-center justify-center group-hover:bg-strategic-light/40 transition-colors">
+                    <TargetIcon className="h-7 w-7 text-strategic" />
+                  </div>
+                  <div className="flex-grow">
+                    <div className="flex flex-wrap justify-between items-start gap-2 mb-3">
+                      <h3 className="text-xl font-semibold">OKRs: Set & Achieve Goals</h3>
+                      <span className="text-xs bg-strategic-light/30 px-3 py-1 rounded-full text-strategic font-medium">Strategic</span>
                     </div>
-                    <div className="flex-grow">
-                      <div className="flex flex-wrap justify-between items-start gap-2 mb-3">
-                        <h3 className="text-xl font-semibold">OKRs: Set & Achieve Goals</h3>
-                        <span className="text-xs bg-strategic-light/30 px-3 py-1 rounded-full text-strategic font-medium">Strategic</span>
-                      </div>
-                      <p className="text-muted-foreground mb-5">Define objectives with key results to track progress.</p>
-                      <div className="flex flex-wrap gap-3">
-                        <Button variant="outline" size="sm" className="flex items-center gap-1.5 border-strategic/30 text-strategic hover:bg-strategic-light/20 hover:text-strategic">
-                          <ExternalLinkIcon className="h-3.5 w-3.5" />
-                          Example
-                        </Button>
-                        <Button variant="outline" size="sm" className="flex items-center gap-1.5 border-strategic/30 text-strategic hover:bg-strategic-light/20 hover:text-strategic">
-                          <DownloadIcon className="h-3.5 w-3.5" />
-                          Guide
-                        </Button>
-                      </div>
+                    <p className="text-muted-foreground mb-5">Define objectives with key results to track progress.</p>
+                    <div className="flex flex-wrap gap-3">
+                      <Button variant="outline" size="sm" className="flex items-center gap-1.5 border-strategic/30 text-strategic hover:bg-strategic-light/20 hover:text-strategic">
+                        <ExternalLinkIcon className="h-3.5 w-3.5" />
+                        Example
+                      </Button>
+                      <Button variant="outline" size="sm" className="flex items-center gap-1.5 border-strategic/30 text-strategic hover:bg-strategic-light/20 hover:text-strategic">
+                        <DownloadIcon className="h-3.5 w-3.5" />
+                        Guide
+                      </Button>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
-              
-              {/* RICE Scoring Card */}
-              <Card className="overflow-hidden transition-all hover:shadow-md duration-300 border border-prioritization/20 group">
-                <CardContent className="p-6">
-                  <div className="flex flex-col sm:flex-row gap-5">
-                    <div className="flex-shrink-0 bg-prioritization-light/20 rounded-xl p-4 flex items-center justify-center group-hover:bg-prioritization-light/40 transition-colors">
-                      <GridIcon className="h-7 w-7 text-prioritization" />
+                </div>
+              </CardContent>
+            </Card>
+            
+            {/* RICE Scoring Card */}
+            <Card className="overflow-hidden transition-all hover:shadow-md duration-300 border border-prioritization/20 group">
+              <CardContent className="p-6">
+                <div className="flex flex-col sm:flex-row gap-5">
+                  <div className="flex-shrink-0 bg-prioritization-light/20 rounded-xl p-4 flex items-center justify-center group-hover:bg-prioritization-light/40 transition-colors">
+                    <GridIcon className="h-7 w-7 text-prioritization" />
+                  </div>
+                  <div className="flex-grow">
+                    <div className="flex flex-wrap justify-between items-start gap-2 mb-3">
+                      <h3 className="text-xl font-semibold">RICE Scoring</h3>
+                      <span className="text-xs bg-prioritization-light/30 px-3 py-1 rounded-full text-prioritization font-medium">Prioritization</span>
                     </div>
-                    <div className="flex-grow">
-                      <div className="flex flex-wrap justify-between items-start gap-2 mb-3">
-                        <h3 className="text-xl font-semibold">RICE Scoring</h3>
-                        <span className="text-xs bg-prioritization-light/30 px-3 py-1 rounded-full text-prioritization font-medium">Prioritization</span>
-                      </div>
-                      <p className="text-muted-foreground mb-5">Evaluate based on Reach, Impact, Confidence, and Effort.</p>
-                      <div className="flex flex-wrap gap-3">
-                        <Dialog>
-                          <DialogTrigger asChild>
-                            <Button variant="outline" size="sm" className="flex items-center gap-1.5 border-prioritization/30 text-prioritization hover:bg-prioritization-light/20 hover:text-prioritization">
-                              <ExternalLinkIcon className="h-3.5 w-3.5" />
-                              Calculator
-                            </Button>
-                          </DialogTrigger>
-                          <DialogContent className="max-w-[95vw] md:max-w-5xl h-[90vh] overflow-y-auto">
-                            <DialogHeader>
-                              <DialogTitle>RICE Score Calculator</DialogTitle>
-                              <DialogDescription>
-                                Calculate and prioritize your features based on Reach, Impact, Confidence, and Effort.
-                              </DialogDescription>
-                            </DialogHeader>
-                            <RICECalculator />
-                          </DialogContent>
-                        </Dialog>
-                        <Button variant="outline" size="sm" className="flex items-center gap-1.5 border-prioritization/30 text-prioritization hover:bg-prioritization-light/20 hover:text-prioritization">
-                          <DownloadIcon className="h-3.5 w-3.5" />
-                          Template
-                        </Button>
-                      </div>
+                    <p className="text-muted-foreground mb-5">Evaluate based on Reach, Impact, Confidence, and Effort.</p>
+                    <div className="flex flex-wrap gap-3">
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button variant="outline" size="sm" className="flex items-center gap-1.5 border-prioritization/30 text-prioritization hover:bg-prioritization-light/20 hover:text-prioritization">
+                            <ExternalLinkIcon className="h-3.5 w-3.5" />
+                            Calculator
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="max-w-[95vw] md:max-w-5xl h-[90vh] overflow-y-auto">
+                          <DialogHeader>
+                            <DialogTitle>RICE Score Calculator</DialogTitle>
+                            <DialogDescription>
+                              Calculate and prioritize your features based on Reach, Impact, Confidence, and Effort.
+                            </DialogDescription>
+                          </DialogHeader>
+                          <RICECalculator />
+                        </DialogContent>
+                      </Dialog>
+                      <Button variant="outline" size="sm" className="flex items-center gap-1.5 border-prioritization/30 text-prioritization hover:bg-prioritization-light/20 hover:text-prioritization">
+                        <DownloadIcon className="h-3.5 w-3.5" />
+                        Template
+                      </Button>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
-              
-              {/* MoSCoW Method Card */}
-              <Card className="overflow-hidden transition-all hover:shadow-md duration-300 border border-requirements/20 group">
-                <CardContent className="p-6">
-                  <div className="flex flex-col sm:flex-row gap-5">
-                    <div className="flex-shrink-0 bg-requirements-light/20 rounded-xl p-4 flex items-center justify-center group-hover:bg-requirements-light/40 transition-colors">
-                      <ClipboardListIcon className="h-7 w-7 text-requirements" />
+                </div>
+              </CardContent>
+            </Card>
+            
+            {/* MoSCoW Method Card */}
+            <Card className="overflow-hidden transition-all hover:shadow-md duration-300 border border-requirements/20 group">
+              <CardContent className="p-6">
+                <div className="flex flex-col sm:flex-row gap-5">
+                  <div className="flex-shrink-0 bg-requirements-light/20 rounded-xl p-4 flex items-center justify-center group-hover:bg-requirements-light/40 transition-colors">
+                    <ClipboardListIcon className="h-7 w-7 text-requirements" />
+                  </div>
+                  <div className="flex-grow">
+                    <div className="flex flex-wrap justify-between items-start gap-2 mb-3">
+                      <h3 className="text-xl font-semibold">MoSCoW Method</h3>
+                      <span className="text-xs bg-requirements-light/30 px-3 py-1 rounded-full text-requirements font-medium">Requirements</span>
                     </div>
-                    <div className="flex-grow">
-                      <div className="flex flex-wrap justify-between items-start gap-2 mb-3">
-                        <h3 className="text-xl font-semibold">MoSCoW Method</h3>
-                        <span className="text-xs bg-requirements-light/30 px-3 py-1 rounded-full text-requirements font-medium">Requirements</span>
-                      </div>
-                      <p className="text-muted-foreground mb-5">Categorize tasks into Must, Should, Could, and Won't.</p>
-                      <div className="flex flex-wrap gap-3">
-                        <Button variant="outline" size="sm" className="flex items-center gap-1.5 border-requirements/30 text-requirements hover:bg-requirements-light/20 hover:text-requirements">
-                          <ExternalLinkIcon className="h-3.5 w-3.5" />
-                          Workshop
-                        </Button>
-                        <Button variant="outline" size="sm" className="flex items-center gap-1.5 border-requirements/30 text-requirements hover:bg-requirements-light/20 hover:text-requirements">
-                          <DownloadIcon className="h-3.5 w-3.5" />
-                          Checklist
-                        </Button>
-                      </div>
+                    <p className="text-muted-foreground mb-5">Categorize tasks into Must, Should, Could, and Won't.</p>
+                    <div className="flex flex-wrap gap-3">
+                      <Button variant="outline" size="sm" className="flex items-center gap-1.5 border-requirements/30 text-requirements hover:bg-requirements-light/20 hover:text-requirements">
+                        <ExternalLinkIcon className="h-3.5 w-3.5" />
+                        Workshop
+                      </Button>
+                      <Button variant="outline" size="sm" className="flex items-center gap-1.5 border-requirements/30 text-requirements hover:bg-requirements-light/20 hover:text-requirements">
+                        <DownloadIcon className="h-3.5 w-3.5" />
+                        Checklist
+                      </Button>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
-              
-              {/* Strategic Roadmapping Card */}
-              <Card className="overflow-hidden transition-all hover:shadow-md duration-300 border border-planning/20 group">
-                <CardContent className="p-6">
-                  <div className="flex flex-col sm:flex-row gap-5">
-                    <div className="flex-shrink-0 bg-planning-light/20 rounded-xl p-4 flex items-center justify-center group-hover:bg-planning-light/40 transition-colors">
-                      <CalendarIcon className="h-7 w-7 text-planning" />
+                </div>
+              </CardContent>
+            </Card>
+            
+            {/* Strategic Roadmapping Card */}
+            <Card className="overflow-hidden transition-all hover:shadow-md duration-300 border border-planning/20 group">
+              <CardContent className="p-6">
+                <div className="flex flex-col sm:flex-row gap-5">
+                  <div className="flex-shrink-0 bg-planning-light/20 rounded-xl p-4 flex items-center justify-center group-hover:bg-planning-light/40 transition-colors">
+                    <CalendarIcon className="h-7 w-7 text-planning" />
+                  </div>
+                  <div className="flex-grow">
+                    <div className="flex flex-wrap justify-between items-start gap-2 mb-3">
+                      <h3 className="text-xl font-semibold">Strategic Roadmapping</h3>
+                      <span className="text-xs bg-planning-light/30 px-3 py-1 rounded-full text-planning font-medium">Planning</span>
                     </div>
-                    <div className="flex-grow">
-                      <div className="flex flex-wrap justify-between items-start gap-2 mb-3">
-                        <h3 className="text-xl font-semibold">Strategic Roadmapping</h3>
-                        <span className="text-xs bg-planning-light/30 px-3 py-1 rounded-full text-planning font-medium">Planning</span>
-                      </div>
-                      <p className="text-muted-foreground mb-5">Organize features into a structured timeline.</p>
-                      <div className="flex flex-wrap gap-3">
-                        <Dialog>
-                          <DialogTrigger asChild>
-                            <Button variant="outline" size="sm" className="flex items-center gap-1.5 border-planning/30 text-planning hover:bg-planning-light/20 hover:text-planning">
-                              <ExternalLinkIcon className="h-3.5 w-3.5" />
-                              Generator
-                            </Button>
-                          </DialogTrigger>
-                          <DialogContent className="max-w-[95vw] md:max-w-5xl h-[90vh] overflow-y-auto">
-                            <DialogHeader>
-                              <DialogTitle>Product Roadmap Generator</DialogTitle>
-                              <DialogDescription>
-                                Enter your feature ideas and get an AI-generated roadmap in seconds.
-                              </DialogDescription>
-                            </DialogHeader>
-                            <RoadmapGenerator />
-                          </DialogContent>
-                        </Dialog>
-                        <Button variant="outline" size="sm" className="flex items-center gap-1.5 border-planning/30 text-planning hover:bg-planning-light/20 hover:text-planning">
-                          <DownloadIcon className="h-3.5 w-3.5" />
-                          Template
-                        </Button>
-                      </div>
+                    <p className="text-muted-foreground mb-5">Organize features into a structured timeline.</p>
+                    <div className="flex flex-wrap gap-3">
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button variant="outline" size="sm" className="flex items-center gap-1.5 border-planning/30 text-planning hover:bg-planning-light/20 hover:text-planning">
+                            <ExternalLinkIcon className="h-3.5 w-3.5" />
+                            Generator
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="max-w-[95vw] md:max-w-5xl h-[90vh] overflow-y-auto">
+                          <DialogHeader>
+                            <DialogTitle>Product Roadmap Generator</DialogTitle>
+                            <DialogDescription>
+                              Enter your feature ideas and get an AI-generated roadmap in seconds.
+                            </DialogDescription>
+                          </DialogHeader>
+                          <RoadmapGenerator />
+                        </DialogContent>
+                      </Dialog>
+                      <Button variant="outline" size="sm" className="flex items-center gap-1.5 border-planning/30 text-planning hover:bg-planning-light/20 hover:text-planning">
+                        <DownloadIcon className="h-3.5 w-3.5" />
+                        Template
+                      </Button>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
-            </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
           
-          <div className="mb-16 bg-gradient-to-r from-muted/50 to-muted/30 p-6 rounded-xl border shadow-sm">
+          <div className="mb-16 bg-card/80 backdrop-blur-sm p-6 rounded-xl border shadow-sm">
             <FrameworkChat />
           </div>
           
-          <div className="grid md:grid-cols-1 gap-6 mb-16">
+          <div className="grid md:grid-cols-2 gap-6 mb-16">
             <div className="bg-card rounded-xl p-6 shadow-sm border">
               <h2 className="text-xl font-semibold mb-6 flex items-center">
                 <span className="mr-2 text-discovery">🎯</span>
@@ -301,41 +292,6 @@ const Explore = () => {
                     </div>
                   </div>
                 </div>
-
-                <div className="border border-border rounded-xl p-5 hover:border-planning/40 transition-colors hover:shadow-sm">
-                  <div className="flex flex-wrap items-start gap-4">
-                    <div className="flex-shrink-0 bg-planning-light/30 p-3 rounded-lg">
-                      <TargetIcon className="h-5 w-5 text-planning" />
-                    </div>
-                    <div className="flex-grow">
-                      <div className="flex flex-wrap justify-between items-center gap-2 mb-2">
-                        <h3 className="text-lg font-medium">3️⃣ Strategic Roadmapping</h3>
-                        <div className="flex items-center text-xs text-muted-foreground bg-muted/50 px-2 py-1 rounded-full">
-                          <ClockIcon className="h-3 w-3 mr-1" /> 
-                          <span>5 hours</span>
-                        </div>
-                      </div>
-                      <p className="text-sm text-muted-foreground mb-4">Build flexible roadmaps that align with business goals.</p>
-                      <div className="mb-4">
-                        <div className="flex justify-between text-xs mb-1.5">
-                          <span>Progress</span>
-                          <span>30%</span>
-                        </div>
-                        <Progress value={30} className="h-2" indicatorColor="bg-planning" />
-                      </div>
-                      <div className="flex flex-wrap gap-3">
-                        <Button variant="outline" size="sm" className="flex items-center gap-1.5 border-planning/30 text-planning hover:bg-planning-light/20 hover:text-planning">
-                          <FileTextIcon className="h-3.5 w-3.5" />
-                          Case Study
-                        </Button>
-                        <Button variant="outline" size="sm" className="flex items-center gap-1.5 border-planning/30 text-planning hover:bg-planning-light/20 hover:text-planning">
-                          <DownloadIcon className="h-3.5 w-3.5" />
-                          Templates
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
             
@@ -376,7 +332,7 @@ const Explore = () => {
             </div>
           </div>
           
-          <div className="max-w-md mx-auto mt-12 bg-gradient-to-r from-muted/50 to-background rounded-xl p-6 shadow-sm border">
+          <div className="max-w-md mx-auto mt-12 bg-card/80 backdrop-blur-sm rounded-xl p-6 shadow-sm border">
             <EmailSignup />
           </div>
         </div>
