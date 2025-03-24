@@ -59,32 +59,28 @@ export default {
 				},
 				// Category colors for visual distinction
 				strategic: {
-					DEFAULT: 'hsl(var(--strategic))',
-					light: 'hsl(var(--strategic-light))'
+					DEFAULT: '#8B5CF6',
+					light: '#EDE9FE'
 				},
 				prioritization: {
-					DEFAULT: 'hsl(var(--prioritization))',
-					light: 'hsl(var(--prioritization-light))'
+					DEFAULT: '#0EA5E9',
+					light: '#E0F2FE'
 				},
 				requirements: {
-					DEFAULT: 'hsl(var(--requirements))',
-					light: 'hsl(var(--requirements-light))'
+					DEFAULT: '#F97316',
+					light: '#FFEDD5'
 				},
 				planning: {
-					DEFAULT: 'hsl(var(--planning))',
-					light: 'hsl(var(--planning-light))'
+					DEFAULT: '#10B981',
+					light: '#D1FAE5'
 				},
 				discovery: {
-					DEFAULT: 'hsl(var(--discovery))',
-					light: 'hsl(var(--discovery-light))'
+					DEFAULT: '#6366F1',
+					light: '#E0E7FF'
 				},
 				analytics: {
-					DEFAULT: 'hsl(var(--analytics))',
-					light: 'hsl(var(--analytics-light))'
-				},
-				development: {
-					DEFAULT: 'hsl(var(--development))',
-					light: 'hsl(var(--development-light))'
+					DEFAULT: '#EC4899',
+					light: '#FCE7F3'
 				},
 			},
 			borderRadius: {

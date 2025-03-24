@@ -20,37 +20,6 @@
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-/* Card effects */
-.card-shine {
-  position: relative;
-  overflow: hidden;
-}
-
-.card-shine::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(
-    to bottom right,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.05) 100%
-  );
-  transform: rotate(30deg);
-  pointer-events: none;
-  z-index: 1;
-}
-
-.dark .card-shine::before {
-  background: linear-gradient(
-    to bottom right,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.03) 100%
-  );
-}
-
 /* Subtle transitions */
 .subtle-transition {
   transition: all 0.2s ease;
@@ -58,16 +27,11 @@
 
 /* Micro-interactions */
 .hover-lift {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.2s ease;
 }
 
 .hover-lift:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 5px 10px -5px rgba(0, 0, 0, 0.02);
-}
-
-.dark .hover-lift:hover {
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2), 0 5px 10px -5px rgba(0, 0, 0, 0.1);
 }
 
 /* Gradient text */
@@ -78,38 +42,9 @@
   background-clip: text;
 }
 
-.dark .gradient-text {
-  background: linear-gradient(90deg, #3b82f6, #6366f1);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
 /* New soft shadows */
 .shadow-soft {
   box-shadow: 0 2px 15px rgba(0, 0, 0, 0.03);
-}
-
-.dark .shadow-soft {
-  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.15);
-}
-
-/* Background gradients */
-.bg-gradient-primary {
-  background: linear-gradient(120deg, hsl(var(--primary)), hsl(var(--primary)/0.8));
-}
-
-.bg-gradient-subtle {
-  background: linear-gradient(120deg, hsl(var(--background)), hsl(var(--muted)/0.5));
-}
-
-/* Common layouts */
-.auth-layout {
-  @apply min-h-screen flex flex-col items-center justify-center px-4 py-12 bg-gradient-to-b from-background to-secondary/30;
-}
-
-.dashboard-layout {
-  @apply min-h-screen flex flex-col;
 }
 
 /* Button hover effect */

@@ -3,8 +3,6 @@ import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/providers/AuthProvider';
 import { useIsMobile } from '@/hooks/use-mobile';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
 import { 
   Sidebar,
   SidebarContent,
@@ -57,9 +55,8 @@ const Dashboard = ({ children }: DashboardProps) => {
   
   return (
     <div className="min-h-screen flex flex-col bg-background relative">
-      <Navbar />
       <div className="absolute inset-0 -z-10 pointer-events-none bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/5 via-background to-background"></div>
-      <div className="flex flex-1 w-full pt-16">
+      <div className="flex flex-1 w-full">
         <Sidebar collapsible={isMobile ? "offcanvas" : "icon"} variant="inset" className="border-r border-muted/60">
           <SidebarHeader className="px-4 py-4">
             <h3 className="text-sm font-medium text-sidebar-foreground/70">
@@ -88,11 +85,12 @@ const Dashboard = ({ children }: DashboardProps) => {
           </SidebarContent>
         </Sidebar>
         
-        <main className="flex-1 overflow-auto pb-16 pt-6 px-4 md:px-6 lg:px-8">
-          {children}
+        <main className="flex-1 overflow-auto pb-24 md:pb-10 pt-20 md:pt-24 px-4 md:px-6 lg:px-10">
+          <div className="pt-4 md:pt-6">
+            {children}
+          </div>
         </main>
       </div>
-      <Footer />
     </div>
   );
 }

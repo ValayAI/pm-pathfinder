@@ -13,6 +13,7 @@ import Explore from './pages/Explore';
 import Resources from './pages/Resources';
 import Coaching from './pages/Coaching';
 import Roadmap from './pages/Roadmap';
+import Navbar from './components/Navbar';
 import { Toaster } from "./components/ui/sonner";
 import { AuthProvider } from './providers/AuthProvider';
 import { SubscriptionProvider } from './providers/SubscriptionProvider';
@@ -26,7 +27,8 @@ function App() {
         <AuthProvider>
           <SubscriptionProvider>
             <SidebarProvider>
-              <div className="min-h-screen flex flex-col bg-background">
+              <div className="min-h-screen flex flex-col">
+                <Navbar />
                 <div className="flex-1 flex flex-col w-full">
                   <Routes>
                     {/* Public routes */}
@@ -50,7 +52,7 @@ function App() {
                     <Route path="*" element={<NotFound />} />
                   </Routes>
                 </div>
-                <Toaster richColors position="top-right" />
+                <Toaster />
               </div>
             </SidebarProvider>
           </SubscriptionProvider>
