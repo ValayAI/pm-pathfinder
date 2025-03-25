@@ -226,4 +226,49 @@
   .feature-icon {
     @apply w-12 h-12 rounded-lg flex items-center justify-center mb-4 text-white;
   }
+  
+  /* Title badge styles */
+  .title-badge {
+    @apply inline-flex items-center justify-center px-4 py-1.5 mb-6 rounded-full text-sm font-medium;
+  }
+}
+
+/* Animation classes */
+.fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide-in-right {
+  animation: slideInRight 0.5s ease-out forwards;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Enhanced button styles */
+.gradient-button {
+  @apply bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white font-medium px-6 py-2 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg;
+}
+
+.outline-button {
+  @apply border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 text-foreground font-medium px-6 py-2 rounded-lg transition-all duration-300;
 }

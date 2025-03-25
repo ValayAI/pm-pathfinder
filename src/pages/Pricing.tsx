@@ -37,17 +37,14 @@ const Pricing = () => {
   const { user } = useAuth();
   const { subscription } = useSubscription();
   
-  // Extract any required feature from location state (passed from protected routes)
   const requiredFeature = location.state?.requiredFeature;
   
   useEffect(() => {
-    // Show toast if user was redirected here due to required feature
     if (requiredFeature && user) {
       toast.info(`Upgrade required`, {
         description: `The "${requiredFeature}" feature requires a subscription upgrade.`,
       });
     } else if (requiredFeature && !user) {
-      // If user is not logged in but was redirected for a required feature
       toast.info(`Sign in required`, {
         description: `Please sign in to access the "${requiredFeature}" feature.`,
       });
@@ -62,7 +59,7 @@ const Pricing = () => {
       price: "$29",
       period: "/month",
       icon: Rocket,
-      priceId: "prod_RxEyhiWdXOWnUk", // Updated product ID for starter plan
+      priceId: "prod_RxEyhiWdXOWnUk",
       features: [
         "50 messages/month",
         "PM career & interview tips"
@@ -79,7 +76,7 @@ const Pricing = () => {
       price: "$99",
       period: " one-time",
       icon: Flame,
-      priceId: "prod_Rxhow56qBX4uRZ", // Updated product ID for popular plan
+      priceId: "prod_Rxhow56qBX4uRZ",
       features: [
         "Unlimited messages",
         "Resume & interview coaching",
@@ -98,7 +95,7 @@ const Pricing = () => {
       price: "$249",
       period: " one-time",
       icon: Briefcase,
-      priceId: "prod_Rxhqlof4dblRZT", // Updated product ID for pro plan
+      priceId: "prod_Rxhqlof4dblRZT",
       features: [
         "Everything in Most Popular",
         "1-on-1 PM coaching call",
@@ -115,7 +112,6 @@ const Pricing = () => {
     if (user) {
       updateSubscription(planId);
       
-      // If the user was redirected here from another page, navigate back
       if (location.state?.from) {
         navigate(location.state.from.pathname);
       }
@@ -132,7 +128,6 @@ const Pricing = () => {
     }
   };
 
-  // Determine button text based on current subscription and login status
   const getButtonText = (planId: string) => {
     if (!user) return "Sign in to Subscribe";
     
@@ -155,12 +150,12 @@ const Pricing = () => {
       <Navbar />
       <div className="container mx-auto px-4 pt-24 pb-12">
         <div className="text-center mb-12">
-          <Badge className="mb-4 bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200 border-purple-300 dark:border-purple-700 px-3 py-1">
-            <DollarSign className="h-3.5 w-3.5 mr-1" />
-            Pricing Plans
-          </Badge>
-          <h1 className="text-3xl font-bold mb-4">Choose Your Perfect Plan</h1>
-          <p className="text-muted-foreground max-w-xl mx-auto">
+          <div className="title-badge bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300">
+            <DollarSign className="h-4 w-4 mr-2" />
+            <span>Pricing Plans</span>
+          </div>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-indigo-600">Choose Your Perfect Plan</h1>
+          <p className="text-muted-foreground max-w-xl mx-auto text-lg">
             Get expert Product Management advice tailored to your career goals. 
             Select the plan that best fits your needs and ambitions.
           </p>
@@ -189,7 +184,6 @@ const Pricing = () => {
             </div>
           )}
           
-          {/* Sustainability message */}
           <div className="mt-5 flex items-center justify-center">
             <Leaf className="h-5 w-5 text-green-500 mr-2" />
             <p className="font-eco text-green-600 dark:text-green-400">

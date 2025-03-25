@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -77,11 +76,11 @@ const Resources = () => {
       <main className="flex-grow container mx-auto px-4 pt-24 md:pt-28 pb-12">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <div className="inline-flex items-center justify-center px-4 py-1.5 mb-6 rounded-full bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-300">
-              <BookMarked className="h-3.5 w-3.5 mr-2" />
-              <span className="text-sm font-medium">Curated Content</span>
+            <div className="title-badge bg-indigo-50 dark:bg-indigo-950/50">
+              <BookMarked className="h-4 w-4 mr-2" />
+              <span>Curated Content</span>
             </div>
-            <h1 className="text-4xl font-bold mb-4">Product Management Resources</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-blue-600">Product Management Resources</h1>
             <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
               Access templates, frameworks, guides and more to excel as a Product Manager
             </p>
@@ -89,7 +88,7 @@ const Resources = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
             {resources.map((resource, index) => (
-              <Card key={index} className="h-full flex flex-col group transition-all hover:shadow-md duration-300 border border-muted">
+              <Card key={index} className="h-full flex flex-col group transition-all hover:shadow-lg duration-300 border border-muted hover:border-indigo-100 dark:hover:border-indigo-900/50">
                 <CardHeader className="pb-3 pt-6 px-6">
                   <div className="flex justify-between items-start mb-2">
                     <div className="bg-indigo-50 dark:bg-indigo-900/20 p-3 rounded-lg group-hover:bg-indigo-100 dark:group-hover:bg-indigo-900/30 transition-colors">
@@ -115,7 +114,7 @@ const Resources = () => {
                       </Button>
                     </div>
                   ) : (
-                    <Button variant="secondary" className="w-full">
+                    <Button variant="secondary" className="w-full hover:bg-indigo-50/50 dark:hover:bg-indigo-900/20">
                       {resource.action}
                     </Button>
                   )}
@@ -133,7 +132,7 @@ const Resources = () => {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <Card className="backdrop-blur-sm rounded-xl border-t-4 border-t-blue-500 border-blue-100 dark:border-blue-900/20 transition-all hover:shadow-md">
+              <Card className="backdrop-blur-sm rounded-xl border-t-4 border-t-blue-500 border-blue-100 dark:border-blue-900/20 transition-all hover:shadow-lg hover:-translate-y-1">
                 <CardHeader className="pb-3">
                   <div className="flex justify-between items-start">
                     <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg transition-colors">
@@ -173,7 +172,7 @@ const Resources = () => {
                 </CardContent>
               </Card>
               
-              <Card className="backdrop-blur-sm rounded-xl border-t-4 border-t-indigo-500 border-indigo-100 dark:border-indigo-900/20 transition-all hover:shadow-md">
+              <Card className="backdrop-blur-sm rounded-xl border-t-4 border-t-indigo-500 border-indigo-100 dark:border-indigo-900/20 transition-all hover:shadow-lg hover:-translate-y-1">
                 <CardHeader className="pb-3">
                   <div className="flex justify-between items-start">
                     <div className="bg-indigo-50 dark:bg-indigo-900/20 p-3 rounded-lg transition-colors">
@@ -213,7 +212,7 @@ const Resources = () => {
                 </CardContent>
               </Card>
               
-              <Card className="backdrop-blur-sm rounded-xl border-t-4 border-t-purple-500 border-purple-100 dark:border-purple-900/20 transition-all hover:shadow-md">
+              <Card className="backdrop-blur-sm rounded-xl border-t-4 border-t-purple-500 border-purple-100 dark:border-purple-900/20 transition-all hover:shadow-lg hover:-translate-y-1">
                 <CardHeader className="pb-3">
                   <div className="flex justify-between items-start">
                     <div className="bg-purple-50 dark:bg-purple-900/20 p-3 rounded-lg transition-colors">
@@ -255,24 +254,24 @@ const Resources = () => {
             </div>
             
             <div className="text-center mt-8">
-              <Button variant="default" size="lg" className="px-6 py-6 h-auto bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700">
+              <Button variant="default" size="lg" className="px-6 py-6 h-auto bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-md hover:shadow-lg">
                 <Wand2 className="mr-2 h-5 w-5" />
                 Generate Custom 30-60-90 Plan
               </Button>
             </div>
           </div>
           
-          <div className="mt-16 bg-card/80 backdrop-blur-sm rounded-xl p-8 text-center shadow-sm border">
+          <div className="mt-16 bg-card/80 backdrop-blur-sm rounded-xl p-8 text-center shadow-md border">
             <h2 className="text-2xl font-semibold mb-4">Need Custom Resources?</h2>
             <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
               Our team can create tailored resources for your specific product management challenges.
             </p>
-            <Button size="lg" className="px-8 py-6 h-auto">
+            <Button size="lg" className="px-8 py-6 h-auto bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 shadow-md hover:shadow-lg">
               Request Custom Resources
             </Button>
           </div>
           
-          <div className="max-w-md mx-auto mt-16 bg-card/80 backdrop-blur-sm rounded-xl p-6 shadow-sm border">
+          <div className="max-w-md mx-auto mt-16 bg-card/80 backdrop-blur-sm rounded-xl p-6 shadow-md border">
             <EmailSignup />
           </div>
         </div>

@@ -18,17 +18,17 @@ export function Chat() {
         {user ? (
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <div className="inline-flex items-center justify-center px-4 py-1.5 mb-6 rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300">
-                <MessageSquare className="h-3.5 w-3.5 mr-2" />
-                <span className="text-sm font-medium">AI Coaching</span>
+              <div className="title-badge bg-purple-50 dark:bg-purple-950/50">
+                <MessageSquare className="h-4 w-4 mr-2" />
+                <span>AI Coaching</span>
               </div>
-              <h1 className="text-4xl font-bold mb-4">Accelerate your PM career</h1>
+              <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-indigo-600">Accelerate your PM career</h1>
               <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
                 Get expert product management advice and career guidance whenever you need it
               </p>
             </div>
             
-            <div className="bg-card/80 backdrop-blur-sm rounded-xl border shadow-sm overflow-hidden">
+            <div className="bg-card/80 backdrop-blur-sm rounded-xl border shadow-md overflow-hidden">
               <ChatContainer />
             </div>
           </div>

@@ -9,17 +9,17 @@ const Roadmap = () => {
     <Dashboard>
       <div className="max-w-6xl mx-auto space-y-6">
         <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center px-4 py-1.5 mb-6 rounded-full bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary-foreground">
-            <Calendar className="h-3.5 w-3.5 mr-2" />
-            <span className="text-sm font-medium">Strategy Tool</span>
+          <div className="title-badge bg-blue-50 dark:bg-blue-950/50">
+            <Calendar className="h-4 w-4 mr-2" />
+            <span>Strategy Tool</span>
           </div>
-          <h1 className="text-4xl font-bold mb-4">Product Roadmap Generator</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-primary">Product Roadmap Generator</h1>
           <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
             Create and visualize your product roadmap with AI assistance
           </p>
         </div>
         
-        <div className="bg-card/80 backdrop-blur-sm border border-muted rounded-xl shadow-sm overflow-hidden">
+        <div className="bg-card/80 backdrop-blur-sm border border-muted rounded-xl shadow-md overflow-hidden">
           <RoadmapGenerator />
         </div>
       </div>
