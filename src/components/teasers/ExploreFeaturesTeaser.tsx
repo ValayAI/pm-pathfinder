@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -9,15 +8,11 @@ import { Badge } from '@/components/ui/badge';
 const ExploreFeaturesTeaser = () => {
   return (
     <div className="w-full max-w-5xl mx-auto px-4">
-      <div className="relative mb-16">
-        <div className="absolute -left-4 top-1/2 -translate-y-1/2 hidden md:block">
-          <div className="w-1.5 h-20 bg-gradient-to-b from-blue-500 to-primary rounded-full"></div>
-        </div>
+      <div className="relative mb-16 mt-12">
         <div className="absolute -top-6 left-1/2 -translate-x-1/2 hidden md:block">
           <Sparkles className="text-primary/60 h-12 w-12 animate-pulse" />
         </div>
         <div className="text-center">
-          <span className="inline-block px-4 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary mb-4">Product Management Suite</span>
           <h2 className="text-3xl md:text-4xl font-semibold leading-tight md:leading-snug tracking-tight mb-4">
             <span className="bg-gradient-to-br from-blue-600 to-primary bg-clip-text text-transparent">
               Enhance your PM workflow
@@ -30,7 +25,6 @@ const ExploreFeaturesTeaser = () => {
       </div>
 
       <div className="grid gap-6 md:grid-cols-3 mb-12">
-        {/* PM Interview Tool */}
         <Card className="overflow-hidden transition-all hover:shadow-md hover:scale-[1.01] duration-300 border border-blue-100 dark:border-blue-900/20 group">
           <CardContent className="p-6">
             <div className="flex justify-between items-start mb-5">
@@ -51,7 +45,6 @@ const ExploreFeaturesTeaser = () => {
           </CardContent>
         </Card>
 
-        {/* OKR Generator */}
         <Card className="overflow-hidden transition-all hover:shadow-md hover:scale-[1.01] duration-300 border border-purple-100 dark:border-purple-900/20 group">
           <CardContent className="p-6">
             <div className="flex justify-between items-start mb-5">
@@ -72,7 +65,6 @@ const ExploreFeaturesTeaser = () => {
           </CardContent>
         </Card>
 
-        {/* Roadmap Builder */}
         <Card className="overflow-hidden transition-all hover:shadow-md hover:scale-[1.01] duration-300 border border-amber-100 dark:border-amber-900/20 group">
           <CardContent className="p-6">
             <div className="flex justify-between items-start mb-5">
@@ -94,7 +86,6 @@ const ExploreFeaturesTeaser = () => {
         </Card>
       </div>
 
-      {/* Feature Preview Banner */}
       <div className="mb-12 bg-gradient-to-r from-primary/5 to-primary/10 backdrop-blur-sm rounded-xl p-8 border border-primary/20 text-center shadow-sm">
         <h2 className="text-2xl font-semibold mb-3">Sign up to unlock 10+ AI tools for PMs 🚀</h2>
         <p className="text-muted-foreground mb-5 max-w-xl mx-auto">Our AI-powered platform helps you build better products and advance your PM career.</p>
@@ -103,7 +94,6 @@ const ExploreFeaturesTeaser = () => {
         </Button>
       </div>
 
-      {/* Testimonials */}
       <div className="grid gap-5 md:grid-cols-2 mb-12">
         <Card className="bg-muted/20 hover:bg-muted/30 transition-colors rounded-xl shadow-sm border border-muted">
           <CardContent className="pt-6 p-6">
