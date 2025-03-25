@@ -17,7 +17,6 @@ import Navbar from './components/Navbar';
 import { Toaster } from "./components/ui/sonner";
 import { AuthProvider } from './providers/AuthProvider';
 import { SubscriptionProvider } from './providers/SubscriptionProvider';
-import { SidebarProvider } from './components/ui/sidebar';
 import './App.css';
 
 function App() {
@@ -26,35 +25,33 @@ function App() {
       <ThemeProvider defaultTheme="light" storageKey="ui-theme">
         <AuthProvider>
           <SubscriptionProvider>
-            <SidebarProvider>
-              <div className="min-h-screen flex flex-col">
-                <Navbar />
-                <div className="flex-1 flex flex-col w-full">
-                  <Routes>
-                    {/* Public routes */}
-                    <Route path="/" element={<Index />} />
-                    <Route path="/signin" element={<SignIn />} />
-                    <Route path="/sign-up" element={<SignUp />} />
-                    <Route path="/signup" element={<Navigate to="/sign-up" replace />} />
-                    <Route path="/pricing" element={<Pricing />} />
-                    
-                    {/* Protected Routes with teasers for non-authenticated users */}
-                    <Route path="/explore" element={<ProtectedRoute><Explore /></ProtectedRoute>} />
-                    <Route path="/resources" element={<ProtectedRoute><Resources /></ProtectedRoute>} />
-                    <Route path="/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
-                    
-                    {/* Fully protected routes - redirect to signin */}
-                    <Route path="/coaching" element={<ProtectedRoute><Coaching /></ProtectedRoute>} />
-                    <Route path="/roadmap" element={<ProtectedRoute><Roadmap /></ProtectedRoute>} />
-                    <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
-                    <Route path="/profile" element={<ProtectedRoute><Navigate to="/settings" replace /></ProtectedRoute>} />
-                    
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
-                </div>
-                <Toaster />
+            <div className="min-h-screen flex flex-col">
+              <Navbar />
+              <div className="flex-1 flex flex-col w-full">
+                <Routes>
+                  {/* Public routes */}
+                  <Route path="/" element={<Index />} />
+                  <Route path="/signin" element={<SignIn />} />
+                  <Route path="/sign-up" element={<SignUp />} />
+                  <Route path="/signup" element={<Navigate to="/sign-up" replace />} />
+                  <Route path="/pricing" element={<Pricing />} />
+                  
+                  {/* Protected Routes with teasers for non-authenticated users */}
+                  <Route path="/explore" element={<ProtectedRoute><Explore /></ProtectedRoute>} />
+                  <Route path="/resources" element={<ProtectedRoute><Resources /></ProtectedRoute>} />
+                  <Route path="/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
+                  
+                  {/* Fully protected routes - redirect to signin */}
+                  <Route path="/coaching" element={<ProtectedRoute><Coaching /></ProtectedRoute>} />
+                  <Route path="/roadmap" element={<ProtectedRoute><Roadmap /></ProtectedRoute>} />
+                  <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+                  <Route path="/profile" element={<ProtectedRoute><Navigate to="/settings" replace /></ProtectedRoute>} />
+                  
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
               </div>
-            </SidebarProvider>
+              <Toaster />
+            </div>
           </SubscriptionProvider>
         </AuthProvider>
       </ThemeProvider>

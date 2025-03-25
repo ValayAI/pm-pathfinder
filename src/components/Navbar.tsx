@@ -1,14 +1,12 @@
+
 import { useState, useEffect } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { 
-  Moon, Sun, User, Menu, X
+  Moon, Sun, User, Menu, X, Home, Compass, BookOpen, MessageSquare, Sparkles, BarChart3, Settings
 } from "lucide-react";
 import { useAuth } from "@/providers/AuthProvider";
-import { 
-  SidebarTrigger
-} from "@/components/ui/sidebar";
 import {
   Sheet,
   SheetContent,
@@ -48,24 +46,23 @@ export function Navbar() {
     setIsDark(!isDark);
   };
   
-  const navigationItems = [
+  // Updated navigation items with icons for authenticated users
+  const navigationItems = user ? [
+    { label: "Home", href: "/", icon: <Home className="h-5 w-5" /> },
+    { label: "Explore", href: "/explore", icon: <Compass className="h-5 w-5" /> },
+    { label: "Resources", href: "/resources", icon: <BookOpen className="h-5 w-5" /> },
+    { label: "PM Coach", href: "/chat", icon: <Sparkles className="h-5 w-5" />, highlight: true },
+    { label: "Coaching", href: "/coaching", icon: <MessageSquare className="h-5 w-5" /> },
+    { label: "Roadmap", href: "/roadmap", icon: <BarChart3 className="h-5 w-5" /> },
+    { label: "Settings", href: "/settings", icon: <Settings className="h-5 w-5" /> }
+  ] : [
     { label: "Home", href: "/" },
     { label: "Explore", href: "/explore" },
     { label: "Resources", href: "/resources" },
     { label: "PM Coach", href: "/chat", highlight: true },
     { label: "Coaching", href: "/coaching" },
+    { label: "Pricing", href: "/pricing" }
   ];
-  
-  if (!user) {
-    navigationItems.push({ label: "Pricing", href: "/pricing" });
-  }
-
-  const userNavigationItems = user ? [
-    { label: "Roadmap", href: "/roadmap" },
-    { label: "Settings", href: "/settings" }
-  ] : [];
-
-  const allNavigationItems = [...navigationItems, ...userNavigationItems];
   
   return (
     <nav 
@@ -77,7 +74,6 @@ export function Navbar() {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
-            {user && <SidebarTrigger className="md:hidden mr-2" />}
             <NavLink to="/" className="flex items-center space-x-2">
               <div className="w-6 h-6 rounded-md bg-gradient-to-br from-primary to-blue-700 flex items-center justify-center shadow-sm">
                 <span className="text-primary-foreground font-bold text-sm">P</span>
@@ -99,21 +95,7 @@ export function Navbar() {
                   item.highlight && !isActive && "text-blue-600 dark:text-blue-400"
                 )}
               >
-                <span>{item.label}</span>
-              </NavLink>
-            ))}
-            
-            {userNavigationItems.map((item) => (
-              <NavLink
-                key={item.label}
-                to={item.href}
-                className={({ isActive }) => cn(
-                  "flex items-center text-sm font-medium transition-colors duration-200 px-3 py-1.5 rounded-md",
-                  isActive 
-                    ? "bg-primary/10 text-primary" 
-                    : "text-foreground/70 hover:bg-muted hover:text-primary"
-                )}
-              >
+                {user && item.icon && <span className="mr-2">{item.icon}</span>}
                 <span>{item.label}</span>
               </NavLink>
             ))}
@@ -134,7 +116,7 @@ export function Navbar() {
               <SheetContent side="right" className="w-[75vw] sm:w-[350px] py-8 bg-background/95 backdrop-blur-md">
                 <div className="flex flex-col gap-6">
                   <div className="flex flex-col gap-3 mt-2">
-                    <MobileMenu navigationItems={allNavigationItems} />
+                    <MobileMenu navigationItems={navigationItems} />
                   </div>
                   
                   {!user && (
