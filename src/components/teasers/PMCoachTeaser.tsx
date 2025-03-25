@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
@@ -39,15 +38,11 @@ const PMCoachTeaser = () => {
 
   return (
     <div className="w-full max-w-4xl mx-auto px-4">
-      <div className="relative mb-16">
-        <div className="absolute -left-4 top-1/2 -translate-y-1/2 hidden md:block">
-          <div className="w-1.5 h-20 bg-gradient-to-b from-blue-500 to-indigo-600 rounded-full"></div>
-        </div>
+      <div className="relative mb-16 mt-12">
         <div className="absolute -top-6 left-1/2 -translate-x-1/2 hidden md:block">
           <Sparkles className="text-indigo-600/60 h-12 w-12 animate-pulse" />
         </div>
         <div className="text-center">
-          <span className="inline-block px-4 py-1 rounded-full text-xs font-medium bg-indigo-600/10 text-indigo-600 mb-4">AI-Powered Coaching</span>
           <h2 className="text-3xl md:text-4xl font-semibold leading-tight md:leading-snug tracking-tight mb-4">
             <span className="bg-gradient-to-br from-blue-600 to-indigo-600 bg-clip-text text-transparent">
               Accelerate your PM career

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -9,7 +8,7 @@ import { Link } from 'react-router-dom';
 const ResourcesTeaser = () => {
   return (
     <div className="w-full max-w-5xl mx-auto px-4">
-      <div className="text-center mb-10">
+      <div className="text-center mb-10 mt-12">
         <h1 className="text-4xl font-bold tracking-tight mb-4 bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
           Product Management Resources
         </h1>
@@ -20,7 +19,6 @@ const ResourcesTeaser = () => {
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 mb-12">
-        {/* PRD Template */}
         <Card className="overflow-hidden hover:shadow-md transition-all hover:scale-[1.01] duration-300 border">
           <CardHeader className="pb-2">
             <div className="flex justify-between items-start">
@@ -60,7 +58,6 @@ const ResourcesTeaser = () => {
           </CardContent>
         </Card>
         
-        {/* PM Interview Questions */}
         <Card className="overflow-hidden hover:shadow-md transition-all hover:scale-[1.01] duration-300 border">
           <CardHeader className="pb-2">
             <div className="flex justify-between items-start">
@@ -103,7 +100,6 @@ const ResourcesTeaser = () => {
         </Card>
       </div>
       
-      {/* More resources banner */}
       <Card className="mb-8 bg-gradient-to-r from-primary/5 to-primary/10 border border-primary/20">
         <CardContent className="p-6">
           <h3 className="text-lg font-bold mb-3">Unlock our complete resource library</h3>

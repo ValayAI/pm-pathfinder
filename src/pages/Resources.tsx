@@ -75,11 +75,7 @@ const Resources = () => {
       <div className="absolute inset-0 -z-10 pointer-events-none bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/5 via-background to-background"></div>
       <main className="flex-grow container mx-auto px-4 pt-24 md:pt-28 pb-12">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <div className="title-badge bg-indigo-50 dark:bg-indigo-950/50">
-              <BookMarked className="h-4 w-4 mr-2" />
-              <span>Curated Content</span>
-            </div>
+          <div className="text-center mb-12 mt-12">
             <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-blue-600">Product Management Resources</h1>
             <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
               Access templates, frameworks, guides and more to excel as a Product Manager
