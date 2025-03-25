@@ -1,10 +1,10 @@
 
 import { useState, useEffect } from 'react';
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink, Link, useNavigate } from 'react-router-dom';
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { 
-  Moon, Sun, User, Menu, X, Home, Compass, BookOpen, MessageSquare, Sparkles, BarChart3, Settings
+  Moon, Sun, User, Menu, X, Home, Compass, BookOpen, MessageSquare, Sparkles, BarChart3, Settings, LogOut
 } from "lucide-react";
 import { useAuth } from "@/providers/AuthProvider";
 import {
@@ -13,8 +13,17 @@ import {
   SheetTrigger,
   SheetClose
 } from "@/components/ui/sheet";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useIsMobile } from "@/hooks/use-mobile";
 import MobileMenu from './MobileMenu';
+import { toast } from "sonner";
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -22,8 +31,9 @@ export function Navbar() {
     document.documentElement.classList.contains('dark')
   );
   
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
   const isMobile = useIsMobile();
+  const navigate = useNavigate();
   
   useEffect(() => {
     const handleScroll = () => {
@@ -46,15 +56,25 @@ export function Navbar() {
     setIsDark(!isDark);
   };
   
-  // Updated navigation items with icons for authenticated users
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      toast.success('Signed out successfully');
+      navigate('/', { replace: true });
+    } catch (error) {
+      console.error('Error signing out:', error);
+      toast.error('Failed to sign out');
+    }
+  };
+  
+  // Updated navigation items with icons for authenticated users - removed Settings from main nav
   const navigationItems = user ? [
     { label: "Home", href: "/", icon: <Home className="h-5 w-5" /> },
     { label: "Explore", href: "/explore", icon: <Compass className="h-5 w-5" /> },
     { label: "Resources", href: "/resources", icon: <BookOpen className="h-5 w-5" /> },
     { label: "PM Coach", href: "/chat", icon: <Sparkles className="h-5 w-5" />, highlight: true },
     { label: "Coaching", href: "/coaching", icon: <MessageSquare className="h-5 w-5" /> },
-    { label: "Roadmap", href: "/roadmap", icon: <BarChart3 className="h-5 w-5" /> },
-    { label: "Settings", href: "/settings", icon: <Settings className="h-5 w-5" /> }
+    { label: "Roadmap", href: "/roadmap", icon: <BarChart3 className="h-5 w-5" /> }
   ] : [
     { label: "Home", href: "/" },
     { label: "Explore", href: "/explore" },
@@ -119,6 +139,31 @@ export function Navbar() {
                     <MobileMenu navigationItems={navigationItems} />
                   </div>
                   
+                  {user && (
+                    <div className="border-t pt-4 mt-2">
+                      <div className="flex flex-col gap-3">
+                        <SheetClose asChild>
+                          <Link to="/settings">
+                            <Button variant="outline" className="w-full">
+                              <Settings className="mr-2 h-4 w-4" />
+                              Settings
+                            </Button>
+                          </Link>
+                        </SheetClose>
+                        <SheetClose asChild>
+                          <Button 
+                            variant="outline" 
+                            className="w-full" 
+                            onClick={handleSignOut}
+                          >
+                            <LogOut className="mr-2 h-4 w-4" />
+                            Sign Out
+                          </Button>
+                        </SheetClose>
+                      </div>
+                    </div>
+                  )}
+                  
                   {!user && (
                     <div className="border-t pt-4 mt-2">
                       <div className="flex flex-col gap-3">
@@ -159,12 +204,30 @@ export function Navbar() {
             </Button>
             
             {user ? (
-              <NavLink to="/settings">
-                <Button variant="outline" size="sm" className="h-8 px-3 rounded-md border-primary/20 hover:bg-primary/10">
-                  <User className="h-3.5 w-3.5 mr-2" />
-                  <span className="hidden sm:inline">Account</span>
-                </Button>
-              </NavLink>
+              <div className="relative">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" size="sm" className="h-8 px-3 rounded-md border-primary/20 hover:bg-primary/10">
+                      <User className="h-3.5 w-3.5 mr-2" />
+                      <span className="hidden sm:inline">Account</span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link to="/settings" className="w-full cursor-pointer">
+                        <Settings className="mr-2 h-4 w-4" />
+                        <span>Settings</span>
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer">
+                      <LogOut className="mr-2 h-4 w-4" />
+                      <span>Sign out</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
             ) : (
               <div className="flex items-center space-x-2">
                 <NavLink to="/signin" className="hidden md:block">
