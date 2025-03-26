@@ -30,6 +30,8 @@ const ResourcePreviewModal: React.FC<ResourcePreviewProps> = ({
   content,
   previewContent,
 }) => {
+  console.log("ResourcePreviewModal rendering with open:", open);
+  
   const getIcon = () => {
     switch (type) {
       case 'Template':
