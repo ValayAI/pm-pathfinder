@@ -10,9 +10,10 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { FileText, BookOpen, Video, Lock } from 'lucide-react';
+import { FileText, BookOpen, Video, Download, Lock } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { toast } from "sonner";
+import { useAuth } from "@/providers/AuthProvider";
 
 export interface ResourcePreviewProps {
   open: boolean;
@@ -32,6 +33,7 @@ const ResourcePreviewModal: React.FC<ResourcePreviewProps> = ({
   previewContent,
 }) => {
   console.log("ResourcePreviewModal rendering with open:", open);
+  const { user } = useAuth();
   
   useEffect(() => {
     console.log("ResourcePreviewModal props changed - open state:", open);
@@ -48,6 +50,8 @@ const ResourcePreviewModal: React.FC<ResourcePreviewProps> = ({
         return <BookOpen className="h-5 w-5 text-primary" />;
       case 'Video':
         return <Video className="h-5 w-5 text-primary" />;
+      case 'Download':
+        return <Download className="h-5 w-5 text-primary" />;
       default:
         return <FileText className="h-5 w-5 text-primary" />;
     }
@@ -67,26 +71,39 @@ const ResourcePreviewModal: React.FC<ResourcePreviewProps> = ({
           </div>
           <DialogTitle className="text-xl mt-2">{title}</DialogTitle>
           <DialogDescription>
-            Preview of the first few paragraphs
+            {user ? "Full resource content" : "Preview of the first few paragraphs"}
           </DialogDescription>
         </DialogHeader>
         
         <div className="mt-2 space-y-4">
           <div className="prose prose-sm dark:prose-invert max-w-none">
-            <p>{previewContent}</p>
-            
-            <div className="relative mt-6 pt-4 border-t">
-              <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground mb-2">
-                <Lock className="h-3 w-3" />
-                <span>Sign up for full access</span>
-              </div>
-              <div className="bg-gradient-to-b from-transparent to-background/95 h-20 absolute -top-20 left-0 right-0 pointer-events-none"></div>
-              <div className="blur-[2px] opacity-30 pointer-events-none">
+            {user ? (
+              // Show full content for authenticated users
+              <>
+                <p className="font-medium text-foreground">{previewContent}</p>
                 {content.split('\n').map((paragraph, i) => (
                   <p key={i} className="mb-4">{paragraph}</p>
                 ))}
-              </div>
-            </div>
+              </>
+            ) : (
+              // Show preview with blurred content for non-authenticated users
+              <>
+                <p>{previewContent}</p>
+                
+                <div className="relative mt-6 pt-4 border-t">
+                  <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground mb-2">
+                    <Lock className="h-3 w-3" />
+                    <span>Sign up for full access</span>
+                  </div>
+                  <div className="bg-gradient-to-b from-transparent to-background/95 h-20 absolute -top-20 left-0 right-0 pointer-events-none"></div>
+                  <div className="blur-[2px] opacity-30 pointer-events-none">
+                    {content.split('\n').map((paragraph, i) => (
+                      <p key={i} className="mb-4">{paragraph}</p>
+                    ))}
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         </div>
         
@@ -98,14 +115,16 @@ const ResourcePreviewModal: React.FC<ResourcePreviewProps> = ({
             Close Preview
           </Button>
           
-          <div className="flex gap-3">
-            <Button variant="outline" asChild>
-              <Link to="/signin">Sign In</Link>
-            </Button>
-            <Button asChild>
-              <Link to="/signup">Sign Up for Full Access</Link>
-            </Button>
-          </div>
+          {!user && (
+            <div className="flex gap-3">
+              <Button variant="outline" asChild>
+                <Link to="/signin">Sign In</Link>
+              </Button>
+              <Button asChild>
+                <Link to="/signup">Sign Up for Full Access</Link>
+              </Button>
+            </div>
+          )}
         </DialogFooter>
       </DialogContent>
     </Dialog>
