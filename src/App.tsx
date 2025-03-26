@@ -14,15 +14,15 @@ import Resources from './pages/Resources';
 import Coaching from './pages/Coaching';
 import Roadmap from './pages/Roadmap';
 import Navbar from './components/Navbar';
-import { Toaster } from "./components/ui/sonner";
+import { Toaster } from "sonner";
 import { AuthProvider } from './providers/AuthProvider';
 import { SubscriptionProvider } from './providers/SubscriptionProvider';
 import './App.css';
 
 function App() {
   return (
-    <Router>
-      <ThemeProvider defaultTheme="light" storageKey="ui-theme">
+    <ThemeProvider defaultTheme="light" storageKey="ui-theme">
+      <Router>
         <AuthProvider>
           <SubscriptionProvider>
             <div className="min-h-screen flex flex-col">
@@ -54,8 +54,8 @@ function App() {
             </div>
           </SubscriptionProvider>
         </AuthProvider>
-      </ThemeProvider>
-    </Router>
+      </Router>
+    </ThemeProvider>
   );
 }
 
