@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import EmailSignup from "../components/EmailSignup";
@@ -27,6 +27,14 @@ const Resources = () => {
   const { user } = useAuth();
   const [previewOpen, setPreviewOpen] = useState(false);
   const [selectedResource, setSelectedResource] = useState<ResourceItem | null>(null);
+  
+  // Debug effect to track modal state changes
+  useEffect(() => {
+    console.log("Resources component - previewOpen changed to:", previewOpen);
+    if (previewOpen) {
+      console.log("Selected resource:", selectedResource?.title);
+    }
+  }, [previewOpen, selectedResource]);
   
   const openPreview = (resource: ResourceItem) => {
     console.log("Opening preview for:", resource.title);
@@ -106,7 +114,7 @@ const Resources = () => {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col relative">
       <Navbar />
       <div className="absolute inset-0 -z-10 pointer-events-none bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/5 via-background to-background"></div>
       <main className="flex-grow container mx-auto px-4 pt-24 md:pt-28 pb-12">
@@ -139,7 +147,10 @@ const Resources = () => {
                       <Button 
                         variant="outline" 
                         className="w-full flex items-center justify-center gap-1.5 hover:bg-muted/50"
-                        onClick={() => openPreview(resource)}
+                        onClick={() => {
+                          console.log("Preview button clicked for:", resource.title);
+                          openPreview(resource);
+                        }}
                       >
                         <Eye className="h-4 w-4" />
                         Preview
@@ -153,7 +164,10 @@ const Resources = () => {
                     <Button 
                       variant="secondary" 
                       className="w-full hover:bg-indigo-50/50 dark:hover:bg-indigo-900/20"
-                      onClick={() => openPreview(resource)}
+                      onClick={() => {
+                        console.log("Action button clicked for:", resource.title);
+                        openPreview(resource);
+                      }}
                     >
                       <Eye className="h-4 w-4 mr-2" />
                       {resource.action}
@@ -320,19 +334,18 @@ const Resources = () => {
       </main>
       <Footer />
     
-      {selectedResource && (
-        <ResourcePreviewModal
-          open={previewOpen}
-          onOpenChange={(open) => {
-            console.log("Modal onOpenChange called with:", open);
-            setPreviewOpen(open);
-          }}
-          title={selectedResource.title}
-          type={selectedResource.type}
-          previewContent={selectedResource.previewContent}
-          content={selectedResource.fullContent}
-        />
-      )}
+      {/* Force the modal to be fully mounted in the DOM regardless of selection */}
+      <ResourcePreviewModal
+        open={previewOpen}
+        onOpenChange={(open) => {
+          console.log("Modal onOpenChange called with:", open);
+          setPreviewOpen(open);
+        }}
+        title={selectedResource?.title || ""}
+        type={selectedResource?.type || ""}
+        previewContent={selectedResource?.previewContent || ""}
+        content={selectedResource?.fullContent || ""}
+      />
     </div>
   );
 };

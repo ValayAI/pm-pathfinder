@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { FileText, BookOpen, Video, Lock } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { toast } from "sonner";
 
 export interface ResourcePreviewProps {
   open: boolean;
@@ -32,9 +33,11 @@ const ResourcePreviewModal: React.FC<ResourcePreviewProps> = ({
 }) => {
   console.log("ResourcePreviewModal rendering with open:", open);
   
-  // Add an effect to log when props change
   useEffect(() => {
     console.log("ResourcePreviewModal props changed - open state:", open);
+    if (open) {
+      toast.info("Modal should be visible now");
+    }
   }, [open, title]);
   
   const getIcon = () => {
