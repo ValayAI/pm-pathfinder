@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -134,7 +135,10 @@ const Resources = () => {
                       <Button 
                         variant="outline" 
                         className="w-full flex items-center justify-center gap-1.5 hover:bg-muted/50"
-                        onClick={() => openPreview(resource)}
+                        onClick={() => {
+                          console.log("Preview button clicked", resource.title);
+                          openPreview(resource);
+                        }}
                       >
                         <Eye className="h-4 w-4" />
                         Preview
@@ -148,7 +152,10 @@ const Resources = () => {
                     <Button 
                       variant="secondary" 
                       className="w-full hover:bg-indigo-50/50 dark:hover:bg-indigo-900/20"
-                      onClick={() => openPreview(resource)}
+                      onClick={() => {
+                        console.log("Action button clicked", resource.title);
+                        openPreview(resource);
+                      }}
                     >
                       <Eye className="h-4 w-4 mr-2" />
                       {resource.action}
@@ -315,16 +322,16 @@ const Resources = () => {
       </main>
       <Footer />
     
-          {selectedResource && (
-            <ResourcePreviewModal
-              open={previewOpen}
-              onOpenChange={setPreviewOpen}
-              title={selectedResource.title}
-              type={selectedResource.type}
-              previewContent={selectedResource.previewContent}
-              content={selectedResource.fullContent}
-            />
-          )}
+      {selectedResource && (
+        <ResourcePreviewModal
+          open={previewOpen}
+          onOpenChange={setPreviewOpen}
+          title={selectedResource.title}
+          type={selectedResource.type}
+          previewContent={selectedResource.previewContent}
+          content={selectedResource.fullContent}
+        />
+      )}
     </div>
   );
 };
