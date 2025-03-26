@@ -10,6 +10,7 @@ import { useAuth } from "@/providers/AuthProvider";
 import ResourcesTeaser from "@/components/teasers/ResourcesTeaser";
 import { Badge } from "@/components/ui/badge";
 import ResourcePreviewModal from "@/components/modals/ResourcePreviewModal";
+import { toast } from "sonner";
 
 interface ResourceItem {
   title: string;
@@ -28,8 +29,11 @@ const Resources = () => {
   const [selectedResource, setSelectedResource] = useState<ResourceItem | null>(null);
   
   const openPreview = (resource: ResourceItem) => {
+    console.log("Opening preview for:", resource.title);
     setSelectedResource(resource);
     setPreviewOpen(true);
+    // Add toast for additional debugging
+    toast.info(`Opening preview for ${resource.title}`);
   };
   
   if (!user) {
@@ -135,10 +139,7 @@ const Resources = () => {
                       <Button 
                         variant="outline" 
                         className="w-full flex items-center justify-center gap-1.5 hover:bg-muted/50"
-                        onClick={() => {
-                          console.log("Preview button clicked", resource.title);
-                          openPreview(resource);
-                        }}
+                        onClick={() => openPreview(resource)}
                       >
                         <Eye className="h-4 w-4" />
                         Preview
@@ -152,10 +153,7 @@ const Resources = () => {
                     <Button 
                       variant="secondary" 
                       className="w-full hover:bg-indigo-50/50 dark:hover:bg-indigo-900/20"
-                      onClick={() => {
-                        console.log("Action button clicked", resource.title);
-                        openPreview(resource);
-                      }}
+                      onClick={() => openPreview(resource)}
                     >
                       <Eye className="h-4 w-4 mr-2" />
                       {resource.action}
@@ -325,7 +323,10 @@ const Resources = () => {
       {selectedResource && (
         <ResourcePreviewModal
           open={previewOpen}
-          onOpenChange={setPreviewOpen}
+          onOpenChange={(open) => {
+            console.log("Modal onOpenChange called with:", open);
+            setPreviewOpen(open);
+          }}
           title={selectedResource.title}
           type={selectedResource.type}
           previewContent={selectedResource.previewContent}

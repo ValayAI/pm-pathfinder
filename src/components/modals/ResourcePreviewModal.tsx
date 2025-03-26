@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -31,6 +31,11 @@ const ResourcePreviewModal: React.FC<ResourcePreviewProps> = ({
   previewContent,
 }) => {
   console.log("ResourcePreviewModal rendering with open:", open);
+  
+  // Add an effect to log when props change
+  useEffect(() => {
+    console.log("ResourcePreviewModal props changed - open state:", open);
+  }, [open, title]);
   
   const getIcon = () => {
     switch (type) {
