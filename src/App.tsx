@@ -21,8 +21,8 @@ import './App.css';
 
 function App() {
   return (
-    <ThemeProvider defaultTheme="light" storageKey="ui-theme">
-      <Router>
+    <Router>
+      <ThemeProvider defaultTheme="light" storageKey="ui-theme">
         <AuthProvider>
           <SubscriptionProvider>
             <div className="min-h-screen flex flex-col">
@@ -54,8 +54,8 @@ function App() {
             </div>
           </SubscriptionProvider>
         </AuthProvider>
-      </Router>
-    </ThemeProvider>
+      </ThemeProvider>
+    </Router>
   );
 }
 

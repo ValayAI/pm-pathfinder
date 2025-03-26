@@ -1,3 +1,4 @@
+
 import { createContext, useContext, useEffect, useState, useMemo } from 'react';
 import { supabase } from '@/lib/supabase';
 import { Session, User } from '@supabase/supabase-js';
@@ -55,6 +56,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     let mounted = true;
     
     const setupAuth = async () => {
+      // First, check if we already have a session in localStorage to avoid flash of logged out state
+      const storedSession = localStorage.getItem('supabase.auth.token');
+      if (storedSession) {
+        try {
+          const parsedSession = JSON.parse(storedSession);
+          if (parsedSession?.currentSession?.access_token && mounted) {
+            console.log('Found stored session');
+            // We have a stored session, but we'll still verify it with getSession() below
+          }
+        } catch (e) {
+          console.error('Error parsing stored session:', e);
+        }
+      }
+
+      // Set up auth state change listener
       const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
         if (!mounted) return;
         
@@ -64,13 +80,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           setSession(null);
           setUser(null);
           localStorage.removeItem('userProfile');
-          localStorage.removeItem('supabase.auth.token');
           console.log('Cleared auth state after sign out');
-        } else {
+        } else if (session) {
           setSession(session);
-          setUser(session?.user ?? null);
+          setUser(session.user ?? null);
           
-          if (session?.user) {
+          if (session.user) {
             await fetchAndStoreUserProfile(session.user.id);
           }
         }
@@ -78,6 +93,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setIsLoading(false);
       });
 
+      // Get the current session state
       try {
         const { data, error } = await supabase.auth.getSession();
         
@@ -235,19 +251,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       console.log('Signing out: starting process');
       
+      // First update local state
       setUser(null);
       setSession(null);
       
+      // Remove items from localStorage
       localStorage.removeItem('userProfile');
-      localStorage.removeItem('supabase.auth.token');
       
-      for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        if (key && (key.startsWith('supabase.auth.') || key.includes('session'))) {
-          localStorage.removeItem(key);
-        }
-      }
-      
+      // Sign out from Supabase
       const { error } = await supabase.auth.signOut({ scope: 'global' });
       if (error) {
         console.error('Error signing out from Supabase:', error);
@@ -260,6 +271,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     } catch (error) {
       console.error('Error signing out:', error);
       
+      // Clean up even if sign out fails
       localStorage.removeItem('userProfile');
       navigate('/', { replace: true });
     }
