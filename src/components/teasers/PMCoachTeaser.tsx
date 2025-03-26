@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
@@ -15,6 +16,23 @@ const PMCoachTeaser = () => {
     }
   ]);
   const [hasAskedQuestion, setHasAskedQuestion] = useState(false);
+  const [hasUsedPreloadedTopic, setHasUsedPreloadedTopic] = useState(false);
+
+  // Preloaded content for the topic buttons
+  const preloadedTopics = {
+    "Interview tips": {
+      question: "What are some essential interview tips for product management roles?",
+      answer: "Here are my top interview tips for product management roles:\n\n1. **Structure your answers**: Use frameworks like STAR (Situation, Task, Action, Result) for behavioral questions.\n\n2. **Prepare your stories**: Have 5-7 strong examples about product launches, working with teams, and overcoming challenges.\n\n3. **Practice product critique**: Be ready to analyze products and suggest improvements.\n\n4. **Know your metrics**: Be clear about how you measure success and impact.\n\n5. **Ask insightful questions**: Show your curiosity and strategic thinking through the questions you ask.\n\nSign up for personalized interview preparation guidance!"
+    },
+    "Career growth": {
+      question: "How can I advance my product management career?",
+      answer: "Here's my advice for accelerating your product management career growth:\n\n1. **Master the fundamentals**: Ensure you excel at core PM skills like user research, prioritization, and execution.\n\n2. **Develop a T-shaped skillset**: Go deep in one area (analytics, UX, technical knowledge) while maintaining breadth.\n\n3. **Quantify your impact**: Track and communicate your achievements with metrics and business outcomes.\n\n4. **Build your network**: Connect with other PMs, mentors, and cross-functional partners.\n\n5. **Continuous learning**: Stay updated on industry trends, technologies, and methodologies.\n\nSign up for a customized career development plan!"
+    },
+    "Roadmap help": {
+      question: "What's the best approach to creating an effective product roadmap?",
+      answer: "Creating an effective product roadmap requires:\n\n1. **Start with strategy**: Align your roadmap with company objectives and product vision.\n\n2. **Focus on outcomes, not features**: Organize around customer problems and business goals.\n\n3. **Prioritize ruthlessly**: Use frameworks like RICE (Reach, Impact, Confidence, Effort) to make decisions.\n\n4. **Create the right timeframe**: Near-term items should be specific, while longer-term items remain flexible.\n\n5. **Communicate clearly**: Make it accessible to all stakeholders and regularly update it.\n\nSign up to access roadmap templates and prioritization tools!"
+    }
+  };
 
   const handleSendMessage = () => {
     if (!message.trim()) return;
@@ -34,6 +52,22 @@ const PMCoachTeaser = () => {
     }, 1000);
     
     setMessage('');
+  };
+
+  const handleTopicClick = (topic) => {
+    if (hasUsedPreloadedTopic) return;
+    
+    const topicData = preloadedTopics[topic];
+    if (!topicData) return;
+    
+    // Add the preloaded question
+    setMessages(prev => [...prev, { role: 'user', content: topicData.question }]);
+    
+    // Add the preloaded answer after a short delay
+    setTimeout(() => {
+      setMessages(prev => [...prev, { role: 'ai', content: topicData.answer }]);
+      setHasUsedPreloadedTopic(true);
+    }, 800);
   };
 
   return (
@@ -98,13 +132,13 @@ const PMCoachTeaser = () => {
               onChange={(e) => setMessage(e.target.value)}
               className="pr-12 resize-none border-primary/20 focus:border-primary/30 shadow-sm"
               rows={2}
-              disabled={hasAskedQuestion}
+              disabled={hasAskedQuestion || hasUsedPreloadedTopic}
             />
             <Button 
               className="absolute right-2 bottom-2 bg-primary/90 hover:bg-primary shadow-sm" 
               size="icon" 
               onClick={handleSendMessage}
-              disabled={!message.trim() || hasAskedQuestion}
+              disabled={!message.trim() || hasAskedQuestion || hasUsedPreloadedTopic}
             >
               <Send className="h-4 w-4" />
               <span className="sr-only">Send</span>
@@ -112,7 +146,7 @@ const PMCoachTeaser = () => {
           </div>
         </CardContent>
         <CardFooter className="flex flex-col gap-5 bg-gradient-to-r from-muted/30 to-transparent">
-          {hasAskedQuestion ? (
+          {(hasAskedQuestion || hasUsedPreloadedTopic) ? (
             <div className="w-full p-4 bg-card rounded-lg border border-dashed shadow-sm">
               <div className="flex items-center gap-2 mb-3">
                 <Lock className="h-5 w-5 text-primary" />
@@ -139,13 +173,31 @@ const PMCoachTeaser = () => {
           )}
           
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full">
-            <Button variant="outline" size="sm" className="text-sm bg-muted/30 border-primary/10 hover:bg-muted/50 hover:border-primary/20">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="text-sm bg-muted/30 border-primary/10 hover:bg-muted/50 hover:border-primary/20"
+              onClick={() => handleTopicClick("Interview tips")}
+              disabled={hasAskedQuestion || hasUsedPreloadedTopic}
+            >
               Interview tips
             </Button>
-            <Button variant="outline" size="sm" className="text-sm bg-muted/30 border-primary/10 hover:bg-muted/50 hover:border-primary/20">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="text-sm bg-muted/30 border-primary/10 hover:bg-muted/50 hover:border-primary/20"
+              onClick={() => handleTopicClick("Career growth")}
+              disabled={hasAskedQuestion || hasUsedPreloadedTopic}
+            >
               Career growth
             </Button>
-            <Button variant="outline" size="sm" className="text-sm bg-muted/30 border-primary/10 hover:bg-muted/50 hover:border-primary/20">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="text-sm bg-muted/30 border-primary/10 hover:bg-muted/50 hover:border-primary/20"
+              onClick={() => handleTopicClick("Roadmap help")}
+              disabled={hasAskedQuestion || hasUsedPreloadedTopic}
+            >
               Roadmap help
             </Button>
           </div>
