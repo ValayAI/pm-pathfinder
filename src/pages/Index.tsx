@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
 import Hero from "@/components/Hero";
@@ -16,6 +17,7 @@ import { Badge } from "@/components/ui/badge";
 const Index = () => {
   const [loaded, setLoaded] = useState(false);
   const { user } = useAuth();
+  const [firstName, setFirstName] = useState('');
 
   // Smooth scroll to top on page load and set loaded state for animations
   useEffect(() => {
@@ -25,6 +27,21 @@ const Index = () => {
     });
     setLoaded(true);
   }, []);
+
+  // Get user's first name from localStorage if available
+  useEffect(() => {
+    if (user) {
+      const storedProfile = localStorage.getItem('userProfile');
+      if (storedProfile) {
+        try {
+          const profile = JSON.parse(storedProfile);
+          setFirstName(profile.first_name || '');
+        } catch (error) {
+          console.error('Error parsing user profile from localStorage:', error);
+        }
+      }
+    }
+  }, [user]);
 
   // If user is logged in, show dashboard content without sidebar
   if (user) {
@@ -36,7 +53,9 @@ const Index = () => {
             <div className="max-w-6xl mx-auto space-y-8">
               <section>
                 <div className="bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-indigo-950/30 dark:to-blue-950/20 p-6 rounded-xl mb-6">
-                  <h1 className="text-3xl font-bold mb-2 text-gradient-primary bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Welcome to PM Pathfinder</h1>
+                  <h1 className="text-3xl font-bold mb-2 text-gradient-primary bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                    {firstName ? `Welcome, ${firstName} to PM Pathfinder` : "Welcome to PM Pathfinder"}
+                  </h1>
                   <p className="text-lg text-muted-foreground mb-6">
                     Your product management journey starts here. Navigate through the dashboard to access all your PM tools and resources.
                   </p>
