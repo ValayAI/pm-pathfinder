@@ -1,3 +1,4 @@
+
 import React from 'react';
 import {
   AlertDialog,
@@ -34,7 +35,7 @@ const PaywallModal: React.FC<PaywallModalProps> = ({
   onLogin,
   requiredFeature
 }) => {
-  const { user, isAuthenticated } = useAuth();
+  const { user } = useAuth();
   const { trackFeatureUsage } = useActivity();
   const location = useLocation();
 
@@ -64,7 +65,7 @@ const PaywallModal: React.FC<PaywallModalProps> = ({
           </AlertDialogDescription>
         </AlertDialogHeader>
         <div className="pb-4">
-          {!isAuthenticated ? (
+          {!user ? (
             <LoginPrompt onLogin={onLogin} />
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
