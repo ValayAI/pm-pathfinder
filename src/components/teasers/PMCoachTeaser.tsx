@@ -1,11 +1,15 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Link } from 'react-router-dom';
-import { ArrowRight, Bot, Send, Lock, MessageSquare, Sparkles } from 'lucide-react';
+import { ArrowRight, Bot, Send, Lock, MessageSquare, Sparkles, Rocket, BookOpen, Briefcase } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { cn } from "@/lib/utils";
+import ChatBubble from './chat-teaser/ChatBubble';
+import FeatureCard from './chat-teaser/FeatureCard';
+import TopicButton from './chat-teaser/TopicButton';
 
 const PMCoachTeaser = () => {
   const [message, setMessage] = useState('');
@@ -15,10 +19,15 @@ const PMCoachTeaser = () => {
       content: "Hi! I'm your PM Coach. Ask me anything about product management, interviews, or career growth."
     }
   ]);
-  const [hasAskedQuestion, setHasAskedQuestion] = useState(false);
-  const [hasUsedPreloadedTopic, setHasUsedPreloadedTopic] = useState(false);
+  const [hasInteracted, setHasInteracted] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+  
+  useEffect(() => {
+    setLoaded(true);
+  }, []);
 
-  // Preloaded content for the topic buttons
+  // Preloaded content for topic buttons
   const preloadedTopics = {
     "Interview tips": {
       question: "What are some essential interview tips for product management roles?",
@@ -41,21 +50,21 @@ const PMCoachTeaser = () => {
     setMessages(prev => [...prev, { role: 'user', content: message }]);
     
     // Simulate AI response
+    setIsTyping(true);
     setTimeout(() => {
-      if (!hasAskedQuestion) {
-        setMessages(prev => [...prev, { 
-          role: 'ai', 
-          content: "Great question! Here's a quick answer:\n\nFor product management interviews, I recommend using the STAR framework (Situation, Task, Action, Result) to structure your responses. This helps you deliver concise, impactful answers that highlight your skills.\n\nSign up for free to get more detailed coaching and unlimited responses!" 
-        }]);
-        setHasAskedQuestion(true);
-      }
-    }, 1000);
+      setMessages(prev => [...prev, { 
+        role: 'ai', 
+        content: "Great question! Here's a quick answer:\n\nFor product management interviews, I recommend using the STAR framework (Situation, Task, Action, Result) to structure your responses. This helps you deliver concise, impactful answers that highlight your skills.\n\nSign up for free to get more detailed coaching and unlimited responses!" 
+      }]);
+      setIsTyping(false);
+      setHasInteracted(true);
+    }, 1500);
     
     setMessage('');
   };
 
   const handleTopicClick = (topic) => {
-    if (hasUsedPreloadedTopic) return;
+    if (hasInteracted) return;
     
     const topicData = preloadedTopics[topic];
     if (!topicData) return;
@@ -64,31 +73,66 @@ const PMCoachTeaser = () => {
     setMessages(prev => [...prev, { role: 'user', content: topicData.question }]);
     
     // Add the preloaded answer after a short delay
+    setIsTyping(true);
     setTimeout(() => {
       setMessages(prev => [...prev, { role: 'ai', content: topicData.answer }]);
-      setHasUsedPreloadedTopic(true);
-    }, 800);
+      setIsTyping(false);
+      setHasInteracted(true);
+    }, 1500);
   };
+
+  const features = [
+    {
+      icon: <MessageSquare className="h-5 w-5 text-blue-600 dark:text-blue-400" />,
+      title: "Interview Prep",
+      description: "Get personalized advice for PM interview questions and feedback on your responses",
+      color: "blue"
+    },
+    {
+      icon: <Rocket className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />,
+      title: "Career Growth",
+      description: "Advice on advancing your PM career, skills development, and navigating challenges",
+      color: "indigo"
+    },
+    {
+      icon: <Briefcase className="h-5 w-5 text-purple-600 dark:text-purple-400" />,
+      title: "Product Strategy",
+      description: "Guidance on frameworks, prioritization, and building successful product strategies",
+      color: "purple"
+    }
+  ];
 
   return (
     <div className="w-full max-w-4xl mx-auto px-4">
-      <div className="relative mb-16 mt-12">
+      <div className={cn(
+        "relative mb-16 mt-12 transition-all duration-700",
+        loaded ? "opacity-100" : "opacity-0"
+      )}>
         <div className="absolute -top-6 left-1/2 -translate-x-1/2 hidden md:block">
           <Sparkles className="text-indigo-600/60 h-12 w-12 animate-pulse" />
         </div>
         <div className="text-center">
-          <h2 className="text-3xl md:text-4xl font-semibold leading-tight md:leading-snug tracking-tight mb-4">
+          <h2 className={cn(
+            "text-3xl md:text-4xl font-semibold leading-tight md:leading-snug tracking-tight mb-4 transition-all duration-700 delay-100",
+            loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+          )}>
             <span className="bg-gradient-to-br from-blue-600 to-indigo-600 bg-clip-text text-transparent">
               Accelerate your PM career
             </span>
           </h2>
-          <p className="text-muted-foreground max-w-xl mx-auto">
+          <p className={cn(
+            "text-muted-foreground max-w-xl mx-auto transition-all duration-700 delay-200",
+            loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+          )}>
             Get expert product management advice and career guidance whenever you need it
           </p>
         </div>
       </div>
       
-      <Card className="mb-12 shadow-sm border rounded-xl overflow-hidden">
+      <Card className={cn(
+        "mb-12 shadow-md border rounded-xl overflow-hidden transition-all duration-700 delay-300 hover:shadow-lg",
+        loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+      )}>
         <CardHeader className="pb-3 bg-muted/30">
           <div className="flex items-center gap-3">
             <div className="bg-primary/10 p-3 rounded-lg">
@@ -103,26 +147,20 @@ const PMCoachTeaser = () => {
         <CardContent className="pt-5">
           <div className="bg-muted/30 backdrop-blur-sm rounded-lg p-4 mb-5 h-[320px] overflow-y-auto shadow-inner border">
             {messages.map((msg, index) => (
-              <div 
-                key={index} 
-                className={`mb-4 ${msg.role === 'user' ? 'text-right' : ''}`}
-              >
-                <div 
-                  className={`inline-block p-3 rounded-lg max-w-[85%] shadow-sm ${
-                    msg.role === 'user' 
-                      ? 'bg-primary text-primary-foreground' 
-                      : 'bg-card border'
-                  }`}
-                >
-                  {msg.content.split('\n').map((line, i) => (
-                    <React.Fragment key={i}>
-                      {line}
-                      {i !== msg.content.split('\n').length - 1 && <br />}
-                    </React.Fragment>
-                  ))}
+              <ChatBubble key={index} message={msg} />
+            ))}
+            
+            {isTyping && (
+              <div className="mb-4">
+                <div className="inline-block p-3 rounded-lg max-w-[85%] bg-card border">
+                  <div className="flex space-x-2">
+                    <div className="h-2 w-2 bg-primary/40 rounded-full animate-bounce"></div>
+                    <div className="h-2 w-2 bg-primary/60 rounded-full animate-bounce [animation-delay:0.2s]"></div>
+                    <div className="h-2 w-2 bg-primary/80 rounded-full animate-bounce [animation-delay:0.4s]"></div>
+                  </div>
                 </div>
               </div>
-            ))}
+            )}
           </div>
           
           <div className="relative">
@@ -132,13 +170,13 @@ const PMCoachTeaser = () => {
               onChange={(e) => setMessage(e.target.value)}
               className="pr-12 resize-none border-primary/20 focus:border-primary/30 shadow-sm"
               rows={2}
-              disabled={hasAskedQuestion || hasUsedPreloadedTopic}
+              disabled={hasInteracted}
             />
             <Button 
               className="absolute right-2 bottom-2 bg-primary/90 hover:bg-primary shadow-sm" 
               size="icon" 
               onClick={handleSendMessage}
-              disabled={!message.trim() || hasAskedQuestion || hasUsedPreloadedTopic}
+              disabled={!message.trim() || hasInteracted}
             >
               <Send className="h-4 w-4" />
               <span className="sr-only">Send</span>
@@ -146,7 +184,7 @@ const PMCoachTeaser = () => {
           </div>
         </CardContent>
         <CardFooter className="flex flex-col gap-5 bg-gradient-to-r from-muted/30 to-transparent">
-          {(hasAskedQuestion || hasUsedPreloadedTopic) ? (
+          {hasInteracted ? (
             <div className="w-full p-4 bg-card rounded-lg border border-dashed shadow-sm">
               <div className="flex items-center gap-2 mb-3">
                 <Lock className="h-5 w-5 text-primary" />
@@ -159,7 +197,7 @@ const PMCoachTeaser = () => {
                 <Button variant="outline" asChild size="sm" className="min-w-24">
                   <Link to="/signin">Sign In</Link>
                 </Button>
-                <Button asChild size="sm" className="min-w-24 bg-primary/90 hover:bg-primary">
+                <Button asChild size="sm" className="min-w-24 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700">
                   <Link to="/signup" className="flex items-center gap-1.5">
                     Sign Up Free <ArrowRight className="h-4 w-4" />
                   </Link>
@@ -173,84 +211,40 @@ const PMCoachTeaser = () => {
           )}
           
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full">
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className="text-sm bg-muted/30 border-primary/10 hover:bg-muted/50 hover:border-primary/20"
+            <TopicButton 
+              topic="Interview tips"
               onClick={() => handleTopicClick("Interview tips")}
-              disabled={hasAskedQuestion || hasUsedPreloadedTopic}
-            >
-              Interview tips
-            </Button>
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className="text-sm bg-muted/30 border-primary/10 hover:bg-muted/50 hover:border-primary/20"
+              disabled={hasInteracted}
+            />
+            <TopicButton 
+              topic="Career growth"
               onClick={() => handleTopicClick("Career growth")}
-              disabled={hasAskedQuestion || hasUsedPreloadedTopic}
-            >
-              Career growth
-            </Button>
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className="text-sm bg-muted/30 border-primary/10 hover:bg-muted/50 hover:border-primary/20"
+              disabled={hasInteracted}
+            />
+            <TopicButton 
+              topic="Roadmap help"
               onClick={() => handleTopicClick("Roadmap help")}
-              disabled={hasAskedQuestion || hasUsedPreloadedTopic}
-            >
-              Roadmap help
-            </Button>
+              disabled={hasInteracted}
+            />
           </div>
         </CardFooter>
       </Card>
       
-      <div className="text-center mb-12">
+      <div className={cn(
+        "text-center mb-12 transition-all duration-700 delay-400",
+        loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+      )}>
         <h2 className="text-xl font-semibold mb-5">What can the PM Coach help with?</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          <Card className="bg-gradient-to-br from-blue-50/60 to-blue-50/30 dark:from-blue-900/10 dark:to-blue-900/5 backdrop-blur-sm shadow-sm border border-blue-100 dark:border-blue-900/20 hover:shadow-md transition-all hover:scale-[1.01] duration-300">
-            <CardContent className="pt-6 p-6">
-              <div className="flex justify-center items-center mb-3">
-                <div className="bg-blue-100/70 dark:bg-blue-900/30 p-3 rounded-lg">
-                  <MessageSquare className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-                </div>
-              </div>
-              <h3 className="text-center font-medium mb-2 text-lg">Interview Prep</h3>
-              <p className="text-sm text-center text-muted-foreground">
-                Get personalized advice for PM interview questions and feedback on your responses
-              </p>
-            </CardContent>
-          </Card>
-          
-          <Card className="bg-gradient-to-br from-indigo-50/60 to-indigo-50/30 dark:from-indigo-900/10 dark:to-indigo-900/5 backdrop-blur-sm shadow-sm border border-indigo-100 dark:border-indigo-900/20 hover:shadow-md transition-all hover:scale-[1.01] duration-300">
-            <CardContent className="pt-6 p-6">
-              <div className="flex justify-center items-center mb-3">
-                <div className="bg-indigo-100/70 dark:bg-indigo-900/30 p-3 rounded-lg">
-                  <MessageSquare className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
-                </div>
-              </div>
-              <h3 className="text-center font-medium mb-2 text-lg">Career Growth</h3>
-              <p className="text-sm text-center text-muted-foreground">
-                Advice on advancing your PM career, skills development, and navigating challenges
-              </p>
-            </CardContent>
-          </Card>
-          
-          <Card className="bg-gradient-to-br from-purple-50/60 to-purple-50/30 dark:from-purple-900/10 dark:to-purple-900/5 backdrop-blur-sm shadow-sm border border-purple-100 dark:border-purple-900/20 hover:shadow-md transition-all hover:scale-[1.01] duration-300">
-            <CardContent className="pt-6 p-6">
-              <div className="flex justify-center items-center mb-3">
-                <div className="bg-purple-100/70 dark:bg-purple-900/30 p-3 rounded-lg">
-                  <MessageSquare className="h-5 w-5 text-purple-600 dark:text-purple-400" />
-                </div>
-              </div>
-              <h3 className="text-center font-medium mb-2 text-lg">Product Strategy</h3>
-              <p className="text-sm text-center text-muted-foreground">
-                Guidance on frameworks, prioritization, and building successful product strategies
-              </p>
-            </CardContent>
-          </Card>
+          {features.map((feature, index) => (
+            <FeatureCard key={index} feature={feature} delay={index * 100} />
+          ))}
         </div>
         
-        <Button asChild size="lg" className="mt-8 px-6 py-6 h-auto bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-md">
+        <Button asChild size="lg" className={cn(
+          "mt-8 px-6 py-6 h-auto bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-md transition-all duration-700 delay-700",
+          loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+        )}>
           <Link to="/signup" className="flex items-center gap-1.5">
             Get Unlimited Access <ArrowRight className="h-5 w-5" />
           </Link>
