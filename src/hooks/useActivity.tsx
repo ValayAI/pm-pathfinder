@@ -1,6 +1,6 @@
 
 import { useAuth } from '@/providers/AuthProvider';
-import { logUserActivity, incrementMessageUsage } from '@/utils/subscriptionUtils';
+import { logUserActivity, incrementMessageUsage } from '@/utils/subscriptionManager';
 
 export const useActivity = () => {
   const { user } = useAuth();

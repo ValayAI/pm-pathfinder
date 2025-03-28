@@ -1,7 +1,9 @@
+
 import React, { createContext, useContext, useEffect, useState, useMemo } from 'react';
 import { useAuth } from './AuthProvider';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { PLAN_FEATURES } from '@/utils/subscriptionManager';
 
 export type PlanType = 'free' | 'starter' | 'popular' | 'pro';
 
@@ -24,27 +26,8 @@ interface SubscriptionContextType {
 const defaultSubscription: SubscriptionData = {
   planId: 'free',
   messageLimit: 10,
-  features: ['Basic chat access', 'Limited messages'],
+  features: PLAN_FEATURES.free.features,
   expiresAt: null
-};
-
-const planFeatures = {
-  free: ['Basic chat access', 'Limited messages'],
-  starter: ['50 messages/month', 'PM career & interview tips'],
-  popular: [
-    'Unlimited messages',
-    'Resume & interview coaching',
-    'Frameworks & strategy guides',
-    'Exclusive PM resources'
-  ],
-  pro: [
-    'Unlimited messages',
-    'Resume & interview coaching',
-    'Frameworks & strategy guides',
-    'Exclusive PM resources',
-    '1-on-1 PM coaching call',
-    'Personalized resume review'
-  ]
 };
 
 const SubscriptionContext = createContext<SubscriptionContextType | undefined>(undefined);
@@ -105,9 +88,9 @@ export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ 
           const jsonFeatures = subscriptionResponse.data.features as any;
           featuresArray = Array.isArray(jsonFeatures) 
             ? jsonFeatures.filter(item => typeof item === 'string').map(item => String(item))
-            : planFeatures[planId];
+            : PLAN_FEATURES[planId].features;
         } else {
-          featuresArray = planFeatures[planId];
+          featuresArray = PLAN_FEATURES[planId].features;
         }
         
         // Create subscription data based on plan
@@ -130,7 +113,7 @@ export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ 
                 user_id: user.id,
                 plan_id: 'free',
                 message_limit: 10,
-                features: planFeatures.free
+                features: PLAN_FEATURES.free.features
               }),
               
             // Initialize message usage counter if not exists

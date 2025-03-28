@@ -7,7 +7,7 @@ import { CheckCircle2, ArrowRight } from 'lucide-react';
 import { useAuth } from '@/providers/AuthProvider';
 import { useSubscription } from '@/providers/SubscriptionProvider';
 import { supabase } from '@/integrations/supabase/client';
-import { updateSubscription } from '@/utils/subscriptionUtils';
+import { updateSubscription } from '@/utils/subscriptionManager';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
