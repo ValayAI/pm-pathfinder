@@ -1,19 +1,30 @@
 
 import React from 'react';
 import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
 
 interface ChatBubbleProps {
   message: {
     role: string;
     content: string;
   };
+  delay?: number;
 }
 
-const ChatBubble = ({ message }: ChatBubbleProps) => {
+const ChatBubble = ({ message, delay = 0 }: ChatBubbleProps) => {
   const isUser = message.role === 'user';
   
   return (
-    <div className={cn("mb-4", isUser ? "text-right" : "")}>
+    <motion.div 
+      className={cn("mb-4", isUser ? "text-right" : "")}
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ 
+        duration: 0.3, 
+        delay: delay,
+        ease: "easeOut" 
+      }}
+    >
       <div 
         className={cn(
           "inline-block p-3 rounded-lg max-w-[85%] shadow-sm", 
@@ -29,7 +40,7 @@ const ChatBubble = ({ message }: ChatBubbleProps) => {
           </React.Fragment>
         ))}
       </div>
-    </div>
+    </motion.div>
   );
 };
 

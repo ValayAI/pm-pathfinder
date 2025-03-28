@@ -52,12 +52,12 @@ const PaywallModal: React.FC<PaywallModalProps> = ({
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
-      <AlertDialogContent>
+      <AlertDialogContent className="max-w-3xl">
         <AlertDialogHeader>
-          <AlertDialogTitle>
+          <AlertDialogTitle className="text-2xl">
             {requiredFeature ? `Unlock ${requiredFeature}` : "Upgrade your plan"}
           </AlertDialogTitle>
-          <AlertDialogDescription>
+          <AlertDialogDescription className="text-base">
             {requiredFeature ?
               `To use ${requiredFeature}, you need to upgrade your plan.`
               : "Choose a plan to access premium features and unlimited coaching."
