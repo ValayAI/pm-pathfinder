@@ -1,9 +1,19 @@
 
+import { useActivity } from '@/hooks/useActivity';
+import { useEffect } from 'react';
+
 interface PlanFeaturesProps {
   planId?: string;
 }
 
 const PlanFeatures = ({ planId }: PlanFeaturesProps) => {
+  const { trackFeatureUsage } = useActivity();
+  
+  useEffect(() => {
+    // Track that the user viewed this component
+    trackFeatureUsage('view_plan_features', { planId });
+  }, [planId, trackFeatureUsage]);
+  
   const getPlanFeatureMessage = () => {
     switch (planId) {
       case 'pro':

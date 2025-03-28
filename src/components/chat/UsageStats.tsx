@@ -2,6 +2,8 @@
 import { cn } from "@/lib/utils";
 import { Progress } from "@/components/ui/progress";
 import { AlertCircle } from "lucide-react";
+import { useActivity } from '@/hooks/useActivity';
+import { useEffect } from 'react';
 
 interface UsageStatsProps {
   usedMessages: number;
@@ -11,6 +13,26 @@ interface UsageStatsProps {
 }
 
 const UsageStats = ({ usedMessages, messageLimit, remainingMessages, planId }: UsageStatsProps) => {
+  const { trackFeatureUsage } = useActivity();
+  
+  useEffect(() => {
+    // Track when usage stats are viewed, with the current usage data
+    trackFeatureUsage('view_usage_stats', { 
+      usedMessages,
+      messageLimit,
+      remainingMessages,
+      planId
+    });
+    
+    // Track if user is running low on messages
+    if (remainingMessages <= 3 && remainingMessages > 0) {
+      trackFeatureUsage('low_message_count', {
+        remainingMessages,
+        planId
+      });
+    }
+  }, [usedMessages, messageLimit, remainingMessages, planId, trackFeatureUsage]);
+
   return (
     <div className="mt-4 mb-6">
       <div className="flex justify-between text-xs mb-1">

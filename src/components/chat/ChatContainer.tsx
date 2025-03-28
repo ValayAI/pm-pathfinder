@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/providers/AuthProvider";
+import { useActivity } from "@/hooks/useActivity";
 import PMCoachTeaser from "@/components/teasers/PMCoachTeaser";
 import ChatHeader from "./ChatHeader";
 import MessageList from "./MessageList";
@@ -10,13 +11,13 @@ import ChatInput from "./ChatInput";
 import UsageStats from "./UsageStats";
 import PlanFeatures from "./PlanFeatures";
 import UpgradePrompt from "./UpgradePrompt";
-import { Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import PaywallModal from "@/components/PaywallModal";
 import { useChat } from "@/hooks/use-chat";
 
 const ChatContainer = () => {
   const { user } = useAuth();
+  const { trackPageView, trackFeatureUsage } = useActivity();
   const {
     messages,
     input,
@@ -39,13 +40,26 @@ const ChatContainer = () => {
 
   useEffect(() => {
     setIsVisible(true);
-  }, [setIsVisible]);
+    
+    // Track page view when component mounts
+    if (user) {
+      trackPageView('chat');
+    }
+  }, [setIsVisible, user, trackPageView]);
 
   useEffect(() => {
     if (hasLimitedMessages && remainingMessages <= 0) {
       setShowPaywall(true);
+      
+      // Track when a user hits their message limit
+      if (user) {
+        trackFeatureUsage('message_limit_reached', {
+          plan: subscription?.planId,
+          messageLimit
+        });
+      }
     }
-  }, [usedMessages, hasLimitedMessages, remainingMessages, setShowPaywall]);
+  }, [usedMessages, hasLimitedMessages, remainingMessages, setShowPaywall, user, trackFeatureUsage, subscription, messageLimit]);
 
   useEffect(() => {
     toast.success("Your PM Coach is ready", {

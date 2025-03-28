@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -6,6 +5,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { CheckCircle2, ArrowRight } from 'lucide-react';
 import { useAuth } from '@/providers/AuthProvider';
 import { useSubscription } from '@/providers/SubscriptionProvider';
+import { useActivity } from '@/hooks/useActivity';
 import { supabase } from '@/integrations/supabase/client';
 import { updateSubscription } from '@/utils/subscriptionManager';
 import Navbar from '@/components/Navbar';
@@ -16,6 +16,7 @@ const Success = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { refreshSubscription } = useSubscription();
+  const { trackActivity } = useActivity();
   const [isProcessing, setIsProcessing] = useState(true);
   const [error, setError] = useState<string | null>(null);
   
@@ -49,6 +50,15 @@ const Success = () => {
           } else {
             // Refresh subscription data
             await refreshSubscription();
+            
+            // Track the subscription change
+            await trackActivity('subscription_changed', {
+              planId,
+              source: 'payment_success',
+              metadata: { 
+                timestamp: new Date().toISOString()
+              }
+            });
           }
         }
       } catch (err) {
@@ -60,7 +70,7 @@ const Success = () => {
     };
     
     processSubscription();
-  }, [user, planId, refreshSubscription]);
+  }, [user, planId, refreshSubscription, trackActivity]);
   
   return (
     <div className="min-h-screen flex flex-col">
