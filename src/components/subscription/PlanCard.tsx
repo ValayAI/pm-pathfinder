@@ -1,5 +1,6 @@
 
 import React from "react";
+import { useNavigate } from 'react-router-dom';
 import { 
   Card, 
   CardContent, 
@@ -8,9 +9,12 @@ import {
   CardHeader, 
   CardTitle 
 } from "@/components/ui/card";
-import { CheckCircle2 } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { CheckCircle2, ThumbsUp, DollarSign } from "lucide-react";
 import { cn } from "@/lib/utils";
 import StripeCheckout from "../StripeCheckout";
+import { Button } from "@/components/ui/button";
+import { User } from "@supabase/supabase-js";
 
 export type PlanType = {
   id: string;
@@ -30,16 +34,35 @@ export type PlanType = {
 interface PlanCardProps {
   plan: PlanType;
   onPlanSuccess: (planId: string) => void;
+  isCurrentPlan?: boolean;
+  isDisabled?: boolean;
+  user: User | null;
+  location: any;
 }
 
-const PlanCard: React.FC<PlanCardProps> = ({ plan, onPlanSuccess }) => {
+const PlanCard: React.FC<PlanCardProps> = ({ 
+  plan, 
+  onPlanSuccess, 
+  isCurrentPlan = false,
+  isDisabled = false,
+  user,
+  location
+}) => {
+  const navigate = useNavigate();
   const { id, name, description, price, period, icon: Icon, priceId, features, highlight, color, borderColor, buttonVariant } = plan;
+
+  const getButtonText = () => {
+    if (isCurrentPlan) return "Current Plan";
+    if (isDisabled) return "Already Included";
+    return highlight ? "Choose Plan" : "Select Plan";
+  };
 
   return (
     <Card 
       className={cn(
         "border-2 transition-all duration-200 hover:shadow-md", 
-        highlight ? "border-purple-400 dark:border-purple-600 shadow-md" : borderColor,
+        isCurrentPlan ? "border-green-400 dark:border-green-600 shadow-md" : 
+          highlight ? "border-purple-400 dark:border-purple-600 shadow-md" : borderColor,
         color
       )}
     >
@@ -50,15 +73,18 @@ const PlanCard: React.FC<PlanCardProps> = ({ plan, onPlanSuccess }) => {
         <div className="flex justify-between items-center mb-1">
           <Icon className={cn(
             "h-5 w-5",
-            highlight ? "text-purple-600 dark:text-purple-400" : "text-muted-foreground"
+            isCurrentPlan ? "text-green-600 dark:text-green-400" :
+              highlight ? "text-purple-600 dark:text-purple-400" : "text-muted-foreground"
           )} />
-          {highlight && (
-            <span className="bg-purple-600 text-white text-xs px-2 py-0.5 rounded-full flex items-center">
-              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
-                <path d="M6 12l6 6 6-6"/>
-              </svg>
+          {isCurrentPlan ? (
+            <Badge className="bg-green-600 hover:bg-green-700">
+              Current Plan
+            </Badge>
+          ) : highlight && !isCurrentPlan && (
+            <Badge className="bg-purple-600 hover:bg-purple-700">
+              <ThumbsUp className="h-3 w-3 mr-1" />
               Best Value
-            </span>
+            </Badge>
           )}
         </div>
         <CardTitle className="text-lg">{name}</CardTitle>
@@ -79,14 +105,33 @@ const PlanCard: React.FC<PlanCardProps> = ({ plan, onPlanSuccess }) => {
         </ul>
       </CardContent>
       <CardFooter>
-        <StripeCheckout 
-          planId={id}
-          planName={name}
-          priceId={priceId}
-          variant={buttonVariant}
-          highlight={highlight}
-          onSuccess={() => onPlanSuccess(id)}
-        />
+        {isDisabled ? (
+          <Button 
+            variant={isCurrentPlan ? "default" : "outline"}
+            className={isCurrentPlan ? "bg-green-600 hover:bg-green-700 cursor-default w-full" : "w-full"}
+            disabled
+          >
+            {getButtonText()}
+          </Button>
+        ) : !user ? (
+          <Button 
+            variant={buttonVariant}
+            onClick={() => navigate('/signin', { state: { from: location, planId: id } })}
+            className="w-full"
+          >
+            Sign in to Subscribe
+          </Button>
+        ) : (
+          <StripeCheckout 
+            planId={id}
+            planName={name}
+            priceId={priceId}
+            variant={buttonVariant}
+            highlight={highlight}
+            onSuccess={() => onPlanSuccess(id)}
+            className="w-full"
+          />
+        )}
       </CardFooter>
     </Card>
   );

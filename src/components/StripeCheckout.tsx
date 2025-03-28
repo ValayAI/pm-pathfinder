@@ -6,6 +6,7 @@ import { DollarSign } from 'lucide-react';
 import { createCheckoutSession } from '@/services/stripe';
 import { useAuth } from '@/providers/AuthProvider';
 import { useSubscription } from '@/providers/SubscriptionProvider';
+import { useActivity } from '@/hooks/useActivity';
 
 interface StripeCheckoutProps {
   planId: string;
@@ -14,6 +15,7 @@ interface StripeCheckoutProps {
   onSuccess?: () => void;
   variant?: "default" | "outline";
   highlight?: boolean;
+  className?: string;
 }
 
 const StripeCheckout: React.FC<StripeCheckoutProps> = ({ 
@@ -22,11 +24,13 @@ const StripeCheckout: React.FC<StripeCheckoutProps> = ({
   priceId, 
   onSuccess, 
   variant = "default",
-  highlight = false 
+  highlight = false,
+  className = ""
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const { user } = useAuth();
   const { refreshSubscription } = useSubscription();
+  const { trackFeatureUsage } = useActivity();
 
   const handleCheckout = async () => {
     if (!user) {
@@ -39,6 +43,12 @@ const StripeCheckout: React.FC<StripeCheckoutProps> = ({
     setIsLoading(true);
     
     try {
+      trackFeatureUsage('checkout_initiated', { 
+        planId, 
+        planName, 
+        priceId 
+      });
+      
       toast.info("Processing payment", {
         description: `Preparing checkout for ${planName} plan...`,
       });
@@ -67,6 +77,10 @@ const StripeCheckout: React.FC<StripeCheckoutProps> = ({
       }
     } catch (error) {
       console.error('Error during checkout:', error);
+      trackFeatureUsage('checkout_failed', { 
+        planId, 
+        error: error instanceof Error ? error.message : 'Unknown error'
+      });
       
       // Provide a more detailed error message based on the error
       let errorMessage = "Unable to process your payment. Please try again.";
@@ -94,7 +108,7 @@ const StripeCheckout: React.FC<StripeCheckoutProps> = ({
       onClick={handleCheckout}
       disabled={isLoading}
       variant={variant}
-      className={highlight ? "bg-purple-600 hover:bg-purple-700" : ""}
+      className={`${highlight ? "bg-purple-600 hover:bg-purple-700" : ""} ${className}`}
     >
       {isLoading ? (
         "Processing..."
