@@ -1,3 +1,4 @@
+
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
@@ -70,14 +71,23 @@ export const cleanupAllUserSubscriptions = async (): Promise<{
   };
   
   try {
+    // Define the expected return type for the RPC function
+    interface UserWithMultipleSubscriptions {
+      user_id: string;
+      subscription_count: number;
+    }
+    
     // First, get a list of all users with multiple active subscriptions
-    const { data: userIds, error: queryError } = await supabase
+    const { data, error: queryError } = await supabase
       .rpc('get_users_with_multiple_active_subscriptions');
     
     if (queryError) {
       result.errors.push(`Error fetching users with multiple subscriptions: ${queryError.message}`);
       return result;
     }
+    
+    // Type assertion to help TypeScript understand the structure
+    const userIds = data as UserWithMultipleSubscriptions[] || [];
     
     if (!userIds || userIds.length === 0) {
       result.success = true;
@@ -88,16 +98,15 @@ export const cleanupAllUserSubscriptions = async (): Promise<{
     
     // Process each user
     for (const row of userIds) {
-      const userId = row.user_id;
       try {
-        const success = await cleanupUserSubscriptions(userId);
+        const success = await cleanupUserSubscriptions(row.user_id);
         if (success) {
           result.usersProcessed++;
         } else {
-          result.errors.push(`Failed to clean up subscriptions for user ${userId}`);
+          result.errors.push(`Failed to clean up subscriptions for user ${row.user_id}`);
         }
       } catch (error) {
-        result.errors.push(`Error processing user ${userId}: ${error instanceof Error ? error.message : String(error)}`);
+        result.errors.push(`Error processing user ${row.user_id}: ${error instanceof Error ? error.message : String(error)}`);
       }
     }
     
