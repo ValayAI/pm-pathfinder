@@ -1,4 +1,3 @@
-
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
@@ -87,7 +86,7 @@ export const cleanupAllUserSubscriptions = async (): Promise<{
     }
     
     // Properly type the data as an array of our interface
-    const userIds = (data || []) as UserWithMultipleSubscriptions[];
+    const userIds = data || [];
     
     if (userIds.length === 0) {
       result.success = true;
@@ -96,7 +95,7 @@ export const cleanupAllUserSubscriptions = async (): Promise<{
     
     result.usersWithMultipleSubscriptions = userIds.length;
     
-    // Process each user with explicit typing to avoid the 'never' type issue
+    // Process each user with explicit typing
     for (const row of userIds) {
       try {
         const success = await cleanupUserSubscriptions(row.user_id);
