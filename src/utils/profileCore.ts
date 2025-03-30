@@ -3,7 +3,7 @@
  * Core utilities for fetching and managing user profiles
  */
 
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/integrations/supabase/client';
 import { UserProfile } from './profileTypes';
 import { getProfileFromCache, updateProfileCache } from './profileCache';
 
