@@ -1,3 +1,4 @@
+
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
@@ -44,7 +45,7 @@ export const cleanupUserSubscriptions = async (userId: string): Promise<boolean>
     
     // Keep the most recent subscription active (index 0) and deactivate all others
     const subscriptionsToDeactivate = activeSubscriptions.slice(1);
-    const idsToDeactivate = subscriptionsToDeactivate.map((sub: { id: string }) => sub.id);
+    const idsToDeactivate: string[] = subscriptionsToDeactivate.map(sub => sub.id);
     
     const { error: updateError } = await supabase
       .from('subscriptions')
