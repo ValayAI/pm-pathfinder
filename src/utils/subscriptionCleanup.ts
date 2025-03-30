@@ -1,3 +1,4 @@
+
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
@@ -75,9 +76,10 @@ export const cleanupAllUserSubscriptions = async (): Promise<{
     }
     
     // First, get a list of all users with multiple active subscriptions
-    // Explicitly type the response data with our interface - using correct generic typing
+    // Using the proper generic typing format for Supabase RPC
     const { data, error: queryError } = await supabase
-      .rpc<UserWithMultipleSubscriptions[], null>('get_users_with_multiple_active_subscriptions');
+      .rpc('get_users_with_multiple_active_subscriptions')
+      .returns<UserWithMultipleSubscriptions[]>();
     
     if (queryError) {
       result.errors.push(`Error fetching users with multiple subscriptions: ${queryError.message}`);
