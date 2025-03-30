@@ -92,6 +92,20 @@ export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ 
       
       if (usageResponse.data) {
         setMessagesUsed(usageResponse.data.messages_used);
+      } else {
+        // Initialize message usage if not found
+        try {
+          await supabase
+            .from('message_usage')
+            .insert({
+              user_id: user.id,
+              messages_used: 0
+            }).throwOnError();
+          
+          setMessagesUsed(0);
+        } catch (error) {
+          console.error("Failed to initialize message usage:", error);
+        }
       }
       
       // If subscription found, use it
@@ -136,7 +150,7 @@ export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ 
             // Initialize message usage counter if not exists
             supabase
               .from('message_usage')
-              .insert({
+              .upsert({
                 user_id: user.id,
                 messages_used: 0
               }).throwOnError()
@@ -202,7 +216,7 @@ export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ 
     getRemainingMessages,
     isFeatureEnabled,
     refreshSubscription
-  }), [subscription, isLoading, messagesUsed]);
+  }), [subscription, isLoading, messagesUsed, user]);
 
   return (
     <SubscriptionContext.Provider value={contextValue}>

@@ -45,21 +45,37 @@ const ChatContainer = () => {
     if (user) {
       trackPageView('chat');
     }
-  }, [setIsVisible, user, trackPageView]);
+    
+    // Check usage stats
+    if (user && hasLimitedMessages) {
+      trackFeatureUsage('view_usage_stats', {
+        usedMessages,
+        messageLimit,
+        remainingMessages,
+        planId: subscription?.planId
+      });
+    }
+    
+    // Check plan features
+    if (user && subscription) {
+      trackFeatureUsage('view_plan_features', {
+        planId: subscription.planId
+      });
+    }
+  }, [setIsVisible, user, trackPageView, hasLimitedMessages, trackFeatureUsage, usedMessages, messageLimit, remainingMessages, subscription]);
 
+  // Only show the "hit message limit" paywall if applicable
   useEffect(() => {
-    if (hasLimitedMessages && remainingMessages <= 0) {
+    if (user && hasLimitedMessages && remainingMessages <= 0) {
       setShowPaywall(true);
       
       // Track when a user hits their message limit
-      if (user) {
-        trackFeatureUsage('message_limit_reached', {
-          plan: subscription?.planId,
-          messageLimit
-        });
-      }
+      trackFeatureUsage('message_limit_reached', {
+        plan: subscription?.planId,
+        messageLimit
+      });
     }
-  }, [usedMessages, hasLimitedMessages, remainingMessages, setShowPaywall, user, trackFeatureUsage, subscription, messageLimit]);
+  }, [user, hasLimitedMessages, remainingMessages, setShowPaywall, trackFeatureUsage, subscription, messageLimit]);
 
   useEffect(() => {
     toast.success("Your PM Coach is ready", {

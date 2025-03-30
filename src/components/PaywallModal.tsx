@@ -38,6 +38,7 @@ const PaywallModal: React.FC<PaywallModalProps> = ({
   const { user } = useAuth();
   const { trackFeatureUsage } = useActivity();
   const location = useLocation();
+  const navigate = useNavigate();
 
   const handlePlanSelect = (planId: string) => {
     if (requiredFeature) {
@@ -48,6 +49,10 @@ const PaywallModal: React.FC<PaywallModalProps> = ({
     }
     onOpenChange(false);
     onUpgrade(planId);
+  };
+
+  const handleCancel = () => {
+    onOpenChange(false);
   };
 
   return (
@@ -82,7 +87,7 @@ const PaywallModal: React.FC<PaywallModalProps> = ({
           )}
         </div>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel onClick={handleCancel}>Cancel</AlertDialogCancel>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

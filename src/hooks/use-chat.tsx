@@ -1,5 +1,5 @@
 
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useEffect } from "react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { useLocalStorage } from "@/hooks/use-local-storage";
@@ -20,11 +20,19 @@ export function useChat() {
   const [showPaywall, setShowPaywall] = useState(false);
   const navigate = useNavigate();
   
-  const { subscription, getRemainingMessages } = useSubscription();
+  const { subscription, getRemainingMessages, refreshSubscription } = useSubscription();
   const remainingMessages = getRemainingMessages();
   const messageLimit = subscription?.messageLimit || 10;
   const hasLimitedMessages = subscription?.planId === 'free' || subscription?.planId === 'starter';
   const isPremium = subscription?.planId === 'popular' || subscription?.planId === 'pro';
+
+  // When component mounts or subscription changes, check message limit
+  useEffect(() => {
+    // Only check limits for authenticated users with limited plans
+    if (hasLimitedMessages && remainingMessages <= 0) {
+      setShowPaywall(true);
+    }
+  }, [hasLimitedMessages, remainingMessages]);
 
   const checkCache = (query: string): string | null => {
     const normalizedQuery = query.trim().toLowerCase();
@@ -64,6 +72,7 @@ export function useChat() {
     
     if (!input.trim()) return;
     
+    // Check if user has remaining messages before proceeding
     if (hasLimitedMessages && remainingMessages <= 0) {
       setShowPaywall(true);
       return;
@@ -115,19 +124,30 @@ export function useChat() {
       
       setMessages(prev => [...prev, assistantMessage]);
       
+      // Increment used messages count if on a limited plan
       if (hasLimitedMessages) {
         setUsedMessages(prev => prev + 1);
+        // Refresh subscription data to get updated message count
+        await refreshSubscription();
       }
       
       updateCache(input, response);
       
-      if (hasLimitedMessages && remainingMessages <= 1) {
+      // Check remaining messages after use
+      const updatedRemaining = getRemainingMessages() - 1;
+      
+      if (hasLimitedMessages && updatedRemaining <= 0) {
         toast.error("Message limit reached", {
           description: "You've used all your free messages. Please upgrade to continue.",
         });
-      } else if (hasLimitedMessages && remainingMessages <= 5) {
+        
+        // Show paywall after a short delay
+        setTimeout(() => {
+          setShowPaywall(true);
+        }, 1500);
+      } else if (hasLimitedMessages && updatedRemaining <= 5) {
         toast.warning("Message limit approaching", {
-          description: `You have ${remainingMessages - 1} messages remaining in your plan.`,
+          description: `You have ${updatedRemaining} messages remaining in your plan.`,
         });
       }
       
@@ -157,6 +177,7 @@ export function useChat() {
     });
     
     setShowPaywall(false);
+    refreshSubscription();
   };
 
   const handleLogin = () => {
