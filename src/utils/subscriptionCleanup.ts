@@ -1,4 +1,3 @@
-
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
@@ -29,7 +28,7 @@ export const cleanupUserSubscriptions = async (userId: string): Promise<boolean>
       .select('*')
       .eq('user_id', userId)
       .eq('active', true)
-      .order('created_at', { ascending: false }) as unknown as { data: Subscription[] | null, error: any };
+      .order('created_at', { ascending: false });
     
     if (fetchError) {
       console.error('Error fetching active subscriptions:', fetchError);
@@ -85,10 +84,7 @@ export const cleanupAllUserSubscriptions = async (): Promise<{
   try {    
     // Call the RPC function with proper type assertions
     const { data, error: queryError } = await supabase
-      .rpc('get_users_with_multiple_active_subscriptions') as { 
-        data: UserWithMultipleSubscriptions[] | null;
-        error: Error | null;
-      };
+      .rpc('get_users_with_multiple_active_subscriptions');
     
     if (queryError) {
       result.errors.push(`Error fetching users with multiple subscriptions: ${queryError.message}`);
