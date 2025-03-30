@@ -1,4 +1,3 @@
-
 import { cn } from "@/lib/utils";
 import { Progress } from "@/components/ui/progress";
 import { AlertCircle, Sparkles } from "lucide-react";
@@ -28,7 +27,7 @@ const UsageStats = ({ usedMessages, messageLimit, remainingMessages, planId }: U
     });
     
     // Track if user is running low on messages
-    if (remainingMessages <= 3 && remainingMessages > 0) {
+    if (remainingMessages <= 2 && remainingMessages > 0) {
       trackFeatureUsage('low_message_count', {
         remainingMessages,
         planId
@@ -99,7 +98,7 @@ const UsageStats = ({ usedMessages, messageLimit, remainingMessages, planId }: U
           <p className="text-xs text-muted-foreground">
             You have {remainingMessages} coaching {remainingMessages === 1 ? 'session' : 'sessions'} remaining
           </p>
-          {remainingMessages <= 5 && (
+          {remainingMessages <= 2 && (
             <Button 
               size="sm" 
               variant="ghost" 

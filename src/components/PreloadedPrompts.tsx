@@ -11,9 +11,7 @@ const PRELOADED_PROMPTS = [
   "What metrics should I focus on to demonstrate the success of my product?",
   "Help me prepare for a senior PM interview at a tech company",
   "How do I create user stories that developers will understand and appreciate?",
-  "What's an effective framework for making difficult product trade-off decisions?",
-  "How do I manage up effectively as a product manager?",
-  "Give me strategies for launching a product with limited marketing resources"
+  "What's an effective framework for making difficult product trade-off decisions?"
 ];
 
 const PreloadedPrompts: React.FC<PreloadedPromptsProps> = ({ onSelectPrompt }) => {

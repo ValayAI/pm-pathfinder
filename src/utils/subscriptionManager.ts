@@ -12,7 +12,7 @@ import { PlanType } from '@/components/subscription/PlanCard';
 export const PLAN_FEATURES = {
   free: {
     features: ['Basic chat access', 'Limited messages'],
-    messageLimit: 10,
+    messageLimit: 5, // Changed from 10 to 5
     expiresAt: null,
   },
   starter: {

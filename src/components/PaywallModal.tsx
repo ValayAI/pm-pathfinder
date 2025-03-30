@@ -88,13 +88,15 @@ const PaywallModal: React.FC<PaywallModalProps> = ({
           )}
         </div>
         <AlertDialogFooter>
-          <Button 
-            variant="outline" 
-            onClick={handleCancel}
-            className="mt-2 sm:mt-0"
-          >
-            Cancel
-          </Button>
+          <AlertDialogCancel asChild>
+            <Button 
+              variant="outline" 
+              onClick={handleCancel}
+              className="mt-2 sm:mt-0"
+            >
+              Cancel
+            </Button>
+          </AlertDialogCancel>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

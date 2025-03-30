@@ -26,7 +26,7 @@ interface SubscriptionContextType {
 
 const defaultSubscription: SubscriptionData = {
   planId: 'free',
-  messageLimit: 10,
+  messageLimit: 5, // Changed from 10 to 5
   features: PLAN_FEATURES.free.features,
   expiresAt: null
 };
