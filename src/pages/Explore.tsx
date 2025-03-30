@@ -1,3 +1,4 @@
+
 import React from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -35,7 +36,15 @@ import {
 
 const Explore = () => {
   const isMobile = useIsMobile();
-  const { user } = useAuth();
+  
+  // Safely access useAuth, providing fallbacks if it's not available
+  let user = null;
+  try {
+    const { user: authUser } = useAuth();
+    user = authUser;
+  } catch (error) {
+    console.warn("Auth context not available in Explore page");
+  }
   
   if (!user) {
     return (

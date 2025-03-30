@@ -12,8 +12,32 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute = ({ children, requireFeature }: ProtectedRouteProps) => {
-  const { user, isLoading: isAuthLoading } = useAuth();
-  const { isLoading: isSubscriptionLoading, isFeatureEnabled } = useSubscription();
+  // Safely access useAuth, providing fallbacks if it's not available
+  let user = null;
+  let isAuthLoading = false;
+  
+  try {
+    const auth = useAuth();
+    user = auth.user;
+    isAuthLoading = auth.isLoading;
+  } catch (error) {
+    console.warn("Auth context not available in ProtectedRoute");
+    isAuthLoading = false;
+  }
+  
+  // Safely access useSubscription
+  let isSubscriptionLoading = false;
+  let isFeatureEnabled = () => false;
+  
+  try {
+    const subscription = useSubscription();
+    isSubscriptionLoading = subscription.isLoading;
+    isFeatureEnabled = subscription.isFeatureEnabled;
+  } catch (error) {
+    console.warn("Subscription context not available in ProtectedRoute");
+    isSubscriptionLoading = false;
+  }
+  
   const location = useLocation();
   
   // If still loading auth or subscription data, show a minimal loading indicator

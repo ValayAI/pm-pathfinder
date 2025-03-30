@@ -34,7 +34,16 @@ const defaultSubscription: SubscriptionData = {
 const SubscriptionContext = createContext<SubscriptionContextType | undefined>(undefined);
 
 export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { user } = useAuth();
+  // Safely access useAuth, providing fallbacks if it's not available
+  let user;
+  try {
+    const authContext = useAuth();
+    user = authContext.user;
+  } catch (error) {
+    console.warn("Auth context not available, defaulting to unauthenticated state");
+    user = null;
+  }
+
   const [subscription, setSubscription] = useState<SubscriptionData | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [messagesUsed, setMessagesUsed] = useState<number>(0);
