@@ -26,13 +26,20 @@ export function useChat() {
   const hasLimitedMessages = subscription?.planId === 'free' || subscription?.planId === 'starter';
   const isPremium = subscription?.planId === 'popular' || subscription?.planId === 'pro';
 
-  // When component mounts or subscription changes, check message limit
+  // When component mounts, refresh subscription data to ensure we have accurate limits
+  useEffect(() => {
+    refreshSubscription();
+  }, []);
+
+  // Only show paywall if user has actually used up their messages
   useEffect(() => {
     // Only check limits for authenticated users with limited plans
-    if (hasLimitedMessages && remainingMessages <= 0) {
+    if (hasLimitedMessages && remainingMessages <= 0 && usedMessages >= messageLimit) {
       setShowPaywall(true);
+    } else {
+      setShowPaywall(false);
     }
-  }, [hasLimitedMessages, remainingMessages]);
+  }, [hasLimitedMessages, remainingMessages, usedMessages, messageLimit]);
 
   const checkCache = (query: string): string | null => {
     const normalizedQuery = query.trim().toLowerCase();
@@ -126,30 +133,30 @@ export function useChat() {
       
       // Increment used messages count if on a limited plan
       if (hasLimitedMessages) {
-        setUsedMessages(prev => prev + 1);
+        const newUsedCount = usedMessages + 1;
+        setUsedMessages(newUsedCount);
+        
         // Refresh subscription data to get updated message count
         await refreshSubscription();
+        
+        // Check if we should show warning or paywall message
+        if (newUsedCount >= messageLimit) {
+          toast.error("Message limit reached", {
+            description: "You've used all your free messages. Please upgrade to continue.",
+          });
+          
+          // Show paywall after a short delay
+          setTimeout(() => {
+            setShowPaywall(true);
+          }, 1500);
+        } else if (messageLimit - newUsedCount <= 3) {
+          toast.warning("Message limit approaching", {
+            description: `You have ${messageLimit - newUsedCount} messages remaining in your plan.`,
+          });
+        }
       }
       
       updateCache(input, response);
-      
-      // Check remaining messages after use
-      const updatedRemaining = getRemainingMessages() - 1;
-      
-      if (hasLimitedMessages && updatedRemaining <= 0) {
-        toast.error("Message limit reached", {
-          description: "You've used all your free messages. Please upgrade to continue.",
-        });
-        
-        // Show paywall after a short delay
-        setTimeout(() => {
-          setShowPaywall(true);
-        }, 1500);
-      } else if (hasLimitedMessages && updatedRemaining <= 5) {
-        toast.warning("Message limit approaching", {
-          description: `You have ${updatedRemaining} messages remaining in your plan.`,
-        });
-      }
       
     } catch (error) {
       console.error("Chat error:", error);
@@ -171,13 +178,13 @@ export function useChat() {
     }
   };
 
-  const handleUpgrade = (plan: string) => {
+  const handleUpgrade = async (plan: string) => {
     toast.success("Upgrade successful!", {
       description: `You now have unlimited access to your PM Coach with the ${plan} plan.`,
     });
     
     setShowPaywall(false);
-    refreshSubscription();
+    await refreshSubscription();
   };
 
   const handleLogin = () => {

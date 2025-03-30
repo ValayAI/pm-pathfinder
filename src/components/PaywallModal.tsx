@@ -52,6 +52,7 @@ const PaywallModal: React.FC<PaywallModalProps> = ({
   };
 
   const handleCancel = () => {
+    // Ensure we properly close the modal when Cancel is clicked
     onOpenChange(false);
   };
 
@@ -79,7 +80,7 @@ const PaywallModal: React.FC<PaywallModalProps> = ({
                   key={plan.id}
                   plan={plan}
                   user={user}
-                  location={null}
+                  location={location}
                   onPlanSuccess={(planId) => handlePlanSelect(planId)}
                 />
               ))}
@@ -87,7 +88,13 @@ const PaywallModal: React.FC<PaywallModalProps> = ({
           )}
         </div>
         <AlertDialogFooter>
-          <AlertDialogCancel onClick={handleCancel}>Cancel</AlertDialogCancel>
+          <Button 
+            variant="outline" 
+            onClick={handleCancel}
+            className="mt-2 sm:mt-0"
+          >
+            Cancel
+          </Button>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

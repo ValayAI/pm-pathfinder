@@ -64,19 +64,9 @@ const ChatContainer = () => {
     }
   }, [setIsVisible, user, trackPageView, hasLimitedMessages, trackFeatureUsage, usedMessages, messageLimit, remainingMessages, subscription]);
 
-  // Only show the "hit message limit" paywall if applicable
-  useEffect(() => {
-    if (user && hasLimitedMessages && remainingMessages <= 0) {
-      setShowPaywall(true);
-      
-      // Track when a user hits their message limit
-      trackFeatureUsage('message_limit_reached', {
-        plan: subscription?.planId,
-        messageLimit
-      });
-    }
-  }, [user, hasLimitedMessages, remainingMessages, setShowPaywall, trackFeatureUsage, subscription, messageLimit]);
-
+  // Only show the paywall modal based on the state in useChat
+  // The logic for when to show it is now handled in useChat
+  
   useEffect(() => {
     toast.success("Your PM Coach is ready", {
       description: "Ask me anything about product management!",
