@@ -4,6 +4,7 @@ import { useAuth } from './AuthProvider';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { PLAN_FEATURES } from '@/utils/subscriptionManager';
+import { cleanupUserSubscriptions } from '@/utils/subscriptionCleanup';
 
 export type PlanType = 'free' | 'starter' | 'popular' | 'pro';
 
@@ -49,13 +50,19 @@ export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ 
     }
 
     try {
+      // First, clean up any duplicate active subscriptions
+      // This ensures the user only has one active subscription
+      await cleanupUserSubscriptions(user.id);
+      
       // Use Promise.all to fetch both subscription and usage data in parallel
       const [subscriptionResponse, usageResponse] = await Promise.all([
         supabase
           .from('subscriptions')
           .select('*')
           .eq('user_id', user.id)
-          .eq('active', true),
+          .eq('active', true)
+          .limit(1)
+          .maybeSingle(),
           
         supabase
           .from('message_usage')
@@ -76,17 +83,15 @@ export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ 
         setMessagesUsed(usageResponse.data.messages_used);
       }
       
-      // Modified: Handle multiple subscription rows
-      if (subscriptionResponse.data && subscriptionResponse.data.length > 0) {
-        // Take the first active subscription (or could implement more complex logic if needed)
-        const activeSubscription = subscriptionResponse.data[0];
-        const planId = activeSubscription.plan_id as PlanType;
+      // If subscription found, use it
+      if (subscriptionResponse.data) {
+        const planId = subscriptionResponse.data.plan_id as PlanType;
         
         // Convert JSON features array to string array with fallback to plan features
         let featuresArray: string[] = [];
-        if (activeSubscription.features) {
+        if (subscriptionResponse.data.features) {
           // Safely typecast and filter to ensure only strings
-          const jsonFeatures = activeSubscription.features as any;
+          const jsonFeatures = subscriptionResponse.data.features as any;
           featuresArray = Array.isArray(jsonFeatures) 
             ? jsonFeatures.filter(item => typeof item === 'string').map(item => String(item))
             : PLAN_FEATURES[planId].features;
@@ -97,9 +102,9 @@ export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ 
         // Create subscription data based on plan
         const subscriptionInfo: SubscriptionData = {
           planId: planId,
-          messageLimit: activeSubscription.message_limit ?? (planId === 'starter' ? 50 : planId === 'free' ? 10 : Infinity),
+          messageLimit: subscriptionResponse.data.message_limit ?? (planId === 'starter' ? 50 : planId === 'free' ? 10 : Infinity),
           features: featuresArray,
-          expiresAt: activeSubscription.expires_at ? new Date(activeSubscription.expires_at) : null
+          expiresAt: subscriptionResponse.data.expires_at ? new Date(subscriptionResponse.data.expires_at) : null
         };
         
         setSubscription(subscriptionInfo);
