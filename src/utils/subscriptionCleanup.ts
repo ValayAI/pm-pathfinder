@@ -1,3 +1,4 @@
+
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
@@ -76,7 +77,7 @@ export const cleanupAllUserSubscriptions = async (): Promise<{
     
     // Call the RPC function with the correct type specification
     const { data, error: queryError } = await supabase
-      .rpc('get_users_with_multiple_active_subscriptions')
+      .rpc<UserWithMultipleSubscriptions[]>('get_users_with_multiple_active_subscriptions')
       .returns<UserWithMultipleSubscriptions[]>();
     
     if (queryError) {
