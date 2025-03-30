@@ -27,7 +27,7 @@ const ProtectedRoute = ({ children, requireFeature }: ProtectedRouteProps) => {
   
   // Safely access useSubscription
   let isSubscriptionLoading = false;
-  let isFeatureEnabled = () => false;
+  let isFeatureEnabled = (feature: string) => false;
   
   try {
     const subscription = useSubscription();
