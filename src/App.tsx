@@ -20,8 +20,6 @@ import { SubscriptionProvider } from './providers/SubscriptionProvider';
 import './App.css';
 
 function App() {
-  console.log("App rendering - checking routes availability");
-  
   return (
     <ThemeProvider defaultTheme="light" storageKey="ui-theme">
       <Router>
