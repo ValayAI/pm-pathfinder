@@ -1,3 +1,4 @@
+
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
@@ -74,8 +75,7 @@ export const cleanupAllUserSubscriptions = async (): Promise<{
       subscription_count: number;
     }
     
-    // First, get a list of all users with multiple active subscriptions
-    // Using a simple approach without complex typing
+    // Specify the return type with a proper type assertion
     const { data, error: queryError } = await supabase.rpc(
       'get_users_with_multiple_active_subscriptions'
     );
@@ -85,7 +85,7 @@ export const cleanupAllUserSubscriptions = async (): Promise<{
       return result;
     }
     
-    // Properly type the data
+    // Explicitly cast the data to the expected type
     const userIds = (data || []) as UserWithMultipleSubscriptions[];
     
     if (userIds.length === 0) {
