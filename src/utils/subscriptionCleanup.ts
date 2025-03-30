@@ -71,7 +71,7 @@ export const cleanupAllUserSubscriptions = async (): Promise<{
   };
   
   try {
-    // Define the expected return type for the RPC function
+    // Define the exact return type for the RPC function
     interface UserWithMultipleSubscriptions {
       user_id: string;
       subscription_count: number;
@@ -86,8 +86,8 @@ export const cleanupAllUserSubscriptions = async (): Promise<{
       return result;
     }
     
-    // Type assertion to help TypeScript understand the structure
-    const userIds = data as UserWithMultipleSubscriptions[] || [];
+    // Type assertion with stronger typing to ensure TypeScript understands the structure
+    const userIds = (data as UserWithMultipleSubscriptions[]) || [];
     
     if (!userIds || userIds.length === 0) {
       result.success = true;
@@ -96,8 +96,8 @@ export const cleanupAllUserSubscriptions = async (): Promise<{
     
     result.usersWithMultipleSubscriptions = userIds.length;
     
-    // Process each user
-    for (const row of userIds) {
+    // Process each user - explicitly type the loop variable
+    for (const row of userIds as UserWithMultipleSubscriptions[]) {
       try {
         const success = await cleanupUserSubscriptions(row.user_id);
         if (success) {
