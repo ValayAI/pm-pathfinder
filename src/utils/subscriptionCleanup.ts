@@ -69,13 +69,13 @@ export const cleanupAllUserSubscriptions = async (): Promise<{
   };
   
   try {
-    // Define the exact return type for the RPC function
+    // Define the interface for the RPC function's return type
     interface UserWithMultipleSubscriptions {
       user_id: string;
       subscription_count: number;
     }
     
-    // Specify the return type with a proper type assertion
+    // Call the RPC function and handle the response with proper typing
     const { data, error: queryError } = await supabase.rpc(
       'get_users_with_multiple_active_subscriptions'
     );
@@ -85,8 +85,8 @@ export const cleanupAllUserSubscriptions = async (): Promise<{
       return result;
     }
     
-    // Explicitly cast the data to the expected type
-    const userIds = (data || []) as UserWithMultipleSubscriptions[];
+    // Convert data to the correct type, using an empty array as fallback
+    const userIds = (data as UserWithMultipleSubscriptions[] || []);
     
     if (userIds.length === 0) {
       result.success = true;
