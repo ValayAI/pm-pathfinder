@@ -75,17 +75,15 @@ export const cleanupAllUserSubscriptions = async (): Promise<{
     }
     
     // First, get a list of all users with multiple active subscriptions
-    // Using the proper generic typing format for Supabase RPC
+    // Properly configure the RPC call with the correct function name as a string literal
     const { data, error: queryError } = await supabase
-      .rpc('get_users_with_multiple_active_subscriptions')
-      .returns<UserWithMultipleSubscriptions[]>();
+      .rpc<UserWithMultipleSubscriptions[]>('get_users_with_multiple_active_subscriptions');
     
     if (queryError) {
       result.errors.push(`Error fetching users with multiple subscriptions: ${queryError.message}`);
       return result;
     }
     
-    // Properly type the data as an array of our interface
     const userIds = data || [];
     
     if (userIds.length === 0) {
