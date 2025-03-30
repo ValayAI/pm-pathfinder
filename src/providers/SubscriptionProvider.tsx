@@ -55,8 +55,7 @@ export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ 
           .from('subscriptions')
           .select('*')
           .eq('user_id', user.id)
-          .eq('active', true)
-          .maybeSingle(),
+          .eq('active', true),
           
         supabase
           .from('message_usage')
@@ -77,15 +76,17 @@ export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ 
         setMessagesUsed(usageResponse.data.messages_used);
       }
       
-      // If subscription found, use it
-      if (subscriptionResponse.data) {
-        const planId = subscriptionResponse.data.plan_id as PlanType;
+      // Modified: Handle multiple subscription rows
+      if (subscriptionResponse.data && subscriptionResponse.data.length > 0) {
+        // Take the first active subscription (or could implement more complex logic if needed)
+        const activeSubscription = subscriptionResponse.data[0];
+        const planId = activeSubscription.plan_id as PlanType;
         
         // Convert JSON features array to string array with fallback to plan features
         let featuresArray: string[] = [];
-        if (subscriptionResponse.data.features) {
+        if (activeSubscription.features) {
           // Safely typecast and filter to ensure only strings
-          const jsonFeatures = subscriptionResponse.data.features as any;
+          const jsonFeatures = activeSubscription.features as any;
           featuresArray = Array.isArray(jsonFeatures) 
             ? jsonFeatures.filter(item => typeof item === 'string').map(item => String(item))
             : PLAN_FEATURES[planId].features;
@@ -96,14 +97,14 @@ export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ 
         // Create subscription data based on plan
         const subscriptionInfo: SubscriptionData = {
           planId: planId,
-          messageLimit: subscriptionResponse.data.message_limit ?? (planId === 'starter' ? 50 : planId === 'free' ? 10 : Infinity),
+          messageLimit: activeSubscription.message_limit ?? (planId === 'starter' ? 50 : planId === 'free' ? 10 : Infinity),
           features: featuresArray,
-          expiresAt: subscriptionResponse.data.expires_at ? new Date(subscriptionResponse.data.expires_at) : null
+          expiresAt: activeSubscription.expires_at ? new Date(activeSubscription.expires_at) : null
         };
         
         setSubscription(subscriptionInfo);
       } else {
-        // Optimize default subscription creation
+        // No active subscriptions found - create default free subscription
         try {
           // If no active subscription found, create default free subscription in DB
           await Promise.all([
