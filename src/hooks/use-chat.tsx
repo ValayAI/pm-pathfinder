@@ -34,7 +34,7 @@ export function useChat() {
   // Only show paywall if user has actually used up their messages
   useEffect(() => {
     // Only check limits for authenticated users with limited plans
-    if (hasLimitedMessages && remainingMessages <= 0 && usedMessages >= messageLimit) {
+    if (hasLimitedMessages && remainingMessages <= 0 && usedMessages > 0) {
       setShowPaywall(true);
     } else {
       setShowPaywall(false);
@@ -80,7 +80,7 @@ export function useChat() {
     if (!input.trim()) return;
     
     // Check if user has remaining messages before proceeding
-    if (hasLimitedMessages && remainingMessages <= 0) {
+    if (hasLimitedMessages && remainingMessages <= 0 && usedMessages > 0) {
       setShowPaywall(true);
       return;
     }

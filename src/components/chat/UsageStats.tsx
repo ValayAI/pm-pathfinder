@@ -1,3 +1,4 @@
+
 import { cn } from "@/lib/utils";
 import { Progress } from "@/components/ui/progress";
 import { AlertCircle, Sparkles } from "lucide-react";
@@ -81,7 +82,8 @@ const UsageStats = ({ usedMessages, messageLimit, remainingMessages, planId }: U
         </div>
       )}
       
-      {remainingMessages <= 0 && !isUnlimited && (
+      {/* Only show the "reached limit" message when actually at 0 remaining AND used some messages */}
+      {remainingMessages <= 0 && usedMessages > 0 && !isUnlimited && (
         <div className="mt-3 flex flex-col gap-2">
           <div className="flex items-center text-destructive text-xs">
             <AlertCircle className="h-3 w-3 mr-1" />
@@ -93,12 +95,12 @@ const UsageStats = ({ usedMessages, messageLimit, remainingMessages, planId }: U
         </div>
       )}
       
-      {remainingMessages > 0 && !isUnlimited && (
+      {(remainingMessages > 0 || usedMessages === 0) && !isUnlimited && (
         <div className="flex justify-between items-center mt-1">
           <p className="text-xs text-muted-foreground">
             You have {remainingMessages} coaching {remainingMessages === 1 ? 'session' : 'sessions'} remaining
           </p>
-          {remainingMessages <= 2 && (
+          {remainingMessages <= 2 && usedMessages > 0 && (
             <Button 
               size="sm" 
               variant="ghost" 
