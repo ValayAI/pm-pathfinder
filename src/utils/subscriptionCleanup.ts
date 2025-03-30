@@ -75,10 +75,11 @@ export const cleanupAllUserSubscriptions = async (): Promise<{
       subscription_count: number;
     }
     
-    // Call the RPC function with its name as a string parameter
-    const { data, error: queryError } = await supabase.rpc<UserWithMultipleSubscriptions[]>(
+    // Call the RPC function with proper type parameters
+    const { data, error: queryError } = await supabase.rpc<
+      UserWithMultipleSubscriptions[],
       'get_users_with_multiple_active_subscriptions'
-    );
+    >('get_users_with_multiple_active_subscriptions');
     
     if (queryError) {
       result.errors.push(`Error fetching users with multiple subscriptions: ${queryError.message}`);
