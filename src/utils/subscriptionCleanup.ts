@@ -1,4 +1,3 @@
-
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
@@ -31,7 +30,7 @@ export const cleanupUserSubscriptions = async (userId: string): Promise<boolean>
     
     // Keep the most recent subscription active (index 0) and deactivate all others
     const subscriptionsToDeactivate = activeSubscriptions.slice(1);
-    const idsToDeactivate = subscriptionsToDeactivate.map(sub => sub.id);
+    const idsToDeactivate: string[] = subscriptionsToDeactivate.map(sub => sub.id);
     
     const { error: updateError } = await supabase
       .from('subscriptions')
@@ -75,10 +74,9 @@ export const cleanupAllUserSubscriptions = async (): Promise<{
       subscription_count: number;
     }
     
-    // Use the correct approach for typing RPC calls
+    // Call the RPC function as if it were a table (it's a view-like object)
     const { data, error: queryError } = await supabase
-      .from('get_users_with_multiple_active_subscriptions')
-      .select('*') as { 
+      .rpc('get_users_with_multiple_active_subscriptions') as { 
         data: UserWithMultipleSubscriptions[] | null;
         error: Error | null;
       };
