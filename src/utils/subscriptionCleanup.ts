@@ -1,4 +1,3 @@
-
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
@@ -33,7 +32,6 @@ export const cleanupUserSubscriptions = async (userId: string): Promise<boolean>
     const subscriptionsToDeactivate = activeSubscriptions.slice(1);
     const idsToDeactivate = subscriptionsToDeactivate.map(sub => sub.id);
     
-    // Deactivate all but the most recent subscription
     const { error: updateError } = await supabase
       .from('subscriptions')
       .update({ active: false })
@@ -54,7 +52,6 @@ export const cleanupUserSubscriptions = async (userId: string): Promise<boolean>
 
 /**
  * Performs a cleanup of all users with multiple active subscriptions
- * This function can be used by admins or in a scheduled task
  * @returns A report of the cleanup operation
  */
 export const cleanupAllUserSubscriptions = async (): Promise<{
@@ -78,9 +75,9 @@ export const cleanupAllUserSubscriptions = async (): Promise<{
     }
     
     // First, get a list of all users with multiple active subscriptions
-    // Explicitly type the response data with our interface
+    // Explicitly type the response data with our interface - using correct generic typing
     const { data, error: queryError } = await supabase
-      .rpc<UserWithMultipleSubscriptions>('get_users_with_multiple_active_subscriptions');
+      .rpc<UserWithMultipleSubscriptions[], null>('get_users_with_multiple_active_subscriptions');
     
     if (queryError) {
       result.errors.push(`Error fetching users with multiple subscriptions: ${queryError.message}`);
