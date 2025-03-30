@@ -78,26 +78,27 @@ export const cleanupAllUserSubscriptions = async (): Promise<{
     }
     
     // First, get a list of all users with multiple active subscriptions
+    // Explicitly type the response data with our interface
     const { data, error: queryError } = await supabase
-      .rpc('get_users_with_multiple_active_subscriptions');
+      .rpc<UserWithMultipleSubscriptions>('get_users_with_multiple_active_subscriptions');
     
     if (queryError) {
       result.errors.push(`Error fetching users with multiple subscriptions: ${queryError.message}`);
       return result;
     }
     
-    // Type assertion with stronger typing to ensure TypeScript understands the structure
-    const userIds = (data as UserWithMultipleSubscriptions[]) || [];
+    // Properly type the data as an array of our interface
+    const userIds = (data || []) as UserWithMultipleSubscriptions[];
     
-    if (!userIds || userIds.length === 0) {
+    if (userIds.length === 0) {
       result.success = true;
       return result;
     }
     
     result.usersWithMultipleSubscriptions = userIds.length;
     
-    // Process each user - explicitly type the loop variable
-    for (const row of userIds as UserWithMultipleSubscriptions[]) {
+    // Process each user with explicit typing to avoid the 'never' type issue
+    for (const row of userIds) {
       try {
         const success = await cleanupUserSubscriptions(row.user_id);
         if (success) {
