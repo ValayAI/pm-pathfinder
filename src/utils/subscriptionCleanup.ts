@@ -2,6 +2,20 @@
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
+// Define interfaces for stricter typing
+interface Subscription {
+  id: string;
+  user_id: string;
+  active: boolean;
+  created_at: string;
+  [key: string]: any;
+}
+
+interface UserWithMultipleSubscriptions {
+  user_id: string;
+  subscription_count: number;
+}
+
 /**
  * Ensures a user has only one active subscription by deactivating all but the most recent one
  * @param userId The ID of the user whose subscriptions need to be cleaned up
@@ -15,7 +29,7 @@ export const cleanupUserSubscriptions = async (userId: string): Promise<boolean>
       .select('*')
       .eq('user_id', userId)
       .eq('active', true)
-      .order('created_at', { ascending: false });
+      .order('created_at', { ascending: false }) as unknown as { data: Subscription[] | null, error: any };
     
     if (fetchError) {
       console.error('Error fetching active subscriptions:', fetchError);
@@ -68,13 +82,7 @@ export const cleanupAllUserSubscriptions = async (): Promise<{
     errors: [] as string[]
   };
   
-  try {
-    // Define the interface for the RPC function's return type
-    interface UserWithMultipleSubscriptions {
-      user_id: string;
-      subscription_count: number;
-    }
-    
+  try {    
     // Call the RPC function with proper type assertions
     const { data, error: queryError } = await supabase
       .rpc('get_users_with_multiple_active_subscriptions') as { 
