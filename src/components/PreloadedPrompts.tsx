@@ -9,9 +9,7 @@ interface PreloadedPromptsProps {
 const PRELOADED_PROMPTS = [
   "How do I transition from engineering to product management?",
   "What metrics should I focus on to demonstrate the success of my product?",
-  "Help me prepare for a senior PM interview at a tech company",
-  "How do I create user stories that developers will understand and appreciate?",
-  "What's an effective framework for making difficult product trade-off decisions?"
+  "Help me prepare for a senior PM interview at a tech company."
 ];
 
 const PreloadedPrompts: React.FC<PreloadedPromptsProps> = ({ onSelectPrompt }) => {
