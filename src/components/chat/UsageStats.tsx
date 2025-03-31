@@ -28,7 +28,7 @@ const UsageStats = ({ usedMessages, messageLimit, remainingMessages, planId }: U
     });
     
     // Track if user is running low on messages
-    if (remainingMessages <= 2 && remainingMessages > 0) {
+    if (remainingMessages <= 2 && remainingMessages > 0 && usedMessages > 0) {
       trackFeatureUsage('low_message_count', {
         remainingMessages,
         planId
@@ -95,10 +95,13 @@ const UsageStats = ({ usedMessages, messageLimit, remainingMessages, planId }: U
         </div>
       )}
       
-      {(remainingMessages > 0 || usedMessages === 0) && !isUnlimited && (
+      {/* Don't show this section if the user has never sent a message or if they're on an unlimited plan */}
+      {((remainingMessages > 0 && !isUnlimited) || (usedMessages === 0 && !isUnlimited)) && (
         <div className="flex justify-between items-center mt-1">
           <p className="text-xs text-muted-foreground">
-            You have {remainingMessages} coaching {remainingMessages === 1 ? 'session' : 'sessions'} remaining
+            {usedMessages === 0 ? 
+              `You have ${messageLimit} coaching ${messageLimit === 1 ? 'session' : 'sessions'} available` : 
+              `You have ${remainingMessages} coaching ${remainingMessages === 1 ? 'session' : 'sessions'} remaining`}
           </p>
           {remainingMessages <= 2 && usedMessages > 0 && (
             <Button 

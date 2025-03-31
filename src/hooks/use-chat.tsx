@@ -22,14 +22,14 @@ export function useChat() {
   
   const { subscription, getRemainingMessages, refreshSubscription } = useSubscription();
   const remainingMessages = getRemainingMessages();
-  const messageLimit = subscription?.messageLimit || 5; // Default to 5 instead of 10
+  const messageLimit = subscription?.messageLimit || 5;
   const hasLimitedMessages = subscription?.planId === 'free' || subscription?.planId === 'starter';
   const isPremium = subscription?.planId === 'popular' || subscription?.planId === 'pro';
 
   // When component mounts, refresh subscription data to ensure we have accurate limits
   useEffect(() => {
     refreshSubscription();
-  }, []);
+  }, [refreshSubscription]);
 
   // Only show paywall if user has actually used up their messages
   useEffect(() => {
@@ -149,7 +149,7 @@ export function useChat() {
           setTimeout(() => {
             setShowPaywall(true);
           }, 1500);
-        } else if (messageLimit - newUsedCount <= 2) { // Changed from 3 to 2 for 5 message limit
+        } else if (messageLimit - newUsedCount <= 2) {
           toast.warning("Message limit approaching", {
             description: `You have ${messageLimit - newUsedCount} messages remaining in your plan.`,
           });

@@ -1,3 +1,4 @@
+
 /**
  * Centralized utilities for subscription management
  */
@@ -12,7 +13,7 @@ import { PlanType } from '@/components/subscription/PlanCard';
 export const PLAN_FEATURES = {
   free: {
     features: ['Basic chat access', 'Limited messages'],
-    messageLimit: 5, // Changed from 10 to 5
+    messageLimit: 5,
     expiresAt: null,
   },
   starter: {
@@ -230,7 +231,7 @@ export const getRemainingMessages = async (userId: string, planId: string | null
   
   try {
     // Get message limit from plan
-    const messageLimit = planId === 'starter' ? 50 : 10;
+    const messageLimit = planId === 'starter' ? 50 : 5; // Update from 10 to 5 for free plan
     
     // Get used messages
     const { data, error } = await supabase
