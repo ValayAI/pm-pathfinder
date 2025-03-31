@@ -9,7 +9,6 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { User, KeyRound, ArrowRight, Mail, CheckCircle, Sparkles, InfoIcon } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import { addSubscriber } from '@/utils/subscriberUtils';
-import { Switch } from '@/components/ui/switch';
 
 const SignUp = () => {
   const [firstName, setFirstName] = useState('');
@@ -17,7 +16,6 @@ const SignUp = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [subscribeNewsletter, setSubscribeNewsletter] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [signupComplete, setSignupComplete] = useState(false);
   const navigate = useNavigate();
@@ -230,29 +228,21 @@ const SignUp = () => {
                   </div>
                 </div>
                 <div className="bg-blue-50 border border-blue-100 rounded-lg p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-start">
-                      <div className="mr-2 mt-0.5">
-                        <InfoIcon className="h-4 w-4 text-blue-500" />
-                      </div>
-                      <div>
-                        <h4 className="text-sm font-medium text-blue-800">Newsletter Subscription</h4>
-                        <p className="text-xs text-blue-600 mt-0.5">
-                          Get valuable PM insights, frameworks, and AI tips in your inbox
-                        </p>
-                      </div>
+                  <div className="flex items-start">
+                    <div className="mr-2 mt-0.5">
+                      <InfoIcon className="h-4 w-4 text-blue-500" />
                     </div>
-                    <Switch
-                      id="subscribe-newsletter"
-                      checked={true}
-                      className="data-[state=checked]:bg-blue-500"
-                      disabled={true}
-                    />
+                    <div>
+                      <h4 className="text-sm font-medium text-blue-800">Newsletter Subscription</h4>
+                      <p className="text-xs text-blue-600 mt-0.5">
+                        Get valuable PM insights, frameworks, and AI tips in your inbox
+                      </p>
+                      <p className="text-xs text-blue-600 mt-2">
+                        By creating an account, you'll be subscribed to our newsletter. 
+                        You can unsubscribe at any time.
+                      </p>
+                    </div>
                   </div>
-                  <p className="text-xs text-blue-600 pl-6">
-                    By creating an account, you'll be subscribed to our newsletter. 
-                    You can unsubscribe at any time.
-                  </p>
                 </div>
               </CardContent>
               <CardFooter className="flex flex-col space-y-4 border-t bg-muted/30 pt-6">
