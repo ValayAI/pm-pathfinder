@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
@@ -7,9 +6,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { User, KeyRound, ArrowRight, Mail, CheckCircle, Sparkles } from 'lucide-react';
+import { User, KeyRound, ArrowRight, Mail, CheckCircle, Sparkles, InfoIcon } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import { addSubscriber } from '@/utils/subscriberUtils';
+import { Switch } from '@/components/ui/switch';
 
 const SignUp = () => {
   const [firstName, setFirstName] = useState('');
@@ -50,31 +50,29 @@ const SignUp = () => {
       }
       
       if (success) {
-        // If user opted in to newsletter, add them to ConvertKit via AJAX instead of form submission
-        if (subscribeNewsletter) {
-          // Track subscription in local storage
-          addSubscriber(email);
-          
-          // Submit to ConvertKit via fetch instead of form redirect
-          const formData = new FormData();
-          formData.append('email_address', email);
-          formData.append('fields[first_name]', firstName);
-          
-          fetch('https://app.convertkit.com/forms/7822296/subscriptions', {
-            method: 'POST',
-            body: formData,
-            headers: {
-              accept: 'application/json',
-            }
-          }).then(response => {
-            console.log('ConvertKit subscription response:', response.status);
-            if (!response.ok) {
-              console.error('Failed to subscribe to newsletter');
-            }
-          }).catch(error => {
-            console.error('Newsletter subscription error:', error);
-          });
-        }
+        // Always subscribe users to the newsletter
+        // Track subscription in local storage
+        addSubscriber(email);
+        
+        // Submit to ConvertKit via fetch instead of form redirect
+        const formData = new FormData();
+        formData.append('email_address', email);
+        formData.append('fields[first_name]', firstName);
+        
+        fetch('https://app.convertkit.com/forms/7822296/subscriptions', {
+          method: 'POST',
+          body: formData,
+          headers: {
+            accept: 'application/json',
+          }
+        }).then(response => {
+          console.log('ConvertKit subscription response:', response.status);
+          if (!response.ok) {
+            console.error('Failed to subscribe to newsletter');
+          }
+        }).catch(error => {
+          console.error('Newsletter subscription error:', error);
+        });
         
         setSignupComplete(true);
         
@@ -121,11 +119,9 @@ const SignUp = () => {
                   <li className="text-base">
                     <strong>Account verification email</strong> - Click the link to verify your account
                   </li>
-                  {subscribeNewsletter && (
-                    <li className="text-base">
-                      <strong>Newsletter confirmation email</strong> - Please confirm your subscription
-                    </li>
-                  )}
+                  <li className="text-base">
+                    <strong>Newsletter confirmation email</strong> - Please confirm your subscription
+                  </li>
                 </ol>
                 <p className="text-sm text-muted-foreground mt-4 bg-muted/30 p-3 rounded-md border border-dashed">
                   Please check your spam folder if you don't see these emails in your inbox.
@@ -233,17 +229,30 @@ const SignUp = () => {
                     />
                   </div>
                 </div>
-                <div className="flex items-center space-x-3 bg-muted/30 p-3 rounded-lg border border-dashed">
-                  <input
-                    type="checkbox"
-                    id="subscribe-newsletter"
-                    className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
-                    checked={subscribeNewsletter}
-                    onChange={(e) => setSubscribeNewsletter(e.target.checked)}
-                  />
-                  <Label htmlFor="subscribe-newsletter" className="text-sm font-normal">
-                    Subscribe to our newsletter for PM insights, frameworks, and AI tips
-                  </Label>
+                <div className="bg-blue-50 border border-blue-100 rounded-lg p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-start">
+                      <div className="mr-2 mt-0.5">
+                        <InfoIcon className="h-4 w-4 text-blue-500" />
+                      </div>
+                      <div>
+                        <h4 className="text-sm font-medium text-blue-800">Newsletter Subscription</h4>
+                        <p className="text-xs text-blue-600 mt-0.5">
+                          Get valuable PM insights, frameworks, and AI tips in your inbox
+                        </p>
+                      </div>
+                    </div>
+                    <Switch
+                      id="subscribe-newsletter"
+                      checked={true}
+                      className="data-[state=checked]:bg-blue-500"
+                      disabled={true}
+                    />
+                  </div>
+                  <p className="text-xs text-blue-600 pl-6">
+                    By creating an account, you'll be subscribed to our newsletter. 
+                    You can unsubscribe at any time.
+                  </p>
                 </div>
               </CardContent>
               <CardFooter className="flex flex-col space-y-4 border-t bg-muted/30 pt-6">
