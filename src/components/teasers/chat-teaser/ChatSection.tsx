@@ -84,123 +84,130 @@ const ChatSection = () => {
   };
   
   return (
-    <Card className="mb-12 shadow-md border rounded-xl overflow-hidden hover:shadow-lg transition-all">
-      <CardHeader className="pb-3 bg-gradient-to-r from-muted/50 to-transparent">
-        <div className="flex items-center gap-3">
-          <div className="bg-primary/10 p-3 rounded-lg">
-            <Bot className="h-5 w-5 text-primary" />
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.7 }}
+    >
+      <Card className="mb-16 shadow-xl border rounded-xl overflow-hidden hover:shadow-2xl transition-all duration-300">
+        <CardHeader className="pb-3 bg-gradient-to-r from-primary/5 via-primary/10 to-transparent">
+          <div className="flex items-center gap-3">
+            <div className="bg-gradient-to-br from-indigo-500/20 to-blue-500/20 p-3 rounded-lg">
+              <Bot className="h-5 w-5 text-primary" />
+            </div>
+            <div>
+              <CardTitle className="text-xl">PM Coach</CardTitle>
+              <CardDescription>Powered by AI</CardDescription>
+            </div>
           </div>
-          <div>
-            <CardTitle className="text-xl">PM Coach</CardTitle>
-            <CardDescription>Powered by AI</CardDescription>
+        </CardHeader>
+        <CardContent className="pt-6">
+          <div 
+            ref={chatContainerRef}
+            className="bg-muted/20 backdrop-blur-sm rounded-lg p-4 mb-5 h-[320px] overflow-y-auto shadow-inner border"
+          >
+            {messages.map((msg, index) => (
+              <ChatBubble 
+                key={index} 
+                message={msg} 
+                delay={index * 0.1}
+              />
+            ))}
+            
+            {isTyping && (
+              <motion.div 
+                className="mb-4"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <div className="inline-block p-3 rounded-lg max-w-[85%] bg-card border">
+                  <div className="flex space-x-2">
+                    <div className="h-2 w-2 bg-primary/40 rounded-full animate-bounce"></div>
+                    <div className="h-2 w-2 bg-primary/60 rounded-full animate-bounce [animation-delay:0.2s]"></div>
+                    <div className="h-2 w-2 bg-primary/80 rounded-full animate-bounce [animation-delay:0.4s]"></div>
+                  </div>
+                </div>
+              </motion.div>
+            )}
           </div>
-        </div>
-      </CardHeader>
-      <CardContent className="pt-5">
-        <div 
-          ref={chatContainerRef}
-          className="bg-muted/20 backdrop-blur-sm rounded-lg p-4 mb-5 h-[320px] overflow-y-auto shadow-inner border"
-        >
-          {messages.map((msg, index) => (
-            <ChatBubble 
-              key={index} 
-              message={msg} 
-              delay={index * 0.1}
-            />
-          ))}
           
-          {isTyping && (
+          <div className="relative">
+            <Textarea 
+              placeholder="Ask about product management, interviews, or career advice..." 
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              className="pr-12 resize-none border-primary/20 focus:border-primary/30 shadow-sm"
+              rows={2}
+              disabled={hasInteracted}
+            />
+            <Button 
+              className="absolute right-2 bottom-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-sm" 
+              size="icon" 
+              onClick={handleSendMessage}
+              disabled={!message.trim() || hasInteracted}
+            >
+              <Send className="h-4 w-4" />
+              <span className="sr-only">Send</span>
+            </Button>
+          </div>
+        </CardContent>
+        <CardFooter className="flex flex-col gap-5 bg-gradient-to-b from-muted/20 via-muted/10 to-transparent">
+          {hasInteracted ? (
             <motion.div 
-              className="mb-4"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
+              className="w-full p-5 bg-card rounded-lg border border-dashed shadow-sm"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.3 }}
             >
-              <div className="inline-block p-3 rounded-lg max-w-[85%] bg-card border">
-                <div className="flex space-x-2">
-                  <div className="h-2 w-2 bg-primary/40 rounded-full animate-bounce"></div>
-                  <div className="h-2 w-2 bg-primary/60 rounded-full animate-bounce [animation-delay:0.2s]"></div>
-                  <div className="h-2 w-2 bg-primary/80 rounded-full animate-bounce [animation-delay:0.4s]"></div>
-                </div>
+              <div className="flex items-center gap-2 mb-3">
+                <Lock className="h-5 w-5 text-primary" />
+                <p className="font-medium">Sign up to continue the conversation</p>
+              </div>
+              <p className="text-sm text-muted-foreground mb-4">
+                Create a free account to get unlimited coaching and personalized advice for your product management career.
+              </p>
+              <div className="flex gap-3 justify-center">
+                <Button variant="outline" asChild size="sm" className="min-w-24">
+                  <Link to="/signin">Sign In</Link>
+                </Button>
+                <Button asChild size="sm" className="min-w-24 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700">
+                  <Link to="/signup" className="flex items-center gap-1.5">
+                    Sign Up Free <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </Button>
               </div>
             </motion.div>
-          )}
-        </div>
-        
-        <div className="relative">
-          <Textarea 
-            placeholder="Ask about product management, interviews, or career advice..." 
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            className="pr-12 resize-none border-primary/20 focus:border-primary/30 shadow-sm"
-            rows={2}
-            disabled={hasInteracted}
-          />
-          <Button 
-            className="absolute right-2 bottom-2 bg-primary/90 hover:bg-primary shadow-sm" 
-            size="icon" 
-            onClick={handleSendMessage}
-            disabled={!message.trim() || hasInteracted}
-          >
-            <Send className="h-4 w-4" />
-            <span className="sr-only">Send</span>
-          </Button>
-        </div>
-      </CardContent>
-      <CardFooter className="flex flex-col gap-5 bg-gradient-to-r from-muted/30 to-transparent">
-        {hasInteracted ? (
-          <motion.div 
-            className="w-full p-4 bg-card rounded-lg border border-dashed shadow-sm"
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.3 }}
-          >
-            <div className="flex items-center gap-2 mb-3">
-              <Lock className="h-5 w-5 text-primary" />
-              <p className="font-medium">Sign up to continue the conversation</p>
-            </div>
-            <p className="text-sm text-muted-foreground mb-4">
-              Create a free account to get unlimited coaching and personalized advice for your product management career.
+          ) : (
+            <p className="text-xs text-muted-foreground">
+              Ask one free question, or <Link to="/signup" className="text-primary hover:underline font-medium">sign up</Link> for unlimited coaching
             </p>
-            <div className="flex gap-3 justify-center">
-              <Button variant="outline" asChild size="sm" className="min-w-24">
-                <Link to="/signin">Sign In</Link>
-              </Button>
-              <Button asChild size="sm" className="min-w-24 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700">
-                <Link to="/signup" className="flex items-center gap-1.5">
-                  Sign Up Free <ArrowRight className="h-4 w-4" />
-                </Link>
-              </Button>
-            </div>
-          </motion.div>
-        ) : (
-          <p className="text-xs text-muted-foreground">
-            Ask one free question, or <Link to="/signup" className="text-primary hover:underline font-medium">sign up</Link> for unlimited coaching
-          </p>
-        )}
-        
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full">
-          <TopicButton 
-            topic="Interview tips"
-            onClick={() => handleTopicClick("Interview tips")}
-            disabled={hasInteracted}
-            delay={0.1}
-          />
-          <TopicButton 
-            topic="Career growth"
-            onClick={() => handleTopicClick("Career growth")}
-            disabled={hasInteracted}
-            delay={0.2}
-          />
-          <TopicButton 
-            topic="Roadmap help"
-            onClick={() => handleTopicClick("Roadmap help")}
-            disabled={hasInteracted}
-            delay={0.3}
-          />
-        </div>
-      </CardFooter>
-    </Card>
+          )}
+          
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full">
+            <TopicButton 
+              topic="Interview tips"
+              onClick={() => handleTopicClick("Interview tips")}
+              disabled={hasInteracted}
+              delay={0.1}
+            />
+            <TopicButton 
+              topic="Career growth"
+              onClick={() => handleTopicClick("Career growth")}
+              disabled={hasInteracted}
+              delay={0.2}
+            />
+            <TopicButton 
+              topic="Roadmap help"
+              onClick={() => handleTopicClick("Roadmap help")}
+              disabled={hasInteracted}
+              delay={0.3}
+            />
+          </div>
+        </CardFooter>
+      </Card>
+    </motion.div>
   );
 };
 

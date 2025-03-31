@@ -4,6 +4,7 @@ import {
   MessageSquareText, Lightbulb, Compass, BarChart3, Target, Award, Sparkles
 } from "lucide-react";
 import { ContainerScroll } from "./ContainerScroll";
+import { motion } from "framer-motion";
 
 export function FeatureSection() {
   const features = [
@@ -72,43 +73,66 @@ export function FeatureSection() {
   };
   
   const FeatureTitle = (
-    <div className="mb-10">
-      <div className="flex justify-center mb-4">
-        <div className="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium bg-indigo-50 text-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-300 shadow-sm border border-indigo-100/80 dark:border-indigo-800/30">
+    <div className="mb-14">
+      <motion.div 
+        className="flex justify-center mb-5"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5 }}
+      >
+        <div className="inline-flex items-center rounded-full px-4 py-1.5 text-xs font-medium bg-indigo-50 text-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-300 shadow-sm border border-indigo-100/80 dark:border-indigo-800/30">
           <Sparkles className="mr-1.5 h-3.5 w-3.5 text-amber-500" />
           <span>Powerful PM Tools</span>
         </div>
-      </div>
-      <h2 className="text-2xl sm:text-3xl font-outfit font-bold text-center bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent">
+      </motion.div>
+      <motion.h2 
+        className="text-3xl sm:text-4xl font-outfit font-bold text-center bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.1 }}
+      >
         Everything You Need to Excel in Product Management
-      </h2>
-      <p className="mt-3 text-base text-muted-foreground max-w-xl mx-auto text-center">
+      </motion.h2>
+      <motion.p 
+        className="mt-4 text-base sm:text-lg text-muted-foreground max-w-xl mx-auto text-center"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+      >
         Simple, powerful tools and resources to help you become a better product manager
-      </p>
+      </motion.p>
     </div>
   );
   
   return (
-    <section id="feature-section" className="relative py-16 bg-gradient-to-b from-blue-50/50 to-white dark:from-blue-950/10 dark:to-gray-900">
+    <section id="feature-section" className="relative py-20 bg-gradient-to-b from-blue-50/50 to-white dark:from-blue-950/10 dark:to-gray-900">
       <ContainerScroll titleComponent={FeatureTitle}>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4 h-full overflow-y-auto">
           {features.map((feature, index) => (
-            <div 
+            <motion.div 
               key={index}
               className={cn(
-                "bg-white/80 dark:bg-gray-800/40 rounded-xl p-6 shadow-sm hover-lift transition-all border",
+                "bg-white/90 dark:bg-gray-800/60 rounded-xl p-7 shadow-md hover:shadow-lg transition-all border",
                 getBorderColor(feature.color)
               )}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              whileHover={{ y: -5, scale: 1.02 }}
             >
               <div className={cn(
-                "h-10 w-10 rounded-lg flex items-center justify-center mb-4",
+                "h-12 w-12 rounded-lg flex items-center justify-center mb-5",
                 getColorClass(feature.color)
               )}>
                 {feature.icon}
               </div>
-              <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
+              <h3 className="text-xl font-semibold mb-3">{feature.title}</h3>
               <p className="text-sm text-muted-foreground">{feature.description}</p>
-            </div>
+            </motion.div>
           ))}
         </div>
       </ContainerScroll>
