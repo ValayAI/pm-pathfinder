@@ -9,7 +9,12 @@ interface TopicButtonGroupProps {
   handleTopicClick: (topic: string) => void;
 }
 
-const TopicButtonGroup = ({ hasInteracted, handleTopicClick }: TopicButtonGroupProps) => {
+const TopicButtonGroup = React.memo(({ hasInteracted, handleTopicClick }: TopicButtonGroupProps) => {
+  // Memoize individual topic click handlers to prevent recreation
+  const handleInterviewClick = React.useCallback(() => handleTopicClick("Interview tips"), [handleTopicClick]);
+  const handleCareerClick = React.useCallback(() => handleTopicClick("Career growth"), [handleTopicClick]);
+  const handleRoadmapClick = React.useCallback(() => handleTopicClick("Roadmap help"), [handleTopicClick]);
+
   return (
     <>
       {hasInteracted ? (
@@ -23,25 +28,27 @@ const TopicButtonGroup = ({ hasInteracted, handleTopicClick }: TopicButtonGroupP
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full">
         <TopicButton 
           topic="Interview tips"
-          onClick={() => handleTopicClick("Interview tips")}
+          onClick={handleInterviewClick}
           disabled={hasInteracted}
           delay={0.1}
         />
         <TopicButton 
           topic="Career growth"
-          onClick={() => handleTopicClick("Career growth")}
+          onClick={handleCareerClick}
           disabled={hasInteracted}
           delay={0.2}
         />
         <TopicButton 
           topic="Roadmap help"
-          onClick={() => handleTopicClick("Roadmap help")}
+          onClick={handleRoadmapClick}
           disabled={hasInteracted}
           delay={0.3}
         />
       </div>
     </>
   );
-};
+});
+
+TopicButtonGroup.displayName = 'TopicButtonGroup';
 
 export default TopicButtonGroup;

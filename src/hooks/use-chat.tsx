@@ -1,5 +1,4 @@
-
-import { useState, FormEvent, useEffect } from "react";
+import { useState, FormEvent, useEffect, useCallback, useRef } from "react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { useLocalStorage } from "@/hooks/use-local-storage";
@@ -7,8 +6,10 @@ import { chatWithOpenAI } from "@/api/chat";
 import { Message, CachedResponse } from "@/types/chat";
 import { useSubscription } from "@/providers/SubscriptionProvider";
 import { Clock } from "lucide-react";
+import { supabase, cachedSupabase } from "@/lib/supabase";
 
 const CACHE_EXPIRY_HOURS = 24;
+const SUBSCRIPTION_REFRESH_INTERVAL = 60 * 1000; // 1 minute
 
 export function useChat() {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -25,15 +26,18 @@ export function useChat() {
   const messageLimit = subscription?.messageLimit || 5;
   const hasLimitedMessages = subscription?.planId === 'free' || subscription?.planId === 'starter';
   const isPremium = subscription?.planId === 'popular' || subscription?.planId === 'pro';
-
-  // When component mounts, refresh subscription data to ensure we have accurate limits
+  
+  const lastRefreshTimeRef = useRef<number>(Date.now());
+  
   useEffect(() => {
-    refreshSubscription();
+    const now = Date.now();
+    if (now - lastRefreshTimeRef.current > SUBSCRIPTION_REFRESH_INTERVAL) {
+      refreshSubscription();
+      lastRefreshTimeRef.current = now;
+    }
   }, [refreshSubscription]);
 
-  // Only show paywall if user has actually used up their messages
   useEffect(() => {
-    // Only check limits for authenticated users with limited plans
     if (hasLimitedMessages && remainingMessages <= 0 && usedMessages > 0) {
       setShowPaywall(true);
     } else {
@@ -41,7 +45,7 @@ export function useChat() {
     }
   }, [hasLimitedMessages, remainingMessages, usedMessages, messageLimit]);
 
-  const checkCache = (query: string): string | null => {
+  const checkCache = useCallback((query: string): string | null => {
     const normalizedQuery = query.trim().toLowerCase();
     const now = Date.now();
     const expiryTime = CACHE_EXPIRY_HOURS * 60 * 60 * 1000;
@@ -52,9 +56,9 @@ export function useChat() {
     );
     
     return cachedItem ? cachedItem.response : null;
-  };
+  }, [responseCache]);
 
-  const updateCache = (query: string, response: string) => {
+  const updateCache = useCallback((query: string, response: string) => {
     const normalizedQuery = query.trim();
     const now = Date.now();
     
@@ -68,18 +72,61 @@ export function useChat() {
     }
     
     setResponseCache(newCache);
-  };
+  }, [responseCache, setResponseCache]);
 
-  const handleSelectPrompt = (prompt: string) => {
+  const handleSelectPrompt = useCallback((prompt: string) => {
     setInput(prompt);
-  };
+  }, []);
 
-  const handleSubmit = async (e: FormEvent) => {
+  const debouncedIncrementMessageUsage = useCallback(async (userId: string) => {
+    try {
+      const cacheKey = `message_usage_${userId}`;
+      
+      const { data, error: checkError } = await cachedSupabase.cachedSelect(
+        'message_usage',
+        '*',
+        cacheKey,
+        60000 // 1 minute cache
+      );
+      
+      if (checkError) {
+        throw checkError;
+      }
+      
+      const userUsage = data.find(item => item.user_id === userId);
+      
+      if (!userUsage) {
+        await supabase
+          .from('message_usage')
+          .insert({
+            user_id: userId,
+            messages_used: 1,
+            last_updated: new Date().toISOString()
+          });
+      } else {
+        await supabase
+          .from('message_usage')
+          .update({ 
+            messages_used: userUsage.messages_used + 1,
+            last_updated: new Date().toISOString()
+          })
+          .eq('user_id', userId);
+      }
+      
+      cachedSupabase.clearCache(cacheKey);
+      
+      return true;
+    } catch (error) {
+      console.error('Error incrementing message usage:', error);
+      return false;
+    }
+  }, []);
+
+  const handleSubmit = useCallback(async (e: FormEvent) => {
     e.preventDefault();
     
     if (!input.trim()) return;
     
-    // Check if user has remaining messages before proceeding
     if (hasLimitedMessages && remainingMessages <= 0 && usedMessages > 0) {
       setShowPaywall(true);
       return;
@@ -131,21 +178,21 @@ export function useChat() {
       
       setMessages(prev => [...prev, assistantMessage]);
       
-      // Increment used messages count if on a limited plan
       if (hasLimitedMessages) {
         const newUsedCount = usedMessages + 1;
         setUsedMessages(newUsedCount);
         
-        // Refresh subscription data to get updated message count
-        await refreshSubscription();
+        const now = Date.now();
+        if (now - lastRefreshTimeRef.current > SUBSCRIPTION_REFRESH_INTERVAL) {
+          await refreshSubscription();
+          lastRefreshTimeRef.current = now;
+        }
         
-        // Check if we should show warning or paywall message
         if (newUsedCount >= messageLimit) {
           toast.error("Message limit reached", {
             description: "You've used all your free messages. Please upgrade to continue.",
           });
           
-          // Show paywall after a short delay
           setTimeout(() => {
             setShowPaywall(true);
           }, 1500);
@@ -176,20 +223,20 @@ export function useChat() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [input, hasLimitedMessages, remainingMessages, usedMessages, checkCache, messageLimit, refreshSubscription, updateCache]);
 
-  const handleUpgrade = async (plan: string) => {
+  const handleUpgrade = useCallback(async (plan: string) => {
     toast.success("Upgrade successful!", {
       description: `You now have unlimited access to your PM Coach with the ${plan} plan.`,
     });
     
     setShowPaywall(false);
     await refreshSubscription();
-  };
+  }, [refreshSubscription]);
 
-  const handleLogin = () => {
+  const handleLogin = useCallback(() => {
     navigate('/signin');
-  };
+  }, [navigate]);
 
   return {
     messages,
