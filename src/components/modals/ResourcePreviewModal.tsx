@@ -56,6 +56,11 @@ const ResourcePreviewModal: React.FC<ResourcePreviewProps> = ({
     }
   };
 
+  // Function to split content into paragraphs
+  const formatContent = (text: string) => {
+    return text.split('\n\n');
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md md:max-w-xl">
@@ -80,26 +85,39 @@ const ResourcePreviewModal: React.FC<ResourcePreviewProps> = ({
               // Show full content for authenticated users
               <>
                 <p className="font-medium text-foreground">{previewContent}</p>
-                {content.split('\n\n').map((paragraph, i) => (
+                {formatContent(content).map((paragraph, i) => (
                   <p key={i} className="mb-4">{paragraph}</p>
                 ))}
               </>
             ) : (
-              // Show preview with blurred content for non-authenticated users
+              // Show extended preview with blurred content for non-authenticated users
               <>
                 <p className="mb-6">{previewContent}</p>
                 
-                <div className="relative mt-8 pt-6 border-t">
-                  <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground mb-4">
+                <div className="relative mt-4 pt-4 border-t">
+                  <div className="mb-6">
+                    {formatContent(content)[0]}
+                  </div>
+                  
+                  <div className="relative">
+                    <div className="bg-gradient-to-b from-transparent to-background/95 h-32 absolute -top-20 left-0 right-0 pointer-events-none"></div>
+                    <div className="blur-[2px] opacity-70 pointer-events-none mb-4">
+                      {formatContent(content)[1] || ""}
+                    </div>
+                    
+                    <div className="blur-[4px] opacity-40 pointer-events-none">
+                      <p className="mb-2">{formatContent(content)[2] || "When preparing for product management interviews, it's essential to have a structured approach that showcases both your analytical thinking and your practical experience..."}</p>
+                      <p className="mb-2">{"The most successful candidates demonstrate a clear understanding of product metrics and can articulate how they've used data to drive decisions in previous roles..."}</p>
+                    </div>
+                    
+                    <div className="blur-[6px] opacity-25 pointer-events-none">
+                      <p>{"Remember that interviewers are looking for your thought process as much as your final answer. Take your time, think through problems methodically, and don't be afraid to ask clarifying questions..."}</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground mt-8 mb-4 bg-muted/30 py-4 px-4 rounded-md border">
                     <Lock className="h-4 w-4" />
                     <span>Sign up to access the full content</span>
-                  </div>
-                  <div className="bg-gradient-to-b from-transparent to-background/90 h-24 absolute -top-24 left-0 right-0 pointer-events-none"></div>
-                  <div className="blur-[3px] opacity-40 pointer-events-none">
-                    {content.split('\n\n').slice(0, 2).map((paragraph, i) => (
-                      <p key={i} className="mb-4">{paragraph}</p>
-                    ))}
-                    <p>...</p>
                   </div>
                 </div>
               </>
