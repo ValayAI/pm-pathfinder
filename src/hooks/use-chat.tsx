@@ -1,3 +1,4 @@
+
 import { useState, FormEvent, useEffect, useCallback, useRef } from "react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
@@ -21,10 +22,10 @@ export function useChat() {
   const [showPaywall, setShowPaywall] = useState(false);
   const navigate = useNavigate();
   
-  const { subscription, getRemainingMessages, refreshSubscription } = useSubscription();
-  const remainingMessages = getRemainingMessages();
-  const messageLimit = subscription?.messageLimit || 5;
-  const hasLimitedMessages = subscription?.planId === 'free' || subscription?.planId === 'starter';
+  const { subscription, getRemainingCredits, refreshSubscription } = useSubscription();
+  const remainingMessages = getRemainingCredits();
+  const messageLimit = subscription?.creditLimit || 5;
+  const hasLimitedMessages = subscription?.planId === 'free' || subscription?.planId === 'starter' || subscription?.planId === 'single';
   const isPremium = subscription?.planId === 'popular' || subscription?.planId === 'pro';
   
   const lastRefreshTimeRef = useRef<number>(Date.now());
