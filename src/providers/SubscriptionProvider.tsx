@@ -6,11 +6,11 @@ import { toast } from 'sonner';
 import { PLAN_FEATURES } from '@/utils/subscriptionManager';
 import { cleanupUserSubscriptions } from '@/utils/subscriptionCleanup';
 
-export type PlanType = 'free' | 'starter' | 'popular' | 'pro';
+export type PlanType = 'free' | 'single' | 'starter' | 'popular' | 'pro';
 
 export interface SubscriptionData {
   planId: PlanType;
-  messageLimit: number;
+  creditLimit: number;
   features: string[];
   expiresAt: Date | null;
 }
@@ -19,20 +19,20 @@ interface SubscriptionContextType {
   subscription: SubscriptionData | null;
   isLoading: boolean;
   hasFeature: (feature: string) => boolean;
-  getRemainingMessages: () => number;
+  getRemainingCredits: () => number;
   isFeatureEnabled: (feature: string) => boolean;
   refreshSubscription: () => Promise<void>;
 }
 
 const defaultSubscription: SubscriptionData = {
   planId: 'free',
-  messageLimit: 5,
+  creditLimit: 0,
   features: PLAN_FEATURES.free.features,
   expiresAt: null
 };
 
 const SUBSCRIPTION_CACHE_KEY = 'user_subscription';
-const MESSAGE_USAGE_CACHE_KEY = 'user_message_usage';
+const CREDIT_USAGE_CACHE_KEY = 'user_credit_usage';
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
 const SubscriptionContext = createContext<SubscriptionContextType | undefined>(undefined);
@@ -41,7 +41,7 @@ export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ 
   const [user, setUser] = useState<any>(null);
   const [subscription, setSubscription] = useState<SubscriptionData | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [messagesUsed, setMessagesUsed] = useState<number>(0);
+  const [creditsUsed, setCreditsUsed] = useState<number>(0);
   const [lastFetchTime, setLastFetchTime] = useState<number>(0);
 
   // Get user from auth context if available, otherwise null
@@ -92,9 +92,9 @@ export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ 
         }),
           
         cachedSupabase.cachedSelect(
-          'message_usage',
-          'messages_used',
-          `${MESSAGE_USAGE_CACHE_KEY}_${user.id}`,
+          'credit_usage',
+          'credits_used',
+          `${CREDIT_USAGE_CACHE_KEY}_${user.id}`,
           CACHE_DURATION
         ).then(result => {
           if (result.error) throw result.error;
@@ -103,22 +103,22 @@ export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ 
       ]);
       
       if (usageResponse) {
-        setMessagesUsed(usageResponse.messages_used);
+        setCreditsUsed(usageResponse.credits_used);
       } else {
-        // Initialize message usage if not found
+        // Initialize credit usage if not found
         try {
           await supabase
-            .from('message_usage')
+            .from('credit_usage')
             .insert({
               user_id: user.id,
-              messages_used: 0
+              credits_used: 0
             }).throwOnError();
           
-          setMessagesUsed(0);
-          // Clear the message usage cache since we've updated it
-          cachedSupabase.clearCache(`${MESSAGE_USAGE_CACHE_KEY}_${user.id}`);
+          setCreditsUsed(0);
+          // Clear the credit usage cache since we've updated it
+          cachedSupabase.clearCache(`${CREDIT_USAGE_CACHE_KEY}_${user.id}`);
         } catch (error) {
-          console.error("Failed to initialize message usage:", error);
+          console.error("Failed to initialize credit usage:", error);
         }
       }
       
@@ -141,14 +141,14 @@ export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ 
         // Create subscription data based on plan
         const subscriptionInfo: SubscriptionData = {
           planId: planId,
-          messageLimit: subscriptionResponse.message_limit ?? (planId === 'starter' ? 50 : planId === 'free' ? 10 : Infinity),
+          creditLimit: subscriptionResponse.credits_limit ?? PLAN_FEATURES[planId].creditLimit,
           features: featuresArray,
           expiresAt: subscriptionResponse.expires_at ? new Date(subscriptionResponse.expires_at) : null
         };
         
         setSubscription(subscriptionInfo);
       } else {
-        // No active subscriptions found - create default free subscription
+        // No active subscriptions found - create default free subscription in DB
         try {
           // If no active subscription found, create default free subscription in DB
           await Promise.all([
@@ -157,22 +157,22 @@ export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ 
               .insert({
                 user_id: user.id,
                 plan_id: 'free',
-                message_limit: 10,
+                credits_limit: 0,
                 features: PLAN_FEATURES.free.features
               }),
               
-            // Initialize message usage counter if not exists
+            // Initialize credit usage counter if not exists
             supabase
-              .from('message_usage')
+              .from('credit_usage')
               .upsert({
                 user_id: user.id,
-                messages_used: 0
+                credits_used: 0
               }).throwOnError()
           ]);
           
           // Clear caches since we've updated these tables
           cachedSupabase.clearCache(`${SUBSCRIPTION_CACHE_KEY}_${user.id}`);
-          cachedSupabase.clearCache(`${MESSAGE_USAGE_CACHE_KEY}_${user.id}`);
+          cachedSupabase.clearCache(`${CREDIT_USAGE_CACHE_KEY}_${user.id}`);
         } catch (error) {
           console.error('Error creating default subscription data:', error);
         }
@@ -211,8 +211,8 @@ export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ 
     return subscription.features.includes(feature);
   }, [subscription]);
 
-  const getRemainingMessages = useCallback((): number => {
-    if (!user) return 0; // No messages for non-authenticated users
+  const getRemainingCredits = useCallback((): number => {
+    if (!user) return 0; // No credits for non-authenticated users
     if (!subscription) return 0;
     
     // For unlimited plans, return Infinity
@@ -221,8 +221,8 @@ export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ 
     }
     
     // For limited plans, calculate remaining based on usage from DB
-    return Math.max(subscription.messageLimit - messagesUsed, 0);
-  }, [user, subscription, messagesUsed]);
+    return Math.max(subscription.creditLimit - creditsUsed, 0);
+  }, [user, subscription, creditsUsed]);
 
   const isFeatureEnabled = useCallback((feature: string): boolean => {
     if (!user) return false; // No features for non-authenticated users
@@ -236,10 +236,10 @@ export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ 
     subscription,
     isLoading,
     hasFeature,
-    getRemainingMessages,
+    getRemainingCredits,
     isFeatureEnabled,
     refreshSubscription
-  }), [subscription, isLoading, hasFeature, getRemainingMessages, isFeatureEnabled, refreshSubscription]);
+  }), [subscription, isLoading, hasFeature, getRemainingCredits, isFeatureEnabled, refreshSubscription]);
 
   return (
     <SubscriptionContext.Provider value={contextValue}>
