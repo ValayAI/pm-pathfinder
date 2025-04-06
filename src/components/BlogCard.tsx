@@ -87,7 +87,7 @@ const BlogCard = ({ id, title, description, content, category, icon }: BlogCardP
             className="w-full"
             onClick={() => setIsModalOpen(true)}
           >
-            Try Demo
+            Read Article
           </Button>
         </CardFooter>
       </Card>
