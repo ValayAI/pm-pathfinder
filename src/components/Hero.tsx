@@ -77,6 +77,16 @@ export function Hero() {
             Product Management Excellence at Your Fingertips
           </motion.h1>
           
+          {/* Added tagline */}
+          <motion.h2
+            className="mt-4 text-xl sm:text-2xl md:text-3xl font-medium bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: loaded ? 1 : 0, y: loaded ? 0 : 20 }}
+            transition={{ duration: 0.7, delay: 0.15 }}
+          >
+            Nail Your PM Interviews. Sharpen Strategy. Get Hired Faster.
+          </motion.h2>
+          
           {/* Subheadline */}
           <motion.p 
             className="mt-6 text-base sm:text-lg md:text-xl text-muted-foreground max-w-xl mx-auto"
