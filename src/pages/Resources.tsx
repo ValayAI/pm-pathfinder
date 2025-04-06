@@ -5,12 +5,13 @@ import Footer from '../components/Footer';
 import EmailSignup from "../components/EmailSignup";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { BookOpen, FileText, Video, Download, Eye, Wand2, Calendar, DollarSign, Sparkles, BookMarked } from "lucide-react";
+import { BookOpen, FileText, Video, Download, Eye, Wand2, Calendar, DollarSign, Sparkles, BookMarked, Brain, Code, Target, MessageSquare, LineChart, Users } from "lucide-react";
 import { useAuth } from "@/providers/AuthProvider";
 import ResourcesTeaser from "@/components/teasers/ResourcesTeaser";
 import { Badge } from "@/components/ui/badge";
 import ResourcePreviewModal from "@/components/modals/ResourcePreviewModal";
 import { toast } from "sonner";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface ResourceItem {
   title: string;
@@ -28,20 +29,16 @@ const Resources = () => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [selectedResource, setSelectedResource] = useState<ResourceItem | null>(null);
   
-  // Debug effect to track modal state changes
   useEffect(() => {
-    console.log("Resources component - previewOpen changed to:", previewOpen);
-    if (previewOpen) {
-      console.log("Selected resource:", selectedResource?.title);
-    }
-  }, [previewOpen, selectedResource]);
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  }, []);
   
   const openPreview = (resource: ResourceItem) => {
-    console.log("Opening preview for:", resource.title);
     setSelectedResource(resource);
     setPreviewOpen(true);
-    // Add toast for additional debugging
-    toast.info(`Opening preview for ${resource.title}`);
   };
   
   if (!user) {
@@ -55,7 +52,8 @@ const Resources = () => {
       </div>
     );
   }
-  
+
+  // Main resources
   const resources: ResourceItem[] = [
     {
       title: "Product Requirement Document Template",
@@ -112,7 +110,87 @@ const Resources = () => {
       fullContent: "Successful A/B testing requires a methodical approach. This template guides you through the entire process - from forming hypotheses to analyzing results to implementing winners. It helps you avoid common pitfalls like testing too many variables or stopping tests too early.\n\nThe template includes:\n\nHypothesis formation worksheet\nSample size calculator\nTest duration estimator\nStatistical significance explainer\nCommon A/B testing pitfalls and how to avoid them\nImplementation checklist\n\nBy following this structured approach, you'll ensure your A/B tests provide reliable insights that lead to meaningful product improvements rather than chasing random fluctuations in the data."
     },
   ];
-
+  
+  // Product Discovery resources
+  const discoveryResources: ResourceItem[] = [
+    {
+      title: "Customer Journey Mapping",
+      type: "Template",
+      description: "Create detailed customer journey maps to identify pain points and opportunities",
+      icon: <Users className="h-8 w-8 text-primary" />,
+      action: "Download",
+      previewContent: "Customer journey maps visualize the entire user experience with your product or service. This template helps you document each touchpoint and identify opportunities to improve the customer experience.",
+      fullContent: "Customer journey maps visualize the entire user experience with your product or service. This template helps you document each touchpoint and identify opportunities to improve the customer experience.\n\nThe template includes sections for:\n\nUser personas and scenarios\nTouchpoints and channels\nUser actions, thoughts, and emotions\nPain points and friction areas\nOpportunity identification\nPrioritization framework\n\nBy mapping the complete customer journey, you can identify moments that matter most to users and focus your product improvements where they'll have the greatest impact. This exercise is particularly valuable when done collaboratively with cross-functional teams."
+    },
+    {
+      title: "Jobs-to-be-Done Framework",
+      type: "Guide",
+      description: "Learn how to use JTBD to uncover your customers' true motivations",
+      icon: <Target className="h-8 w-8 text-primary" />,
+      action: "Read Guide",
+      previewContent: "The Jobs-to-be-Done framework focuses on understanding what 'job' customers are 'hiring' your product to do. This perspective helps you build features that directly address user needs rather than chasing competitor features.",
+      fullContent: "The Jobs-to-be-Done framework focuses on understanding what 'job' customers are 'hiring' your product to do. This perspective helps you build features that directly address user needs rather than chasing competitor features.\n\nThis comprehensive guide covers:\n\nCore JTBD theory and principles\nHow to identify functional, emotional and social jobs\nJTBD interview techniques and questions\nTranslating jobs into product requirements\nUsing JTBD for marketing and positioning\n\nBy understanding the progress your customers are trying to make in particular circumstances, you can design solutions that meet their needs better than alternatives and command premium pricing."
+    },
+    {
+      title: "User Research Planning Kit",
+      type: "Template",
+      description: "Templates and checklists for planning effective user research sessions",
+      icon: <Brain className="h-8 w-8 text-primary" />,
+      showSampleGenerate: true,
+      previewContent: "Effective user research starts with proper planning. This kit includes everything you need to plan, execute, and synthesize findings from user research sessions - from screeners to interview guides to analysis templates.",
+      fullContent: "Effective user research starts with proper planning. This kit includes everything you need to plan, execute, and synthesize findings from user research sessions.\n\nThe kit includes:\n\nResearch planning worksheet\nParticipant screener templates\nRecruitment email templates\nDiscovery interview script templates\nUsability testing guides\nResearch synthesis frameworks\nStakeholder presentation template\n\nThese resources help ensure your research is focused on answering key questions, participants are properly screened, sessions run smoothly, and insights are effectively communicated to stakeholders and translated into action."
+    },
+    {
+      title: "Opportunity Solution Trees",
+      type: "Guide",
+      description: "Visual framework for connecting user needs to potential solutions",
+      icon: <LineChart className="h-8 w-8 text-primary" />,
+      action: "Read Guide",
+      previewContent: "Opportunity Solution Trees help you visually connect business objectives to user needs and potential solutions. This framework ensures you're exploring multiple solutions to each opportunity while staying focused on outcomes.",
+      fullContent: "Opportunity Solution Trees help you visually connect business objectives to user needs and potential solutions. This framework ensures you're exploring multiple solutions to each opportunity while staying focused on outcomes.\n\nThis guide covers:\n\nHow to structure your tree (desired outcome → opportunities → solutions → experiments)\nFacilitating collaborative OST workshops\nBalancing divergent and convergent thinking\nUsing the framework for continuous discovery\nMaking evidence-based decisions using the OST\n\nBy visualizing your thinking in this way, you can ensure your team explores sufficient solution options for each critical user need while maintaining clear line-of-sight to business objectives."
+    }
+  ];
+  
+  // Collaboration & Communication resources
+  const communicationResources: ResourceItem[] = [
+    {
+      title: "Product Presentation Templates",
+      type: "Template",
+      description: "Professional presentation templates for product reviews and roadmap presentations",
+      icon: <FileText className="h-8 w-8 text-primary" />,
+      showSampleGenerate: true,
+      previewContent: "These professionally designed presentation templates help you effectively communicate product strategy, roadmaps, and feature launches to executives, stakeholders, and team members.",
+      fullContent: "These professionally designed presentation templates help you effectively communicate product strategy, roadmaps, and feature launches to executives, stakeholders, and team members.\n\nThe bundle includes templates for:\n\nQuarterly business reviews\nProduct roadmap presentations\nFeature launch decks\nUser research findings\nCompetitive analysis\nMetrics dashboards\n\nEach template includes example slides, suggested talking points, and visualization ideas to help communicate complex product concepts clearly. These templates save time while ensuring you present information in a structured, visually appealing way that drives alignment and decision-making."
+    },
+    {
+      title: "Stakeholder Communication Guide",
+      type: "Guide",
+      description: "Strategies for effective communication with different stakeholder groups",
+      icon: <MessageSquare className="h-8 w-8 text-primary" />,
+      action: "Read Guide",
+      previewContent: "Different stakeholders need different types of communication. This guide helps you tailor your communication style and content for executives, engineers, designers, sales, and other key stakeholders to build trust and alignment.",
+      fullContent: "Different stakeholders need different types of communication. This guide helps you tailor your communication style and content for executives, engineers, designers, sales, and other key stakeholders to build trust and alignment.\n\nFor each stakeholder group, we cover:\n\nKey motivations and concerns\nPreferred communication channels and frequency\nLevel of detail required\nHow to frame discussions and decisions\nCommon pitfalls and how to avoid them\n\nThe guide also includes templates for status updates, decision memos, and meeting agendas customized for different audiences. By adapting your communication to each stakeholder's needs, you'll build stronger relationships and drive better product outcomes."
+    },
+    {
+      title: "Product Requirements API Documentation",
+      type: "Template",
+      description: "Template for creating clear API documentation for developers",
+      icon: <Code className="h-8 w-8 text-primary" />,
+      action: "Download",
+      previewContent: "Clear API documentation is crucial for developer adoption and efficiency. This template provides a structured format for documenting APIs in a way that's comprehensive yet easy to understand.",
+      fullContent: "Clear API documentation is crucial for developer adoption and efficiency. This template provides a structured format for documenting APIs in a way that's comprehensive yet easy to understand.\n\nThe template includes sections for:\n\nAPI overview and architecture\nAuthentication and authorization\nEndpoint documentation with request/response examples\nError codes and handling\nRate limiting and pagination\nImplementation guidelines and best practices\nSDK examples in multiple languages\n\nFollowing this template ensures your API documentation is complete, consistent, and developer-friendly. Good documentation reduces onboarding time, support requests, and implementation errors while improving developer satisfaction."
+    },
+    {
+      title: "Cross-Functional Collaboration Playbook",
+      type: "Guide",
+      description: "Strategies for effective collaboration across product, design, and engineering teams",
+      icon: <Users className="h-8 w-8 text-primary" />,
+      action: "Read Guide",
+      previewContent: "Strong cross-functional collaboration is essential for product success. This playbook provides frameworks, rituals, and tools to improve how product, design, and engineering teams work together.",
+      fullContent: "Strong cross-functional collaboration is essential for product success. This playbook provides frameworks, rituals, and tools to improve how product, design, and engineering teams work together.\n\nThe playbook covers:\n\nTeam structure and roles/responsibilities\nDecision frameworks (RACI, RAPID, etc.)\nEffective meeting patterns and rituals\nTools and documentation standards\nConflict resolution techniques\nRemote/hybrid collaboration best practices\n\nBy establishing clear processes for how cross-functional teams collaborate, you can reduce friction, speed up decision-making, and build better products faster. The playbook includes practical examples from high-performing product teams that you can adapt to your organization."
+    }
+  ];
+  
   return (
     <div className="min-h-screen flex flex-col relative">
       <Navbar />
@@ -126,58 +204,157 @@ const Resources = () => {
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-            {resources.map((resource, index) => (
-              <Card key={index} className="h-full flex flex-col group transition-all hover:shadow-lg duration-300 border border-muted hover:border-indigo-100 dark:hover:border-indigo-900/50">
-                <CardHeader className="pb-3 pt-6 px-6">
-                  <div className="flex justify-between items-start mb-2">
-                    <div className="bg-indigo-50 dark:bg-indigo-900/20 p-3 rounded-lg group-hover:bg-indigo-100 dark:group-hover:bg-indigo-900/30 transition-colors">
-                      {resource.icon}
-                    </div>
-                    <Badge variant="outline" className="bg-indigo-50/50 dark:bg-indigo-900/10 hover:bg-indigo-50 text-indigo-700 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800">
-                      {resource.type}
-                    </Badge>
-                  </div>
-                  <CardTitle className="mt-4 text-xl">{resource.title}</CardTitle>
-                  <CardDescription className="text-base">{resource.description}</CardDescription>
-                </CardHeader>
-                <CardContent className="pt-2 mt-auto pb-6 px-6">
-                  {resource.showSampleGenerate ? (
-                    <div className="flex flex-col space-y-3">
-                      <Button 
-                        variant="outline" 
-                        className="w-full flex items-center justify-center gap-1.5 hover:bg-muted/50"
-                        onClick={() => {
-                          console.log("Preview button clicked for:", resource.title);
-                          openPreview(resource);
-                        }}
-                      >
-                        <Eye className="h-4 w-4" />
-                        Preview
-                      </Button>
-                      <Button variant="default" className="w-full flex items-center justify-center gap-1.5 bg-indigo-600 hover:bg-indigo-700">
-                        <Wand2 className="h-4 w-4" />
-                        Generate
-                      </Button>
-                    </div>
-                  ) : (
-                    <Button 
-                      variant="secondary" 
-                      className="w-full hover:bg-indigo-50/50 dark:hover:bg-indigo-900/20"
-                      onClick={() => {
-                        console.log("Action button clicked for:", resource.title);
-                        openPreview(resource);
-                      }}
-                    >
-                      <Eye className="h-4 w-4 mr-2" />
-                      {resource.action}
-                    </Button>
-                  )}
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-          
+          <Tabs defaultValue="essential" className="w-full mb-10">
+            <TabsList className="grid w-full max-w-md mx-auto grid-cols-3">
+              <TabsTrigger value="essential">Essential</TabsTrigger>
+              <TabsTrigger value="discovery">Discovery</TabsTrigger>
+              <TabsTrigger value="collaboration">Collaboration</TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="essential" className="mt-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {resources.map((resource, index) => (
+                  <Card key={index} className="h-full flex flex-col group transition-all hover:shadow-lg duration-300 border border-muted hover:border-indigo-100 dark:hover:border-indigo-900/50">
+                    <CardHeader className="pb-3 pt-6 px-6">
+                      <div className="flex justify-between items-start mb-2">
+                        <div className="bg-indigo-50 dark:bg-indigo-900/20 p-3 rounded-lg group-hover:bg-indigo-100 dark:group-hover:bg-indigo-900/30 transition-colors">
+                          {resource.icon}
+                        </div>
+                        <Badge variant="outline" className="bg-indigo-50/50 dark:bg-indigo-900/10 hover:bg-indigo-50 text-indigo-700 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800">
+                          {resource.type}
+                        </Badge>
+                      </div>
+                      <CardTitle className="mt-4 text-xl">{resource.title}</CardTitle>
+                      <CardDescription className="text-base">{resource.description}</CardDescription>
+                    </CardHeader>
+                    <CardContent className="pt-2 mt-auto pb-6 px-6">
+                      {resource.showSampleGenerate ? (
+                        <div className="flex flex-col space-y-3">
+                          <Button 
+                            variant="outline" 
+                            className="w-full flex items-center justify-center gap-1.5 hover:bg-muted/50"
+                            onClick={() => openPreview(resource)}
+                          >
+                            <Eye className="h-4 w-4" />
+                            Preview
+                          </Button>
+                          <Button variant="default" className="w-full flex items-center justify-center gap-1.5 bg-indigo-600 hover:bg-indigo-700">
+                            <Wand2 className="h-4 w-4" />
+                            Generate
+                          </Button>
+                        </div>
+                      ) : (
+                        <Button 
+                          variant="secondary" 
+                          className="w-full hover:bg-indigo-50/50 dark:hover:bg-indigo-900/20"
+                          onClick={() => openPreview(resource)}
+                        >
+                          <Eye className="h-4 w-4 mr-2" />
+                          {resource.action}
+                        </Button>
+                      )}
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="discovery" className="mt-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {discoveryResources.map((resource, index) => (
+                  <Card key={index} className="h-full flex flex-col group transition-all hover:shadow-lg duration-300 border border-muted hover:border-purple-100 dark:hover:border-purple-900/50">
+                    <CardHeader className="pb-3 pt-6 px-6">
+                      <div className="flex justify-between items-start mb-2">
+                        <div className="bg-purple-50 dark:bg-purple-900/20 p-3 rounded-lg group-hover:bg-purple-100 dark:group-hover:bg-purple-900/30 transition-colors">
+                          {resource.icon}
+                        </div>
+                        <Badge variant="outline" className="bg-purple-50/50 dark:bg-purple-900/10 hover:bg-purple-50 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800">
+                          {resource.type}
+                        </Badge>
+                      </div>
+                      <CardTitle className="mt-4 text-xl">{resource.title}</CardTitle>
+                      <CardDescription className="text-base">{resource.description}</CardDescription>
+                    </CardHeader>
+                    <CardContent className="pt-2 mt-auto pb-6 px-6">
+                      {resource.showSampleGenerate ? (
+                        <div className="flex flex-col space-y-3">
+                          <Button 
+                            variant="outline" 
+                            className="w-full flex items-center justify-center gap-1.5 hover:bg-muted/50"
+                            onClick={() => openPreview(resource)}
+                          >
+                            <Eye className="h-4 w-4" />
+                            Preview
+                          </Button>
+                          <Button variant="default" className="w-full flex items-center justify-center gap-1.5 bg-purple-600 hover:bg-purple-700">
+                            <Wand2 className="h-4 w-4" />
+                            Generate
+                          </Button>
+                        </div>
+                      ) : (
+                        <Button 
+                          variant="secondary" 
+                          className="w-full hover:bg-purple-50/50 dark:hover:bg-purple-900/20"
+                          onClick={() => openPreview(resource)}
+                        >
+                          <Eye className="h-4 w-4 mr-2" />
+                          {resource.action}
+                        </Button>
+                      )}
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="collaboration" className="mt-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {communicationResources.map((resource, index) => (
+                  <Card key={index} className="h-full flex flex-col group transition-all hover:shadow-lg duration-300 border border-muted hover:border-blue-100 dark:hover:border-blue-900/50">
+                    <CardHeader className="pb-3 pt-6 px-6">
+                      <div className="flex justify-between items-start mb-2">
+                        <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg group-hover:bg-blue-100 dark:group-hover:bg-blue-900/30 transition-colors">
+                          {resource.icon}
+                        </div>
+                        <Badge variant="outline" className="bg-blue-50/50 dark:bg-blue-900/10 hover:bg-blue-50 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800">
+                          {resource.type}
+                        </Badge>
+                      </div>
+                      <CardTitle className="mt-4 text-xl">{resource.title}</CardTitle>
+                      <CardDescription className="text-base">{resource.description}</CardDescription>
+                    </CardHeader>
+                    <CardContent className="pt-2 mt-auto pb-6 px-6">
+                      {resource.showSampleGenerate ? (
+                        <div className="flex flex-col space-y-3">
+                          <Button 
+                            variant="outline" 
+                            className="w-full flex items-center justify-center gap-1.5 hover:bg-muted/50"
+                            onClick={() => openPreview(resource)}
+                          >
+                            <Eye className="h-4 w-4" />
+                            Preview
+                          </Button>
+                          <Button variant="default" className="w-full flex items-center justify-center gap-1.5 bg-blue-600 hover:bg-blue-700">
+                            <Wand2 className="h-4 w-4" />
+                            Generate
+                          </Button>
+                        </div>
+                      ) : (
+                        <Button 
+                          variant="secondary" 
+                          className="w-full hover:bg-blue-50/50 dark:hover:bg-blue-900/20"
+                          onClick={() => openPreview(resource)}
+                        >
+                          <Eye className="h-4 w-4 mr-2" />
+                          {resource.action}
+                        </Button>
+                      )}
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </TabsContent>
+          </Tabs>
           
           <div className="mt-16 mb-10">
             <div className="text-center mb-10">
@@ -334,13 +511,10 @@ const Resources = () => {
       </main>
       <Footer />
     
-      {/* Force the modal to be fully mounted in the DOM regardless of selection */}
+      {/* ResourcePreviewModal is always in the DOM */}
       <ResourcePreviewModal
         open={previewOpen}
-        onOpenChange={(open) => {
-          console.log("Modal onOpenChange called with:", open);
-          setPreviewOpen(open);
-        }}
+        onOpenChange={setPreviewOpen}
         title={selectedResource?.title || ""}
         type={selectedResource?.type || ""}
         previewContent={selectedResource?.previewContent || ""}

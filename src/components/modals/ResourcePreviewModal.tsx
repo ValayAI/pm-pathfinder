@@ -32,15 +32,7 @@ const ResourcePreviewModal: React.FC<ResourcePreviewProps> = ({
   content,
   previewContent,
 }) => {
-  console.log("ResourcePreviewModal rendering with open:", open);
   const { user } = useAuth();
-  
-  useEffect(() => {
-    console.log("ResourcePreviewModal props changed - open state:", open);
-    if (open) {
-      toast.info("Modal should be visible now");
-    }
-  }, [open, title]);
   
   const getIcon = () => {
     switch (type) {
@@ -81,7 +73,7 @@ const ResourcePreviewModal: React.FC<ResourcePreviewProps> = ({
               // Show full content for authenticated users
               <>
                 <p className="font-medium text-foreground">{previewContent}</p>
-                {content.split('\n').map((paragraph, i) => (
+                {content.split('\n\n').map((paragraph, i) => (
                   <p key={i} className="mb-4">{paragraph}</p>
                 ))}
               </>
@@ -97,7 +89,7 @@ const ResourcePreviewModal: React.FC<ResourcePreviewProps> = ({
                   </div>
                   <div className="bg-gradient-to-b from-transparent to-background/95 h-20 absolute -top-20 left-0 right-0 pointer-events-none"></div>
                   <div className="blur-[2px] opacity-30 pointer-events-none">
-                    {content.split('\n').map((paragraph, i) => (
+                    {content.split('\n\n').slice(0, 2).map((paragraph, i) => (
                       <p key={i} className="mb-4">{paragraph}</p>
                     ))}
                   </div>
