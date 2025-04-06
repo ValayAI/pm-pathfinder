@@ -1,9 +1,6 @@
-
 import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import Dashboard from '@/components/Dashboard';
 import BlogCard from '@/components/BlogCard';
-import { Button } from '@/components/ui/button';
 
 // Blog post data
 const blogPosts = [
@@ -176,21 +173,6 @@ const Blog = () => {
               icon={post.icon as 'interview' | 'strategic' | 'planning'}
             />
           ))}
-        </div>
-        
-        <div className="mt-16 text-center">
-          <h2 className="text-2xl font-bold mb-4">Ready to take your PM career to the next level?</h2>
-          <p className="text-muted-foreground mb-6 max-w-xl mx-auto">
-            Access personalized coaching, frameworks, and tools to excel in your product management career.
-          </p>
-          <div className="flex justify-center gap-4">
-            <Button variant="outline" asChild>
-              <Link to="/resources">Browse Resources</Link>
-            </Button>
-            <Button asChild>
-              <Link to="/signup">Get Started for Free</Link>
-            </Button>
-          </div>
         </div>
       </div>
     </Dashboard>

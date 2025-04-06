@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
@@ -84,7 +83,7 @@ const BlogCard = ({ id, title, description, content, category, icon }: BlogCardP
           <p className="text-muted-foreground mb-4">{description}</p>
         </CardContent>
         
-        <CardFooter className="mt-auto pt-0 flex flex-col gap-3">
+        <CardFooter className="mt-auto pt-0">
           <Button 
             variant="outline" 
             className="w-full flex items-center justify-center"
@@ -92,17 +91,6 @@ const BlogCard = ({ id, title, description, content, category, icon }: BlogCardP
           >
             Read Article <ArrowRight className="ml-1.5 h-4 w-4" />
           </Button>
-          
-          {!user && (
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              className="w-full text-sm text-primary hover:text-primary"
-              asChild
-            >
-              <Link to="/sign-up">Sign up for more PM resources</Link>
-            </Button>
-          )}
         </CardFooter>
       </Card>
       
