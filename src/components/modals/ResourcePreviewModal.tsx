@@ -135,21 +135,24 @@ const ResourcePreviewModal: React.FC<ResourcePreviewProps> = ({
           </div>
         </div>
         
-        {/* Updated footer to ensure buttons are visible */}
-        <DialogFooter className="flex flex-wrap sm:flex-row justify-between gap-4 pt-4 border-t mt-4">
-          <Button 
-            variant="outline"
-            onClick={() => onOpenChange(false)}
-          >
-            Close Preview
-          </Button>
-          
-          {!user && (
-            <Button asChild className="w-full sm:w-auto">
-              <Link to="/signup">Sign Up for Full Access</Link>
+        {/* Fixed footer styling to ensure buttons are always visible */}
+        <div className="border-t pt-6 mt-6">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-3">
+            <Button 
+              variant="outline"
+              onClick={() => onOpenChange(false)}
+              className="w-full sm:w-auto"
+            >
+              Close Preview
             </Button>
-          )}
-        </DialogFooter>
+            
+            {!user && (
+              <Button asChild className="w-full sm:w-auto">
+                <Link to="/signup">Sign Up for Full Access</Link>
+              </Button>
+            )}
+          </div>
+        </div>
       </DialogContent>
     </Dialog>
   );
