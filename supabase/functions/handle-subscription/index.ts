@@ -44,35 +44,33 @@ serve(async (req) => {
     // Define plan specifics
     const planFeatures = {
       single: {
-        features: ['1 PM Power Hour', 'Basic question assistance'],
-        messageLimit: 1,
+        features: ['1 Coaching Credit', 'Basic question assistance', 'Try before you buy'],
+        creditLimit: 1,
         expiresAt: null, // single session doesn't expire
       },
       starter: {
-        features: ['🎁 2 Free Sessions', '50 PM Power Hours', 'Interview preparation toolkit'],
-        messageLimit: 50,
+        features: ['3 Coaching Credits', 'Interview preparation toolkit', 'Basic career guidance'],
+        creditLimit: 3,
         expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days
       },
       popular: {
         features: [
-          '🎁 5 Free Sessions',
-          'Unlimited PM Power Hours',
+          '10 Coaching Credits + 5 Bonus',
           'Roadmaps & backlogs templates',
           'Strategy frameworks library',
           'Resume & interview coaching'
         ],
-        messageLimit: null, // unlimited
+        creditLimit: 15, // 10 base + 5 bonus
         expiresAt: null, // no expiry
       },
       pro: {
         features: [
-          '🎁 10 Free Sessions',
-          'Everything in Execution Pack',
+          '20 Coaching Credits + 10 Bonus',
           '1-on-1 PM coaching call',
           'Personalized resume review',
           'Full product toolkit access'
         ],
-        messageLimit: null, // unlimited
+        creditLimit: 30, // 20 base + 10 bonus
         expiresAt: null, // no expiry
       }
     };
@@ -105,7 +103,7 @@ serve(async (req) => {
       .insert({
         user_id: userId,
         plan_id: planId,
-        message_limit: selectedPlan.messageLimit,
+        credits_limit: selectedPlan.creditLimit,
         features: selectedPlan.features,
         expires_at: selectedPlan.expiresAt,
         active: true
@@ -116,14 +114,14 @@ serve(async (req) => {
       throw insertError;
     }
     
-    // Reset used messages counter
+    // Reset used credits counter
     const { error: resetError } = await supabaseClient
-      .from('message_usage')
-      .update({ messages_used: 0 })
+      .from('credit_usage')
+      .update({ credits_used: 0 })
       .eq('user_id', userId);
     
     if (resetError) {
-      console.error('Error resetting message usage:', resetError);
+      console.error('Error resetting credit usage:', resetError);
     }
     
     // Log the activity

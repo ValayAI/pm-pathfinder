@@ -1,4 +1,3 @@
-
 /**
  * Centralized utilities for subscription management
  */
@@ -12,18 +11,18 @@ import { PlanType } from '@/components/subscription/PlanCard';
  */
 export const PLAN_FEATURES = {
   free: {
-    features: ['Basic chat access', 'Limited messages'],
-    messageLimit: 5,
+    features: ['Basic chat access', 'Limited coaching'],
+    creditLimit: 0,
     expiresAt: null,
   },
   single: {
-    features: ['1 PM Power Hour', 'Basic question assistance'],
-    messageLimit: 1,
+    features: ['1 Coaching Credit', 'Basic question assistance', 'Try before you buy'],
+    creditLimit: 1,
     expiresAt: null, // single session doesn't expire
   },
   starter: {
-    features: ['🎁 2 Free Sessions', '50 PM Power Hours', 'Interview preparation toolkit'],
-    messageLimit: 50,
+    features: ['3 Coaching Credits', 'Interview preparation toolkit', 'Basic career guidance'],
+    creditLimit: 3,
     expiresAt: (date: Date) => {
       const expiryDate = new Date(date);
       expiryDate.setDate(expiryDate.getDate() + 30);
@@ -32,24 +31,22 @@ export const PLAN_FEATURES = {
   },
   popular: {
     features: [
-      '🎁 5 Free Sessions',
-      'Unlimited PM Power Hours',
+      '10 Coaching Credits + 5 Bonus',
       'Roadmaps & backlogs templates',
       'Strategy frameworks library',
       'Resume & interview coaching'
     ],
-    messageLimit: null, // unlimited
+    creditLimit: 15, // 10 + 5 bonus
     expiresAt: null, // no expiry
   },
   pro: {
     features: [
-      '🎁 10 Free Sessions',
-      'Everything in Execution Pack',
+      '20 Coaching Credits + 10 Bonus',
       '1-on-1 PM coaching call',
       'Personalized resume review',
       'Full product toolkit access'
     ],
-    messageLimit: null, // unlimited
+    creditLimit: 30, // 20 + 10 bonus
     expiresAt: null, // no expiry
   }
 };
@@ -99,7 +96,7 @@ export const updateSubscription = async (planId: string): Promise<boolean> => {
       .insert({
         user_id: userId,
         plan_id: planId,
-        message_limit: selectedPlan.messageLimit,
+        credits_limit: selectedPlan.creditLimit,
         features: selectedPlan.features,
         expires_at: expiresAt,
         active: true
@@ -110,14 +107,14 @@ export const updateSubscription = async (planId: string): Promise<boolean> => {
       return false;
     }
     
-    // Reset used messages counter
+    // Reset used credits counter
     const { error: resetError } = await supabase
-      .from('message_usage')
-      .update({ messages_used: 0 })
+      .from('credit_usage')
+      .update({ credits_used: 0 })
       .eq('user_id', userId);
     
     if (resetError) {
-      console.error('Error resetting message usage:', resetError);
+      console.error('Error resetting credit usage:', resetError);
     }
     
     // Log the activity
@@ -170,13 +167,13 @@ export const logUserActivity = async (
 };
 
 /**
- * Increments the message usage counter for a user
+ * Increments the credit usage counter for a user
  */
-export const incrementMessageUsage = async (userId: string): Promise<boolean> => {
+export const incrementCreditUsage = async (userId: string): Promise<boolean> => {
   try {
-    // First, check if user exists in message_usage table
+    // First, check if user exists in credit_usage table
     const { data, error: checkError } = await supabase
-      .from('message_usage')
+      .from('credit_usage')
       .select('*')
       .eq('user_id', userId)
       .maybeSingle();
@@ -188,10 +185,10 @@ export const incrementMessageUsage = async (userId: string): Promise<boolean> =>
     // If user doesn't exist in the table, create a record
     if (!data) {
       const { error: insertError } = await supabase
-        .from('message_usage')
+        .from('credit_usage')
         .insert({
           user_id: userId,
-          messages_used: 1,
+          credits_used: 1,
           last_updated: new Date().toISOString()
         });
       
@@ -201,9 +198,9 @@ export const incrementMessageUsage = async (userId: string): Promise<boolean> =>
     } else {
       // Otherwise, increment the existing count
       const { error: updateError } = await supabase
-        .from('message_usage')
+        .from('credit_usage')
         .update({ 
-          messages_used: data.messages_used + 1,
+          credits_used: data.credits_used + 1,
           last_updated: new Date().toISOString()
         })
         .eq('user_id', userId);
@@ -214,34 +211,34 @@ export const incrementMessageUsage = async (userId: string): Promise<boolean> =>
     }
     
     // Log the activity
-    await logUserActivity(userId, 'message_sent', {
+    await logUserActivity(userId, 'credit_used', {
       timestamp: new Date().toISOString()
     });
     
     return true;
   } catch (error) {
-    console.error('Error incrementing message usage:', error);
+    console.error('Error incrementing credit usage:', error);
     return false;
   }
 };
 
 /**
- * Gets the remaining message count for a user based on their subscription
+ * Gets the remaining credits for a user based on their subscription
  */
-export const getRemainingMessages = async (userId: string, planId: string | null): Promise<number> => {
-  // For unlimited plans, return Infinity
-  if (planId === 'popular' || planId === 'pro') {
-    return Infinity;
+export const getRemainingCredits = async (userId: string, planId: string | null): Promise<number> => {
+  // For free plan, return 0
+  if (planId === 'free' || !planId) {
+    return 0;
   }
   
   try {
-    // Get message limit from plan
-    const messageLimit = planId === 'starter' ? 50 : 5; // Update from 10 to 5 for free plan
+    // Get credit limit from plan
+    const creditLimit = PLAN_FEATURES[planId as keyof typeof PLAN_FEATURES]?.creditLimit || 0;
     
-    // Get used messages
+    // Get used credits
     const { data, error } = await supabase
-      .from('message_usage')
-      .select('messages_used')
+      .from('credit_usage')
+      .select('credits_used')
       .eq('user_id', userId)
       .maybeSingle();
     
@@ -249,12 +246,12 @@ export const getRemainingMessages = async (userId: string, planId: string | null
       throw error;
     }
     
-    const messagesUsed = data?.messages_used || 0;
+    const creditsUsed = data?.credits_used || 0;
     
     // Calculate remaining
-    return Math.max(messageLimit - messagesUsed, 0);
+    return Math.max(creditLimit - creditsUsed, 0);
   } catch (error) {
-    console.error('Error getting remaining messages:', error);
+    console.error('Error getting remaining credits:', error);
     return 0;
   }
 };

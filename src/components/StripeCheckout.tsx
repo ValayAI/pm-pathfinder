@@ -12,6 +12,7 @@ interface StripeCheckoutProps {
   planId: string;
   planName: string;
   priceId: string;
+  buttonText?: string;
   onSuccess?: () => void;
   variant?: "default" | "outline";
   highlight?: boolean;
@@ -22,6 +23,7 @@ const StripeCheckout: React.FC<StripeCheckoutProps> = ({
   planId, 
   planName, 
   priceId, 
+  buttonText,
   onSuccess, 
   variant = "default",
   highlight = false,
@@ -112,13 +114,11 @@ const StripeCheckout: React.FC<StripeCheckoutProps> = ({
     >
       {isLoading ? (
         "Processing..."
-      ) : highlight ? (
-        <>
-          <DollarSign className="h-4 w-4 mr-1" />
-          Choose Plan
-        </>
       ) : (
-        "Select Plan"
+        <>
+          {highlight && <DollarSign className="h-4 w-4 mr-1" />}
+          {buttonText || (highlight ? "Choose Plan" : "Select Plan")}
+        </>
       )}
     </Button>
   );

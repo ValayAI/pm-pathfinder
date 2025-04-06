@@ -28,6 +28,7 @@ export type PlanType = {
   highlight: boolean;
   color: string;
   borderColor: string;
+  buttonText?: string; 
   buttonVariant: "outline" | "default";
 }
 
@@ -49,18 +50,16 @@ const PlanCard: React.FC<PlanCardProps> = ({
   location
 }) => {
   const navigate = useNavigate();
-  const { id, name, description, price, period, icon: Icon, priceId, features, highlight, color, borderColor, buttonVariant } = plan;
+  const { id, name, description, price, period, icon: Icon, priceId, features, highlight, color, borderColor, buttonVariant, buttonText } = plan;
 
   const getButtonText = () => {
     if (isCurrentPlan) return "Current Plan";
     if (isDisabled) return "Already Included";
-    return highlight ? "Choose Plan" : "Select Plan";
+    return buttonText || (highlight ? "Choose Plan" : "Select Plan");
   };
 
-  // Find the free sessions feature if it exists
-  const freeSessionsFeature = features.find(feature => feature.includes("Free Sessions"));
-  // Filter out the free sessions feature from the regular features list
-  const regularFeatures = features.filter(feature => !feature.includes("Free Sessions"));
+  // Check if any features contain "Bonus" text
+  const hasBonusFeature = features.some(feature => feature.includes("Bonus"));
 
   return (
     <Card 
@@ -96,11 +95,11 @@ const PlanCard: React.FC<PlanCardProps> = ({
         <CardDescription className="text-sm">({description})</CardDescription>
       </CardHeader>
       <CardContent className="pb-2">
-        {/* Show free sessions bonus above the price if available */}
-        {freeSessionsFeature && (
+        {/* Show bonus credits highlight if applicable */}
+        {hasBonusFeature && (
           <div className="mb-2 p-1.5 bg-amber-50 border border-amber-200 rounded-md flex items-center dark:bg-amber-900/30 dark:border-amber-700/50">
             <Gift className="h-4 w-4 text-amber-500 mr-1.5 flex-shrink-0" />
-            <span className="text-sm font-medium text-amber-700 dark:text-amber-300">{freeSessionsFeature}</span>
+            <span className="text-sm font-medium text-amber-700 dark:text-amber-300">Bonus Credits Included!</span>
           </div>
         )}
         <div className="flex items-baseline mb-4">
@@ -108,7 +107,7 @@ const PlanCard: React.FC<PlanCardProps> = ({
           <span className="text-muted-foreground text-sm ml-1">{period}</span>
         </div>
         <ul className="space-y-2 min-h-[160px]">
-          {regularFeatures.map((feature, idx) => (
+          {features.map((feature, idx) => (
             <li key={idx} className="flex">
               <CheckCircle2 className="h-4 w-4 text-green-600 dark:text-green-400 mr-2 mt-0.5 flex-shrink-0" />
               <span className="text-sm">{feature}</span>
@@ -138,6 +137,7 @@ const PlanCard: React.FC<PlanCardProps> = ({
             planId={id}
             planName={name}
             priceId={priceId}
+            buttonText={getButtonText()}
             variant={buttonVariant}
             highlight={highlight}
             onSuccess={() => onPlanSuccess(id)}
