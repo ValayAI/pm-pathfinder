@@ -10,7 +10,7 @@ import {
   CardTitle 
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle2, ThumbsUp, DollarSign } from "lucide-react";
+import { CheckCircle2, ThumbsUp, DollarSign, Gift } from "lucide-react";
 import { cn } from "@/lib/utils";
 import StripeCheckout from "../StripeCheckout";
 import { Button } from "@/components/ui/button";
@@ -57,6 +57,11 @@ const PlanCard: React.FC<PlanCardProps> = ({
     return highlight ? "Choose Plan" : "Select Plan";
   };
 
+  // Find the free sessions feature if it exists
+  const freeSessionsFeature = features.find(feature => feature.includes("Free Sessions"));
+  // Filter out the free sessions feature from the regular features list
+  const regularFeatures = features.filter(feature => !feature.includes("Free Sessions"));
+
   return (
     <Card 
       className={cn(
@@ -91,12 +96,19 @@ const PlanCard: React.FC<PlanCardProps> = ({
         <CardDescription className="text-sm">({description})</CardDescription>
       </CardHeader>
       <CardContent className="pb-2">
+        {/* Show free sessions bonus above the price if available */}
+        {freeSessionsFeature && (
+          <div className="mb-2 p-1.5 bg-amber-50 border border-amber-200 rounded-md flex items-center dark:bg-amber-900/30 dark:border-amber-700/50">
+            <Gift className="h-4 w-4 text-amber-500 mr-1.5 flex-shrink-0" />
+            <span className="text-sm font-medium text-amber-700 dark:text-amber-300">{freeSessionsFeature}</span>
+          </div>
+        )}
         <div className="flex items-baseline mb-4">
           <span className="text-2xl font-bold">{price}</span>
           <span className="text-muted-foreground text-sm ml-1">{period}</span>
         </div>
         <ul className="space-y-2 min-h-[160px]">
-          {features.map((feature, idx) => (
+          {regularFeatures.map((feature, idx) => (
             <li key={idx} className="flex">
               <CheckCircle2 className="h-4 w-4 text-green-600 dark:text-green-400 mr-2 mt-0.5 flex-shrink-0" />
               <span className="text-sm">{feature}</span>

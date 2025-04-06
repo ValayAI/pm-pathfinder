@@ -16,8 +16,13 @@ export const PLAN_FEATURES = {
     messageLimit: 5,
     expiresAt: null,
   },
+  single: {
+    features: ['1 PM Power Hour', 'Basic question assistance'],
+    messageLimit: 1,
+    expiresAt: null, // single session doesn't expire
+  },
   starter: {
-    features: ['50 messages/month', 'PM career & interview tips'],
+    features: ['🎁 2 Free Sessions', '50 PM Power Hours', 'Interview preparation toolkit'],
     messageLimit: 50,
     expiresAt: (date: Date) => {
       const expiryDate = new Date(date);
@@ -27,22 +32,22 @@ export const PLAN_FEATURES = {
   },
   popular: {
     features: [
-      'Unlimited messages',
-      'Resume & interview coaching',
-      'Frameworks & strategy guides',
-      'Exclusive PM resources'
+      '🎁 5 Free Sessions',
+      'Unlimited PM Power Hours',
+      'Roadmaps & backlogs templates',
+      'Strategy frameworks library',
+      'Resume & interview coaching'
     ],
     messageLimit: null, // unlimited
     expiresAt: null, // no expiry
   },
   pro: {
     features: [
-      'Unlimited messages',
-      'Resume & interview coaching',
-      'Frameworks & strategy guides',
-      'Exclusive PM resources',
+      '🎁 10 Free Sessions',
+      'Everything in Execution Pack',
       '1-on-1 PM coaching call',
-      'Personalized resume review'
+      'Personalized resume review',
+      'Full product toolkit access'
     ],
     messageLimit: null, // unlimited
     expiresAt: null, // no expiry
@@ -55,7 +60,7 @@ export const PLAN_FEATURES = {
 export const updateSubscription = async (planId: string): Promise<boolean> => {
   try {
     // Validate that planId is a valid plan type
-    if (!['starter', 'popular', 'pro'].includes(planId)) {
+    if (!['single', 'starter', 'popular', 'pro'].includes(planId)) {
       console.error(`Invalid plan ID: ${planId}`);
       return false;
     }

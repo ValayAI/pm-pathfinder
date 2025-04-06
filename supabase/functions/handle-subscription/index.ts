@@ -43,29 +43,34 @@ serve(async (req) => {
 
     // Define plan specifics
     const planFeatures = {
+      single: {
+        features: ['1 PM Power Hour', 'Basic question assistance'],
+        messageLimit: 1,
+        expiresAt: null, // single session doesn't expire
+      },
       starter: {
-        features: ['50 messages/month', 'PM career & interview tips'],
+        features: ['🎁 2 Free Sessions', '50 PM Power Hours', 'Interview preparation toolkit'],
         messageLimit: 50,
         expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days
       },
       popular: {
         features: [
-          'Unlimited messages',
-          'Resume & interview coaching',
-          'Frameworks & strategy guides',
-          'Exclusive PM resources'
+          '🎁 5 Free Sessions',
+          'Unlimited PM Power Hours',
+          'Roadmaps & backlogs templates',
+          'Strategy frameworks library',
+          'Resume & interview coaching'
         ],
         messageLimit: null, // unlimited
         expiresAt: null, // no expiry
       },
       pro: {
         features: [
-          'Unlimited messages',
-          'Resume & interview coaching',
-          'Frameworks & strategy guides',
-          'Exclusive PM resources',
+          '🎁 10 Free Sessions',
+          'Everything in Execution Pack',
           '1-on-1 PM coaching call',
-          'Personalized resume review'
+          'Personalized resume review',
+          'Full product toolkit access'
         ],
         messageLimit: null, // unlimited
         expiresAt: null, // no expiry

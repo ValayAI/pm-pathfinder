@@ -39,14 +39,33 @@ serve(async (req) => {
     console.log(`Creating Stripe checkout session for product: ${priceId}`);
     console.log(`Success URL: ${successUrl}, Cancel URL: ${cancelUrl}`);
 
-    // Create a checkout session - adjust line_items to use priceId as product instead of price
+    // Define product prices based on ID
+    const productPrices = {
+      'prod_RxEyhiWdXOWnUk': 2900,  // Career Starter Pack - $29/month
+      'prod_Rxhow56qBX4uRZ': 9900,  // Execution Pack - $99 one-time
+      'prod_Rxhqlof4dblRZT': 24900, // PM360 Pack - $249 one-time
+      'prod_SingleSession': 1000,   // Single Session - $10 one-time
+    };
+
+    // Check if the product exists in our mapping
+    if (!productPrices[priceId]) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid product ID' }),
+        { 
+          status: 400, 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        }
+      );
+    }
+
+    // Create a checkout session
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [{
         price_data: {
           product: priceId,
           currency: 'usd',
-          unit_amount: priceId === 'prod_RxEyhiWdXOWnUk' ? 2900 : priceId === 'prod_Rxhow56qBX4uRZ' ? 9900 : 24900,
+          unit_amount: productPrices[priceId],
           recurring: priceId === 'prod_RxEyhiWdXOWnUk' ? { interval: 'month' } : undefined,
         },
         quantity: 1,
