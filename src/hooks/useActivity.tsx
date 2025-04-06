@@ -1,7 +1,7 @@
 
 import { useAuth } from '@/providers/AuthProvider';
 import { useSubscription } from '@/providers/SubscriptionProvider';
-import { logUserActivity, incrementMessageUsage } from '@/utils/subscriptionManager';
+import { logUserActivity, incrementCreditUsage } from '@/utils/subscriptionManager';
 import { toast } from 'sonner';
 
 export type ActivityType = 'page_view' | 'message_sent' | 'subscription_changed' | 'feature_used' | 'login' | 'signup';
@@ -16,7 +16,7 @@ export interface ActivityDetails {
 
 export const useActivity = () => {
   const { user } = useAuth();
-  const { subscription, getRemainingMessages } = useSubscription();
+  const { subscription, getRemainingCredits } = useSubscription();
 
   /**
    * Track general user activity
@@ -41,22 +41,22 @@ export const useActivity = () => {
   const trackMessage = async () => {
     if (!user) return false;
     
-    const remainingMessages = getRemainingMessages();
+    const remainingCredits = getRemainingCredits();
     
     // If this is a limited plan and user has 0 or 1 message left, show appropriate toast
-    if (remainingMessages === 1) {
-      toast.warning("Last message remaining", {
-        description: "You've reached your message limit. Consider upgrading your plan for unlimited access.",
+    if (remainingCredits === 1) {
+      toast.warning("Last coaching credit remaining", {
+        description: "You've reached your credit limit. Consider upgrading your plan for more coaching credits.",
       });
     }
     
-    const success = await incrementMessageUsage(user.id);
+    const success = await incrementCreditUsage(user.id);
     
     // Track the message send as a general activity too
     if (success) {
       await trackActivity('message_sent', {
         metadata: { 
-          remainingBefore: remainingMessages,
+          remainingBefore: remainingCredits,
           planId: subscription?.planId 
         }
       });
