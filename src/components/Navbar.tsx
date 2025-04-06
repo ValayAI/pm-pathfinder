@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { NavLink, Link, useNavigate } from 'react-router-dom';
 import { cn } from "@/lib/utils";
@@ -67,11 +66,11 @@ export function Navbar() {
     }
   };
   
-  // Updated navigation items with icons for authenticated users - removed Settings from main nav
   const navigationItems = user ? [
     { label: "Home", href: "/", icon: <Home className="h-5 w-5" /> },
     { label: "Explore", href: "/explore", icon: <Compass className="h-5 w-5" /> },
     { label: "Resources", href: "/resources", icon: <BookOpen className="h-5 w-5" /> },
+    { label: "Blog", href: "/blog", icon: <BookOpen className="h-5 w-5" /> },
     { label: "PM Coach", href: "/chat", icon: <Sparkles className="h-5 w-5" />, highlight: true },
     { label: "Coaching", href: "/coaching", icon: <MessageSquare className="h-5 w-5" /> },
     { label: "Roadmap", href: "/roadmap", icon: <BarChart3 className="h-5 w-5" /> }
@@ -79,6 +78,7 @@ export function Navbar() {
     { label: "Home", href: "/" },
     { label: "Explore", href: "/explore" },
     { label: "Resources", href: "/resources" },
+    { label: "Blog", href: "/blog" },
     { label: "PM Coach", href: "/chat", highlight: true },
     { label: "Coaching", href: "/coaching" },
     { label: "Pricing", href: "/pricing" }

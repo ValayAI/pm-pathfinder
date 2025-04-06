@@ -14,7 +14,7 @@ export function Footer() {
     { section: 'Resources', links: [
       { name: 'Frameworks', href: '/frameworks' },
       { name: 'Templates', href: '/templates' },
-      { name: 'Blog', href: '/blog' },
+      { name: 'Blog', href: '/blog' }, // Added Blog link
     ]},
     { section: 'Company', links: [
       { name: 'About', href: '/about' },

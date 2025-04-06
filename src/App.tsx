@@ -13,6 +13,7 @@ import Explore from './pages/Explore';
 import Resources from './pages/Resources';
 import Coaching from './pages/Coaching';
 import Roadmap from './pages/Roadmap';
+import Blog from './pages/Blog'; // Added Blog import
 import Navbar from './components/Navbar';
 import { Toaster } from "sonner";
 import { AuthProvider } from './providers/AuthProvider';
@@ -35,6 +36,7 @@ function App() {
                   <Route path="/sign-up" element={<SignUp />} />
                   <Route path="/signup" element={<Navigate to="/sign-up" replace />} />
                   <Route path="/pricing" element={<Pricing />} />
+                  <Route path="/blog" element={<Blog />} /> {/* Added Blog route */}
                   
                   {/* Protected Routes with teasers for non-authenticated users */}
                   <Route path="/explore" element={<ProtectedRoute><Explore /></ProtectedRoute>} />
