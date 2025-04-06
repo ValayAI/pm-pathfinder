@@ -1,11 +1,139 @@
-import React from 'react';
+
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { FileText, Lock, Eye, ArrowRight, CheckCircle } from 'lucide-react';
+import { FileText, Lock, Eye, ArrowRight, CheckCircle, BookOpen, Video, Download, Target, Brain, LineChart, MessageSquare, Users, Code } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import ResourcePreviewModal from '../modals/ResourcePreviewModal';
+
+interface ResourceItem {
+  title: string;
+  type: string;
+  description: string;
+  icon: JSX.Element;
+  previewContent: string;
+  fullContent: string;
+}
 
 const ResourcesTeaser = () => {
+  const [selectedResource, setSelectedResource] = useState<ResourceItem | null>(null);
+  const [previewOpen, setPreviewOpen] = useState(false);
+  
+  const openPreview = (resource: ResourceItem) => {
+    setSelectedResource(resource);
+    setPreviewOpen(true);
+  };
+
+  // Essential resources
+  const essentialResources: ResourceItem[] = [
+    {
+      title: "How to Write a Killer PRD",
+      type: "Template",
+      description: "A comprehensive template for creating effective product requirement documents",
+      icon: <FileText className="h-5 w-5 text-blue-600 dark:text-blue-400" />,
+      previewContent: "A great PRD clearly defines the problem, success metrics, and required functionality. The key is to be concise yet thorough...",
+      fullContent: "A great PRD clearly defines the problem, success metrics, and required functionality. The key is to be concise yet thorough.\n\nStart with a compelling problem statement that explains the customer pain point you're solving. Then define clear success metrics that align with business goals. Your PRD should include:\n\nUser personas and journeys\nFeature requirements (must-haves vs nice-to-haves)\nTechnical considerations\nEdge cases and constraints\n\nKeep your language simple and avoid jargon. Use visuals wherever possible - wireframes, user flows, and diagrams help communicate your vision."
+    },
+    {
+      title: "Top PM Interview Questions",
+      type: "Guide",
+      description: "Prepare for your product management interviews with these common questions",
+      icon: <BookOpen className="h-5 w-5 text-purple-600 dark:text-purple-400" />,
+      previewContent: "For \"Tell me about a time you failed\" questions, use the STAR method and focus on what you learned...",
+      fullContent: "For \"Tell me about a time you failed\" questions, use the STAR method and focus on what you learned.\n\nCommon PM interview questions include:\n\nHow would you improve our product?\nHow do you prioritize features?\nTell me about a product you launched\nHow would you design X for Y?\n\nFor each question, we provide frameworks, examples, and tips from PMs who have successfully interviewed at FAANG companies."
+    }
+  ];
+  
+  // Discovery resources
+  const discoveryResources: ResourceItem[] = [
+    {
+      title: "User Interview Playbook",
+      type: "Guide",
+      description: "Learn how to conduct effective user interviews to gather valuable insights",
+      icon: <MessageSquare className="h-5 w-5 text-blue-600 dark:text-blue-400" />,
+      previewContent: "Effective user interviews start with creating a comfortable environment for honest feedback. Begin with easy, open-ended questions...",
+      fullContent: "Effective user interviews start with creating a comfortable environment for honest feedback. Begin with easy, open-ended questions before diving into specific product areas. Remember that your goal is to understand user problems, not validate your solutions.\n\nKey techniques include:\n\nAsk 'why' five times to get to the root cause\nUse silence strategically to encourage elaboration\nAvoid leading questions that suggest answers"
+    },
+    {
+      title: "Jobs-to-be-Done Framework",
+      type: "Template",
+      description: "Learn how to use JTBD to uncover your customers' true motivations",
+      icon: <Target className="h-5 w-5 text-purple-600 dark:text-purple-400" />,
+      previewContent: "The Jobs-to-be-Done framework focuses on understanding what 'job' customers are 'hiring' your product to do...",
+      fullContent: "The Jobs-to-be-Done framework focuses on understanding what 'job' customers are 'hiring' your product to do. This perspective helps you build features that directly address user needs rather than chasing competitor features.\n\nThis comprehensive guide covers:\n\nCore JTBD theory and principles\nHow to identify functional, emotional and social jobs\nJTBD interview techniques and questions"
+    }
+  ];
+  
+  // Collaboration resources
+  const collaborationResources: ResourceItem[] = [
+    {
+      title: "Product Metrics Guide",
+      type: "Guide",
+      description: "Key metrics every product manager should track for success",
+      icon: <LineChart className="h-5 w-5 text-green-600 dark:text-green-400" />,
+      previewContent: "Choosing the right metrics is critical for product success. This guide explains the difference between vanity metrics and actionable metrics...",
+      fullContent: "Choosing the right metrics is critical for product success. This guide explains the difference between vanity metrics and actionable metrics, and walks through the key metrics for different product types - from SaaS platforms to mobile apps to e-commerce products.\n\nFor each product category, we cover:\n\nAcquisition metrics: CAC, conversion rates, channel effectiveness\nEngagement metrics: DAU/MAU, session length, feature adoption\nRetention metrics: churn rate, renewal rate, lifetime value"
+    },
+    {
+      title: "Cross-Functional Collaboration Playbook",
+      type: "Template",
+      description: "Strategies for effective collaboration across product, design, and engineering teams",
+      icon: <Users className="h-5 w-5 text-blue-600 dark:text-blue-400" />,
+      previewContent: "Strong cross-functional collaboration is essential for product success. This playbook provides frameworks, rituals, and tools...",
+      fullContent: "Strong cross-functional collaboration is essential for product success. This playbook provides frameworks, rituals, and tools to improve how product, design, and engineering teams work together.\n\nThe playbook covers:\n\nTeam structure and roles/responsibilities\nDecision frameworks (RACI, RAPID, etc.)\nEffective meeting patterns and rituals\nTools and documentation standards"
+    }
+  ];
+
+  const renderResourceCard = (resource: ResourceItem) => {
+    return (
+      <Card className="overflow-hidden hover:shadow-md transition-all hover:scale-[1.01] duration-300 border">
+        <CardHeader className="pb-2">
+          <div className="flex justify-between items-start">
+            <div className="bg-blue-100 dark:bg-blue-900/30 p-2 rounded-full">
+              {resource.icon}
+            </div>
+            <Badge variant="outline">{resource.type}</Badge>
+          </div>
+          <CardTitle className="mt-4">{resource.title}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="mb-2">
+            <Badge variant="secondary" className="text-xs mb-2">Free Preview</Badge>
+          </div>
+          <p className="text-sm text-muted-foreground mb-4">
+            {resource.description}
+          </p>
+          <div className="relative">
+            <div className="bg-gradient-to-b from-transparent to-background h-16 absolute bottom-0 left-0 right-0"></div>
+            <div className="opacity-20 pointer-events-none blur-[2px] text-sm text-muted-foreground">
+              <p>{resource.previewContent}</p>
+            </div>
+          </div>
+          <div className="flex gap-2 mt-4">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="flex-1 flex items-center justify-center gap-1"
+              onClick={() => openPreview(resource)}
+            >
+              <Eye className="h-3.5 w-3.5 mr-1" /> Preview
+            </Button>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="flex-1 flex items-center justify-center gap-1" 
+              disabled
+            >
+              <Lock className="h-3.5 w-3.5 mr-1" /> Full Guide
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  };
+
   return (
     <div className="w-full max-w-5xl mx-auto px-4">
       <div className="text-center mb-10 mt-12">
@@ -18,87 +146,31 @@ const ResourcesTeaser = () => {
         <div className="w-20 h-1 bg-gradient-to-r from-purple-600 to-indigo-600 mx-auto mt-6 rounded-full"></div>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 mb-12">
-        <Card className="overflow-hidden hover:shadow-md transition-all hover:scale-[1.01] duration-300 border">
-          <CardHeader className="pb-2">
-            <div className="flex justify-between items-start">
-              <div className="bg-blue-100 dark:bg-blue-900/30 p-2 rounded-full">
-                <FileText className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-              </div>
-              <Badge variant="outline">Template</Badge>
-            </div>
-            <CardTitle className="mt-4">How to Write a Killer PRD</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="mb-2">
-              <Badge variant="secondary" className="text-xs mb-2">Free Preview</Badge>
-            </div>
-            <p className="text-sm text-muted-foreground mb-4">
-              A great PRD clearly defines the problem, success metrics, and required functionality. The key is to be concise yet thorough...
-            </p>
-            <div className="relative">
-              <div className="bg-gradient-to-b from-transparent to-background h-16 absolute bottom-0 left-0 right-0"></div>
-              <div className="opacity-20 pointer-events-none blur-[2px] text-sm text-muted-foreground">
-                <p>Start with a compelling problem statement that explains the customer pain point you're solving. Then define clear success metrics that align with business goals. Your PRD should include:</p>
-                <ul className="mt-2 space-y-1 pl-6">
-                  <li>User personas and journeys</li>
-                  <li>Feature requirements (must-haves vs nice-to-haves)</li>
-                  <li>Technical considerations</li>
-                </ul>
-              </div>
-            </div>
-            <div className="flex gap-2 mt-4">
-              <Button variant="outline" size="sm" className="flex-1 flex items-center justify-center gap-1">
-                <Eye className="h-3.5 w-3.5 mr-1" /> Preview
-              </Button>
-              <Button variant="outline" size="sm" className="flex-1 flex items-center justify-center gap-1" disabled>
-                <Lock className="h-3.5 w-3.5 mr-1" /> Full Guide
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+      <Tabs defaultValue="essential" className="w-full mb-8">
+        <TabsList className="grid w-full max-w-md mx-auto grid-cols-3 mb-6">
+          <TabsTrigger value="essential">Essential</TabsTrigger>
+          <TabsTrigger value="discovery">Discovery</TabsTrigger>
+          <TabsTrigger value="collaboration">Collaboration</TabsTrigger>
+        </TabsList>
         
-        <Card className="overflow-hidden hover:shadow-md transition-all hover:scale-[1.01] duration-300 border">
-          <CardHeader className="pb-2">
-            <div className="flex justify-between items-start">
-              <div className="bg-purple-100 dark:bg-purple-900/30 p-2 rounded-full">
-                <FileText className="h-5 w-5 text-purple-600 dark:text-purple-400" />
-              </div>
-              <Badge variant="outline">Guide</Badge>
-            </div>
-            <CardTitle className="mt-4">Top PM Interview Questions</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="mb-2">
-              <Badge variant="secondary" className="text-xs mb-2">Free Preview</Badge>
-            </div>
-            <p className="text-sm text-muted-foreground mb-4">
-              For "Tell me about a time you failed" questions, use the STAR method and focus on what you learned...
-            </p>
-            <div className="relative">
-              <div className="bg-gradient-to-b from-transparent to-background h-16 absolute bottom-0 left-0 right-0"></div>
-              <div className="opacity-20 pointer-events-none blur-[2px] text-sm text-muted-foreground">
-                <p>Common PM interview questions include:</p>
-                <ul className="mt-2 space-y-1 pl-6">
-                  <li>How would you improve our product?</li>
-                  <li>How do you prioritize features?</li>
-                  <li>Tell me about a product you launched</li>
-                  <li>How would you design X for Y?</li>
-                </ul>
-                <p className="mt-2">For each question, we provide frameworks, examples, and tips from PMs who have successfully interviewed at FAANG companies.</p>
-              </div>
-            </div>
-            <div className="flex gap-2 mt-4">
-              <Button variant="outline" size="sm" className="flex-1 flex items-center justify-center gap-1">
-                <Eye className="h-3.5 w-3.5 mr-1" /> Preview
-              </Button>
-              <Button variant="outline" size="sm" className="flex-1 flex items-center justify-center gap-1" disabled>
-                <Lock className="h-3.5 w-3.5 mr-1" /> Full Guide
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+        <TabsContent value="essential">
+          <div className="grid gap-6 md:grid-cols-2 mb-12">
+            {essentialResources.map((resource, index) => renderResourceCard(resource))}
+          </div>
+        </TabsContent>
+        
+        <TabsContent value="discovery">
+          <div className="grid gap-6 md:grid-cols-2 mb-12">
+            {discoveryResources.map((resource, index) => renderResourceCard(resource))}
+          </div>
+        </TabsContent>
+        
+        <TabsContent value="collaboration">
+          <div className="grid gap-6 md:grid-cols-2 mb-12">
+            {collaborationResources.map((resource, index) => renderResourceCard(resource))}
+          </div>
+        </TabsContent>
+      </Tabs>
       
       <Card className="mb-8 bg-gradient-to-r from-primary/5 to-primary/10 border border-primary/20">
         <CardContent className="p-6">
@@ -141,6 +213,16 @@ const ResourcesTeaser = () => {
           </Button>
         </div>
       </div>
+
+      {/* ResourcePreviewModal */}
+      <ResourcePreviewModal
+        open={previewOpen}
+        onOpenChange={setPreviewOpen}
+        title={selectedResource?.title || ""}
+        type={selectedResource?.type || ""}
+        previewContent={selectedResource?.previewContent || ""}
+        content={selectedResource?.fullContent || ""}
+      />
     </div>
   );
 };
