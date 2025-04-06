@@ -16,6 +16,7 @@ export function Hero() {
   const features = [
     "Expert PM coaching",
     "AI-powered guidance",
+    "Saved users 10+ hours/week",
     "Interview preparation",
     "Roadmap frameworks"
   ];
