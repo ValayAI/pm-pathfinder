@@ -135,7 +135,7 @@ const ResourcePreviewModal: React.FC<ResourcePreviewProps> = ({
           </div>
         </div>
         
-        <DialogFooter className="flex sm:justify-between flex-col sm:flex-row gap-3 sm:gap-0 mt-6 pt-4 border-t">
+        <DialogFooter className="flex justify-between pt-4 border-t">
           <Button 
             variant="outline"
             onClick={() => onOpenChange(false)}
@@ -144,14 +144,9 @@ const ResourcePreviewModal: React.FC<ResourcePreviewProps> = ({
           </Button>
           
           {!user && (
-            <div className="flex gap-3">
-              <Button variant="outline" asChild>
-                <Link to="/signin">Sign In</Link>
-              </Button>
-              <Button asChild>
-                <Link to="/signup">Sign Up for Full Access</Link>
-              </Button>
-            </div>
+            <Button asChild>
+              <Link to="/signup">Sign Up for Full Access</Link>
+            </Button>
           )}
         </DialogFooter>
       </DialogContent>
