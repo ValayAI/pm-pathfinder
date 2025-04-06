@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import {
   Dialog,
   DialogContent,
@@ -8,7 +9,8 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { MessageCircle, Target, Calendar } from 'lucide-react';
+import { MessageCircle, Target, Calendar, ArrowRight } from 'lucide-react';
+import { useAuth } from '@/providers/AuthProvider';
 
 interface BlogPostModalProps {
   open: boolean;
@@ -27,6 +29,8 @@ const BlogPostModal: React.FC<BlogPostModalProps> = ({
   category,
   icon,
 }) => {
+  const { user } = useAuth();
+  
   const getIcon = () => {
     switch (icon) {
       case 'interview':
@@ -73,6 +77,32 @@ const BlogPostModal: React.FC<BlogPostModalProps> = ({
             {content.split('\n').map((paragraph, i) => (
               <p key={i} className="mb-4">{paragraph}</p>
             ))}
+          </div>
+          
+          {/* CTA section */}
+          <div className="mt-8 mb-4 bg-primary/5 border border-primary/10 rounded-lg p-6">
+            <h3 className="text-lg font-semibold mb-2">Ready to level up your PM skills?</h3>
+            <p className="mb-4">Get personalized coaching, access to frameworks, and practice interviews with our AI assistant.</p>
+            <div className="flex flex-col sm:flex-row gap-3">
+              {!user ? (
+                <>
+                  <Button asChild>
+                    <Link to="/sign-up" className="flex items-center justify-center">
+                      Sign up free <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
+                  </Button>
+                  <Button variant="outline" asChild>
+                    <Link to="/signin">Already have an account? Sign in</Link>
+                  </Button>
+                </>
+              ) : (
+                <Button asChild>
+                  <Link to="/chat" className="flex items-center justify-center">
+                    Try PM-Pathfinder <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+              )}
+            </div>
           </div>
         </div>
         

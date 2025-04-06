@@ -2,8 +2,10 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
-import { MessageCircle, Target, Calendar } from 'lucide-react';
+import { MessageCircle, Target, Calendar, ArrowRight } from 'lucide-react';
 import BlogPostModal from './modals/BlogPostModal';
+import { Link } from 'react-router-dom';
+import { useAuth } from '@/providers/AuthProvider';
 
 interface BlogCardProps {
   id: string;
@@ -16,6 +18,7 @@ interface BlogCardProps {
 
 const BlogCard = ({ id, title, description, content, category, icon }: BlogCardProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { user } = useAuth();
   
   const getIcon = () => {
     switch (icon) {
@@ -81,14 +84,25 @@ const BlogCard = ({ id, title, description, content, category, icon }: BlogCardP
           <p className="text-muted-foreground mb-4">{description}</p>
         </CardContent>
         
-        <CardFooter className="mt-auto pt-0">
+        <CardFooter className="mt-auto pt-0 flex flex-col gap-3">
           <Button 
             variant="outline" 
-            className="w-full"
+            className="w-full flex items-center justify-center"
             onClick={() => setIsModalOpen(true)}
           >
-            Read Article
+            Read Article <ArrowRight className="ml-1.5 h-4 w-4" />
           </Button>
+          
+          {!user && (
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="w-full text-sm text-primary hover:text-primary"
+              asChild
+            >
+              <Link to="/sign-up">Sign up for more PM resources</Link>
+            </Button>
+          )}
         </CardFooter>
       </Card>
       
