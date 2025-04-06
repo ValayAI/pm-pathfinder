@@ -95,23 +95,33 @@ const ResourcePreviewModal: React.FC<ResourcePreviewProps> = ({
                 <p className="mb-6">{previewContent}</p>
                 
                 <div className="relative mt-4 pt-4 border-t">
+                  {/* First paragraph fully visible */}
                   <div className="mb-6">
                     {formatContent(content)[0]}
                   </div>
                   
+                  {/* Second paragraph fully visible */}
+                  <div className="mb-6">
+                    {formatContent(content)[1] || ""}
+                  </div>
+                  
                   <div className="relative">
                     <div className="bg-gradient-to-b from-transparent to-background/95 h-32 absolute -top-20 left-0 right-0 pointer-events-none"></div>
-                    <div className="blur-[2px] opacity-70 pointer-events-none mb-4">
-                      {formatContent(content)[1] || ""}
+                    
+                    {/* Third paragraph slightly blurred */}
+                    <div className="blur-[1px] opacity-80 pointer-events-none mb-4">
+                      {formatContent(content)[2] || ""}
                     </div>
                     
-                    <div className="blur-[4px] opacity-40 pointer-events-none">
-                      <p className="mb-2">{formatContent(content)[2] || "When preparing for product management interviews, it's essential to have a structured approach that showcases both your analytical thinking and your practical experience..."}</p>
-                      <p className="mb-2">{"The most successful candidates demonstrate a clear understanding of product metrics and can articulate how they've used data to drive decisions in previous roles..."}</p>
+                    {/* Fourth paragraph more blurred */}
+                    <div className="blur-[3px] opacity-50 pointer-events-none mb-4">
+                      {formatContent(content)[3] || "When preparing for product management interviews, it's essential to have a structured approach that showcases both your analytical thinking and your practical experience..."}
                     </div>
                     
-                    <div className="blur-[6px] opacity-25 pointer-events-none">
-                      <p>{"Remember that interviewers are looking for your thought process as much as your final answer. Take your time, think through problems methodically, and don't be afraid to ask clarifying questions..."}</p>
+                    {/* Fifth paragraph very blurred */}
+                    <div className="blur-[5px] opacity-30 pointer-events-none">
+                      <p className="mb-2">{formatContent(content)[4] || "The most successful candidates demonstrate a clear understanding of product metrics and can articulate how they've used data to drive decisions in previous roles..."}</p>
+                      <p className="mb-2">{"Remember that interviewers are looking for your thought process as much as your final answer. Take your time, think through problems methodically, and don't be afraid to ask clarifying questions..."}</p>
                     </div>
                   </div>
                   
