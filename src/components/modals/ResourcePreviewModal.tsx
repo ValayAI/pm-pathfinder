@@ -34,6 +34,13 @@ const ResourcePreviewModal: React.FC<ResourcePreviewProps> = ({
 }) => {
   const { user } = useAuth();
   
+  // Add this useEffect to handle modal opening
+  useEffect(() => {
+    if (open && !user) {
+      console.log("Resource preview opened by non-logged in user");
+    }
+  }, [open, user]);
+  
   const getIcon = () => {
     switch (type) {
       case 'Template':
@@ -63,7 +70,7 @@ const ResourcePreviewModal: React.FC<ResourcePreviewProps> = ({
           </div>
           <DialogTitle className="text-xl mt-2">{title}</DialogTitle>
           <DialogDescription>
-            {user ? "Full resource content" : "Preview of the first few paragraphs"}
+            {user ? "Full resource content" : "Preview of the resource"}
           </DialogDescription>
         </DialogHeader>
         
@@ -80,18 +87,19 @@ const ResourcePreviewModal: React.FC<ResourcePreviewProps> = ({
             ) : (
               // Show preview with blurred content for non-authenticated users
               <>
-                <p>{previewContent}</p>
+                <p className="mb-6">{previewContent}</p>
                 
-                <div className="relative mt-6 pt-4 border-t">
-                  <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground mb-2">
-                    <Lock className="h-3 w-3" />
-                    <span>Sign up for full access</span>
+                <div className="relative mt-8 pt-6 border-t">
+                  <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground mb-4">
+                    <Lock className="h-4 w-4" />
+                    <span>Sign up to access the full content</span>
                   </div>
-                  <div className="bg-gradient-to-b from-transparent to-background/95 h-20 absolute -top-20 left-0 right-0 pointer-events-none"></div>
-                  <div className="blur-[2px] opacity-30 pointer-events-none">
+                  <div className="bg-gradient-to-b from-transparent to-background/90 h-24 absolute -top-24 left-0 right-0 pointer-events-none"></div>
+                  <div className="blur-[3px] opacity-40 pointer-events-none">
                     {content.split('\n\n').slice(0, 2).map((paragraph, i) => (
                       <p key={i} className="mb-4">{paragraph}</p>
                     ))}
+                    <p>...</p>
                   </div>
                 </div>
               </>
@@ -99,7 +107,7 @@ const ResourcePreviewModal: React.FC<ResourcePreviewProps> = ({
           </div>
         </div>
         
-        <DialogFooter className="flex sm:justify-between flex-col sm:flex-row gap-3 sm:gap-0 mt-4 pt-4 border-t">
+        <DialogFooter className="flex sm:justify-between flex-col sm:flex-row gap-3 sm:gap-0 mt-6 pt-4 border-t">
           <Button 
             variant="outline"
             onClick={() => onOpenChange(false)}
