@@ -4,7 +4,7 @@ import { useAuth } from '@/providers/AuthProvider';
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ContentTeaser from '@/components/ContentTeaser';
-import { Calendar, Lock, MessageSquare, VideoIcon, Star } from 'lucide-react';
+import { Calendar, Lock, MessageSquare, VideoIcon, Star, Clock } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -50,7 +50,8 @@ const coachingOptions = [
       "Customized advice for your experience level",
       "Career progression planning",
       "Personalized skill development plan"
-    ]
+    ],
+    comingSoon: false
   },
   {
     title: "Interview Preparation",
@@ -62,7 +63,8 @@ const coachingOptions = [
       "Real PM interview questions",
       "Detailed feedback on your answers",
       "Tailored improvement suggestions"
-    ]
+    ],
+    comingSoon: true
   },
   {
     title: "Executive Coaching",
@@ -74,7 +76,8 @@ const coachingOptions = [
       "Leadership strategy development",
       "Executive presence coaching",
       "Organizational design guidance"
-    ]
+    ],
+    comingSoon: true
   }
 ];
 
@@ -267,7 +270,14 @@ const Coaching = () => {
         </section>
         
         <section className="mb-16">
-          <h2 className="text-2xl font-bold mb-6">Coaching Options</h2>
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold">Coaching Options</h2>
+            <div className="bg-amber-50 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300 py-1.5 px-4 rounded-full flex items-center text-sm">
+              <Clock className="h-4 w-4 mr-1" />
+              Some features coming soon
+            </div>
+          </div>
+          
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {coachingOptions.map((option, index) => (
               <Card key={index} className={`h-full flex flex-col ${option.popular ? 'border-primary shadow-md' : ''}`}>
@@ -277,8 +287,15 @@ const Coaching = () => {
                   </div>
                 )}
                 <CardHeader className="pb-2">
-                  <div className="flex items-center mb-2">
-                    {option.icon}
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center">
+                      {option.icon}
+                    </div>
+                    {option.comingSoon && (
+                      <Badge variant="outline" className="bg-amber-50 text-amber-700 hover:bg-amber-50 dark:bg-amber-900/20 dark:text-amber-300">
+                        <Clock className="h-3 w-3 mr-1" /> Coming Soon
+                      </Badge>
+                    )}
                   </div>
                   <CardTitle>{option.title}</CardTitle>
                   <CardDescription>{option.description}</CardDescription>
@@ -295,8 +312,17 @@ const Coaching = () => {
                   </ul>
                 </CardContent>
                 <CardFooter className="pt-0">
-                  <Button className="w-full" variant={option.popular ? "default" : "outline"}>
-                    {option.price === "Custom" ? "Contact Us" : "Book Session"}
+                  <Button 
+                    className="w-full" 
+                    variant={option.popular ? "default" : "outline"}
+                    disabled={option.comingSoon}
+                  >
+                    {option.comingSoon 
+                      ? "Coming Soon" 
+                      : option.price === "Custom" 
+                        ? "Contact Us" 
+                        : "Book Session"
+                    }
                   </Button>
                 </CardFooter>
               </Card>
