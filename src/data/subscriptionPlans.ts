@@ -36,7 +36,7 @@ export const subscriptionPlans: PlanType[] = [
     priceId: "prod_RxEyhiWdXOWnUk",
     features: [
       "3 Coaching Credits",
-      "Interview preparation toolkit",
+      "Interview preparation toolkit (Coming Soon)",
       "Basic career guidance"
     ],
     highlight: false,
@@ -57,7 +57,7 @@ export const subscriptionPlans: PlanType[] = [
       "10 Coaching Credits + 5 Bonus",
       "Roadmaps & backlogs templates",
       "Strategy frameworks library",
-      "Resume & interview coaching"
+      "Resume & interview coaching (Coming Soon)"
     ],
     highlight: true,
     color: "bg-purple-50 dark:bg-purple-950",
@@ -75,8 +75,8 @@ export const subscriptionPlans: PlanType[] = [
     priceId: "prod_Rxhqlof4dblRZT",
     features: [
       "20 Coaching Credits + 10 Bonus",
-      "1-on-1 PM coaching call",
-      "Personalized resume review",
+      "1-on-1 PM coaching call (Coming Soon)",
+      "Personalized resume review (Coming Soon)",
       "Full product toolkit access"
     ],
     highlight: false,

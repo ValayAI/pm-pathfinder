@@ -10,11 +10,17 @@ import {
   CardTitle 
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle2, ThumbsUp, DollarSign, Gift } from "lucide-react";
+import { CheckCircle2, ThumbsUp, DollarSign, Gift, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
 import StripeCheckout from "../StripeCheckout";
 import { Button } from "@/components/ui/button";
 import { User } from "@supabase/supabase-js";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export type PlanType = {
   id: string;
@@ -108,9 +114,30 @@ const PlanCard: React.FC<PlanCardProps> = ({
         </div>
         <ul className="space-y-2 min-h-[160px]">
           {features.map((feature, idx) => (
-            <li key={idx} className="flex">
+            <li key={idx} className="flex items-start">
               <CheckCircle2 className="h-4 w-4 text-green-600 dark:text-green-400 mr-2 mt-0.5 flex-shrink-0" />
-              <span className="text-sm">{feature}</span>
+              <span className="text-sm">
+                {feature.includes("Coming Soon") ? (
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger className="text-left cursor-help">
+                        <span className="flex items-center">
+                          {feature.replace(" (Coming Soon)", "")}
+                          <Badge variant="outline" className="ml-1.5 border-amber-300 text-amber-700 dark:text-amber-400 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/40 text-[10px] px-1.5 py-0 h-4 flex items-center">
+                            <Clock className="h-2.5 w-2.5 mr-0.5" />
+                            Soon
+                          </Badge>
+                        </span>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p className="text-xs">This feature is coming soon!</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                ) : (
+                  feature
+                )}
+              </span>
             </li>
           ))}
         </ul>

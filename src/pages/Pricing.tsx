@@ -14,6 +14,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { 
   LockOpen,
   CreditCard,
+  Clock,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -44,6 +45,14 @@ const Pricing = () => {
       <Navbar />
       <div className="container mx-auto px-4 pt-24 pb-12">
         <PlansList />
+
+        <Alert className="bg-amber-50 border-amber-200 dark:bg-amber-950/30 dark:border-amber-800 max-w-3xl mx-auto mb-6">
+          <Clock className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+          <AlertTitle>Premium Features Coming Soon</AlertTitle>
+          <AlertDescription>
+            Some premium features like 1-on-1 coaching calls, resume review, and interview coaching will be available soon. Purchase now to get early access when they launch!
+          </AlertDescription>
+        </Alert>
 
         <Alert className="bg-blue-50 border-blue-200 dark:bg-blue-950 dark:border-blue-800 max-w-3xl mx-auto">
           <LockOpen className="h-4 w-4 text-blue-600 dark:text-blue-400" />
