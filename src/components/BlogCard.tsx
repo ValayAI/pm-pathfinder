@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
-import { MessageCircle, Target, Calendar, ArrowRight } from 'lucide-react';
+import { MessageCircle, Target, Calendar, ArrowRight, Clock } from 'lucide-react';
 import BlogPostModal from './modals/BlogPostModal';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/providers/AuthProvider';
@@ -14,9 +14,22 @@ interface BlogCardProps {
   content: string;
   category: string;
   icon: 'interview' | 'strategic' | 'planning';
+  publishDate: string;
+  readingTime: string;
+  slug: string;
 }
 
-const BlogCard = ({ id, title, description, content, category, icon }: BlogCardProps) => {
+const BlogCard = ({ 
+  id, 
+  title, 
+  description, 
+  content, 
+  category, 
+  icon,
+  publishDate,
+  readingTime,
+  slug
+}: BlogCardProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { user } = useAuth();
   
@@ -81,17 +94,31 @@ const BlogCard = ({ id, title, description, content, category, icon }: BlogCardP
           </div>
           
           <h3 className="text-xl font-semibold mb-2">{title}</h3>
+          
+          <div className="flex items-center text-xs text-muted-foreground mb-3">
+            <Calendar className="h-3 w-3 mr-1" />
+            <span>{publishDate}</span>
+            <span className="mx-1.5">·</span>
+            <Clock className="h-3 w-3 mr-1" />
+            <span>{readingTime} read</span>
+          </div>
+          
           <p className="text-muted-foreground mb-4">{description}</p>
         </CardContent>
         
         <CardFooter className="mt-auto pt-0">
-          <Button 
-            variant="outline" 
-            className="w-full flex items-center justify-center"
-            onClick={() => setIsModalOpen(true)}
-          >
-            Read Article <ArrowRight className="ml-1.5 h-4 w-4" />
-          </Button>
+          <Link to={`/blog/${slug}`} className="w-full">
+            <Button 
+              variant="outline" 
+              className="w-full flex items-center justify-center"
+              onClick={(e) => {
+                e.preventDefault();
+                setIsModalOpen(true);
+              }}
+            >
+              Read Article <ArrowRight className="ml-1.5 h-4 w-4" />
+            </Button>
+          </Link>
         </CardFooter>
       </Card>
       
@@ -102,6 +129,8 @@ const BlogCard = ({ id, title, description, content, category, icon }: BlogCardP
         content={content}
         category={category}
         icon={icon}
+        publishDate={publishDate}
+        readingTime={readingTime}
       />
     </>
   );

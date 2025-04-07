@@ -1,6 +1,10 @@
+
 import { useEffect } from 'react';
 import Dashboard from '@/components/Dashboard';
 import BlogCard from '@/components/BlogCard';
+import { ArrowRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
 
 // Blog post data
 const blogPosts = [
@@ -29,6 +33,10 @@ Response from PM-Pathfinder: A prioritized framework like RICE with real-life co
 Practice these questions with PM-Pathfinder to improve your responses and gain confidence for your next interview.`,
     category: 'Interviews',
     icon: 'interview',
+    publishDate: 'April 5, 2025',
+    readingTime: '4 min',
+    slug: 'top-10-product-management-interview-questions',
+    featured: true
   },
   {
     id: '2',
@@ -57,6 +65,10 @@ Use RICE when comparing multiple initiatives. Use JTBD for user research. Use Ka
 PM-Pathfinder helps you choose and apply the right framework for any product challenge.`,
     category: 'Strategic',
     icon: 'strategic',
+    publishDate: 'March 28, 2025',
+    readingTime: '5 min',
+    slug: 'ultimate-framework-guide-product-managers',
+    featured: false
   },
   {
     id: '3',
@@ -76,6 +88,10 @@ Day-by-Day Plan:
 PM-Pathfinder is your on-demand interview coach to accelerate your prep.`,
     category: 'Planning',
     icon: 'planning',
+    publishDate: 'March 20, 2025',
+    readingTime: '3 min',
+    slug: 'prep-pm-interview-7-days',
+    featured: false
   },
   {
     id: '4',
@@ -93,6 +109,10 @@ PM-Pathfinder is your on-demand interview coach to accelerate your prep.`,
 Ready to level up your workflow? Use PM-Pathfinder to work smarter, not harder.`,
     category: 'Strategic',
     icon: 'strategic',
+    publishDate: 'March 15, 2025',
+    readingTime: '4 min',
+    slug: 'ai-product-managers-workflow',
+    featured: false
   },
   {
     id: '5',
@@ -114,6 +134,10 @@ How to Fix It:
 Don't make the same mistakes twice. Practice with PM-Pathfinder and get interview-ready today.`,
     category: 'Interviews',
     icon: 'interview',
+    publishDate: 'March 10, 2025',
+    readingTime: '3 min',
+    slug: 'what-pms-get-wrong-interviews',
+    featured: false
   },
   {
     id: '6',
@@ -136,10 +160,18 @@ PM-Pathfinder's roadmap builder helps you create strategic, visually compelling 
 Whether you're managing a new product launch or planning the next quarter's initiatives, having a well-structured roadmap makes all the difference in execution and stakeholder management.`,
     category: 'Planning',
     icon: 'planning',
+    publishDate: 'March 5, 2025',
+    readingTime: '5 min',
+    slug: 'roadmap-builder-product-teams',
+    featured: false
   }
 ];
 
 const Blog = () => {
+  // Find featured blog post
+  const featuredPost = blogPosts.find(post => post.featured);
+  const regularPosts = blogPosts.filter(post => !post.featured);
+  
   // Scroll to top on page load
   useEffect(() => {
     window.scrollTo({
@@ -161,8 +193,35 @@ const Blog = () => {
           </p>
         </div>
 
+        {featuredPost && (
+          <div className="mb-12 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 p-6 rounded-xl">
+            <div className="flex flex-col md:flex-row gap-6">
+              <div className="md:w-2/3">
+                <div className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-amber-500/10 text-amber-600 dark:text-amber-400 mb-4">
+                  Featured Article
+                </div>
+                <h2 className="text-2xl font-bold mb-2">{featuredPost.title}</h2>
+                <div className="text-sm text-muted-foreground mb-4">
+                  {featuredPost.publishDate} · {featuredPost.readingTime} read
+                </div>
+                <p className="mb-6">{featuredPost.description}</p>
+                <Link to={`/blog/${featuredPost.slug}`}>
+                  <Button>
+                    Read Featured Article <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </Link>
+              </div>
+              <div className="md:w-1/3 bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-800/30 dark:to-purple-800/30 rounded-lg flex items-center justify-center">
+                <div className="p-8 text-center">
+                  <span className="text-3xl font-bold text-primary">PM Insights</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {blogPosts.map((post) => (
+          {regularPosts.map((post) => (
             <BlogCard
               key={post.id}
               id={post.id}
@@ -171,6 +230,9 @@ const Blog = () => {
               content={post.content}
               category={post.category}
               icon={post.icon as 'interview' | 'strategic' | 'planning'}
+              publishDate={post.publishDate}
+              readingTime={post.readingTime}
+              slug={post.slug}
             />
           ))}
         </div>
