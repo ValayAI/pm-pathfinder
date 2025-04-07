@@ -14,6 +14,7 @@ import Resources from './pages/Resources';
 import Coaching from './pages/Coaching';
 import Roadmap from './pages/Roadmap';
 import Blog from './pages/Blog';
+import Sitemap from './pages/Sitemap';
 import Navbar from './components/Navbar';
 import { Toaster } from "sonner";
 import { AuthProvider } from './providers/AuthProvider';
@@ -38,6 +39,7 @@ function App() {
                   <Route path="/pricing" element={<Pricing />} />
                   <Route path="/blog" element={<Blog />} />
                   <Route path="/blog/:slug" element={<Blog />} />
+                  <Route path="/sitemap" element={<Sitemap />} />
                   
                   {/* Protected Routes with teasers for non-authenticated users */}
                   <Route path="/explore" element={<ProtectedRoute><Explore /></ProtectedRoute>} />

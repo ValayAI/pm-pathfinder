@@ -14,12 +14,13 @@ export function Footer() {
     { section: 'Resources', links: [
       { name: 'Frameworks', href: '/frameworks' },
       { name: 'Templates', href: '/templates' },
-      { name: 'Blog', href: '/blog' }, // Added Blog link
+      { name: 'Blog', href: '/blog' },
     ]},
     { section: 'Company', links: [
       { name: 'About', href: '/about' },
       { name: 'Careers', href: '/careers' },
       { name: 'Contact', href: '/contact' },
+      { name: 'Sitemap', href: '/sitemap' }, 
     ]},
   ];
   
