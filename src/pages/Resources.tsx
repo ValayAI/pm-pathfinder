@@ -10,6 +10,7 @@ import { useAuth } from "@/providers/AuthProvider";
 import ResourcesTeaser from "@/components/teasers/ResourcesTeaser";
 import { Badge } from "@/components/ui/badge";
 import ResourcePreviewModal from "@/components/modals/ResourcePreviewModal";
+import DayPlanModal from "@/components/modals/DayPlanModal";
 import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -28,6 +29,8 @@ const Resources = () => {
   const { user } = useAuth();
   const [previewOpen, setPreviewOpen] = useState(false);
   const [selectedResource, setSelectedResource] = useState<ResourceItem | null>(null);
+  const [dayPlanOpen, setDayPlanOpen] = useState(false);
+  const [selectedDayPlan, setSelectedDayPlan] = useState<"30day" | "60day" | "90day">("30day");
   
   useEffect(() => {
     window.scrollTo({
@@ -39,6 +42,11 @@ const Resources = () => {
   const openPreview = (resource: ResourceItem) => {
     setSelectedResource(resource);
     setPreviewOpen(true);
+  };
+
+  const openDayPlanModal = (plan: "30day" | "60day" | "90day") => {
+    setSelectedDayPlan(plan);
+    setDayPlanOpen(true);
   };
   
   if (!user) {
@@ -399,7 +407,11 @@ const Resources = () => {
                       <span className="text-sm">Understand current metrics</span>
                     </li>
                   </ul>
-                  <Button variant="outline" className="w-full border-blue-200 hover:border-blue-300 hover:bg-blue-50/50 text-blue-700">
+                  <Button 
+                    variant="outline" 
+                    className="w-full border-blue-200 hover:border-blue-300 hover:bg-blue-50/50 text-blue-700"
+                    onClick={() => openDayPlanModal("30day")}
+                  >
                     Get 30-Day Template
                   </Button>
                 </CardContent>
@@ -439,7 +451,11 @@ const Resources = () => {
                       <span className="text-sm">Propose initial improvements</span>
                     </li>
                   </ul>
-                  <Button variant="outline" className="w-full border-indigo-200 hover:border-indigo-300 hover:bg-indigo-50/50 text-indigo-700">
+                  <Button 
+                    variant="outline" 
+                    className="w-full border-indigo-200 hover:border-indigo-300 hover:bg-indigo-50/50 text-indigo-700"
+                    onClick={() => openDayPlanModal("60day")}
+                  >
                     Get 60-Day Template
                   </Button>
                 </CardContent>
@@ -479,7 +495,11 @@ const Resources = () => {
                       <span className="text-sm">Establish long-term vision</span>
                     </li>
                   </ul>
-                  <Button variant="outline" className="w-full border-purple-200 hover:border-purple-300 hover:bg-purple-50/50 text-purple-700">
+                  <Button 
+                    variant="outline" 
+                    className="w-full border-purple-200 hover:border-purple-300 hover:bg-purple-50/50 text-purple-700"
+                    onClick={() => openDayPlanModal("90day")}
+                  >
                     Get 90-Day Template
                   </Button>
                 </CardContent>
@@ -487,7 +507,12 @@ const Resources = () => {
             </div>
             
             <div className="text-center mt-8">
-              <Button variant="default" size="lg" className="px-6 py-6 h-auto bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-md hover:shadow-lg">
+              <Button 
+                variant="default" 
+                size="lg" 
+                className="px-6 py-6 h-auto bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-md hover:shadow-lg"
+                onClick={() => openDayPlanModal("30day")}
+              >
                 <Wand2 className="mr-2 h-5 w-5" />
                 Generate Custom 30-60-90 Plan
               </Button>
@@ -519,6 +544,13 @@ const Resources = () => {
         type={selectedResource?.type || ""}
         previewContent={selectedResource?.previewContent || ""}
         content={selectedResource?.fullContent || ""}
+      />
+      
+      {/* DayPlanModal for 30-60-90 day plan */}
+      <DayPlanModal
+        open={dayPlanOpen}
+        onOpenChange={setDayPlanOpen}
+        defaultTab={selectedDayPlan}
       />
     </div>
   );
