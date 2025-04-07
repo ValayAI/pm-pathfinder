@@ -1,10 +1,11 @@
 
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Dashboard from '@/components/Dashboard';
 import BlogCard from '@/components/BlogCard';
 import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
+import BlogPostModal from '@/components/modals/BlogPostModal';
 
 // Blog post data
 const blogPosts = [
@@ -172,6 +173,9 @@ const Blog = () => {
   const featuredPost = blogPosts.find(post => post.featured);
   const regularPosts = blogPosts.filter(post => !post.featured);
   
+  // State to control the featured post modal
+  const [isFeaturedModalOpen, setIsFeaturedModalOpen] = useState(false);
+  
   // Scroll to top on page load
   useEffect(() => {
     window.scrollTo({
@@ -194,30 +198,42 @@ const Blog = () => {
         </div>
 
         {featuredPost && (
-          <div className="mb-12 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 p-6 rounded-xl">
-            <div className="flex flex-col md:flex-row gap-6">
-              <div className="md:w-2/3">
-                <div className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-amber-500/10 text-amber-600 dark:text-amber-400 mb-4">
-                  Featured Article
-                </div>
-                <h2 className="text-2xl font-bold mb-2">{featuredPost.title}</h2>
-                <div className="text-sm text-muted-foreground mb-4">
-                  {featuredPost.publishDate} · {featuredPost.readingTime} read
-                </div>
-                <p className="mb-6">{featuredPost.description}</p>
-                <Link to={`/blog/${featuredPost.slug}`}>
-                  <Button>
+          <>
+            <div className="mb-12 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 p-6 rounded-xl">
+              <div className="flex flex-col md:flex-row gap-6">
+                <div className="md:w-2/3">
+                  <div className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-amber-500/10 text-amber-600 dark:text-amber-400 mb-4">
+                    Featured Article
+                  </div>
+                  <h2 className="text-2xl font-bold mb-2">{featuredPost.title}</h2>
+                  <div className="text-sm text-muted-foreground mb-4">
+                    {featuredPost.publishDate} · {featuredPost.readingTime} read
+                  </div>
+                  <p className="mb-6">{featuredPost.description}</p>
+                  <Button onClick={() => setIsFeaturedModalOpen(true)}>
                     Read Featured Article <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
-                </Link>
-              </div>
-              <div className="md:w-1/3 bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-800/30 dark:to-purple-800/30 rounded-lg flex items-center justify-center">
-                <div className="p-8 text-center">
-                  <span className="text-3xl font-bold text-primary">PM Insights</span>
+                </div>
+                <div className="md:w-1/3 bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-800/30 dark:to-purple-800/30 rounded-lg flex items-center justify-center">
+                  <div className="p-8 text-center">
+                    <span className="text-3xl font-bold text-primary">PM Insights</span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+            
+            {/* Modal for featured post */}
+            <BlogPostModal 
+              open={isFeaturedModalOpen}
+              onOpenChange={setIsFeaturedModalOpen}
+              title={featuredPost.title}
+              content={featuredPost.content}
+              category={featuredPost.category}
+              icon={featuredPost.icon as 'interview' | 'strategic' | 'planning'}
+              publishDate={featuredPost.publishDate}
+              readingTime={featuredPost.readingTime}
+            />
+          </>
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

@@ -1,10 +1,9 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { MessageCircle, Target, Calendar, ArrowRight, Clock } from 'lucide-react';
 import BlogPostModal from './modals/BlogPostModal';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/providers/AuthProvider';
 
 interface BlogCardProps {
@@ -32,6 +31,7 @@ const BlogCard = ({
 }: BlogCardProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { user } = useAuth();
+  const navigate = useNavigate();
   
   const getIcon = () => {
     switch (icon) {
@@ -84,6 +84,18 @@ const BlogCard = ({
     );
   };
   
+  const handleArticleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    
+    // Option 1: Always show modal
+    setIsModalOpen(true);
+    
+    // Option 2: Update URL without page reload (for SEO)
+    if (slug) {
+      window.history.pushState(null, '', `/blog/${slug}`);
+    }
+  };
+  
   return (
     <>
       <Card className="h-full flex flex-col hover:shadow-md transition-shadow">
@@ -107,18 +119,13 @@ const BlogCard = ({
         </CardContent>
         
         <CardFooter className="mt-auto pt-0">
-          <Link to={`/blog/${slug}`} className="w-full">
-            <Button 
-              variant="outline" 
-              className="w-full flex items-center justify-center"
-              onClick={(e) => {
-                e.preventDefault();
-                setIsModalOpen(true);
-              }}
-            >
-              Read Article <ArrowRight className="ml-1.5 h-4 w-4" />
-            </Button>
-          </Link>
+          <Button 
+            variant="outline" 
+            className="w-full flex items-center justify-center"
+            onClick={handleArticleClick}
+          >
+            Read Article <ArrowRight className="ml-1.5 h-4 w-4" />
+          </Button>
         </CardFooter>
       </Card>
       
