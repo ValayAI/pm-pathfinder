@@ -2,8 +2,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Dashboard from '@/components/Dashboard';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, FileSearch } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 interface SitemapSection {
   title: string;
@@ -56,9 +57,24 @@ const Sitemap = () => {
       <div className="container max-w-7xl mx-auto px-4 py-12">
         <div className="mb-10">
           <h1 className="text-3xl md:text-4xl font-bold mb-4">Sitemap</h1>
-          <p className="text-lg text-muted-foreground">
+          <p className="text-lg text-muted-foreground mb-6">
             A complete overview of all pages available on PM Pathfinder
           </p>
+          
+          <Alert className="mb-8">
+            <FileSearch className="h-4 w-4 mr-2" />
+            <AlertDescription>
+              <span className="font-medium">For search engines:</span> An XML version of this sitemap is available at{' '}
+              <a 
+                href="/sitemap.xml" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-primary hover:underline"
+              >
+                /sitemap.xml
+              </a>
+            </AlertDescription>
+          </Alert>
         </div>
 
         <div className="space-y-10">
